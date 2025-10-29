@@ -13,6 +13,6 @@ services:
     networks:
       - proxy
     ports:
-      - "8081:8081"
+      - "8081:80"
     volumes:
       - ./:/usr/share/nginx/html

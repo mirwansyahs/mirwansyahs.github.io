@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pusat Bantuan | LifePlan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0A1929 0%, #1a365d 100%);
+            min-height: 100vh;
+        }
+
+        details summary {
+            cursor: pointer;
+        }
+
+        details summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details[open] summary .icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+
+<body class="text-gray-200 font-sans">
+    <div class="max-w-3xl mx-auto px-6 py-10">
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-cyan-400">Pusat Bantuan</h1>
+            <p class="text-gray-400 mt-2">LifePlan - Aplikasi Perencanaan Keuangan</p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="grid grid-cols-2 gap-4 mb-10">
+            <a href="#getting-started"
+                class="bg-gray-800/50 rounded-xl p-4 text-center hover:bg-gray-700/50 transition">
+                <div class="text-2xl mb-2">🚀</div>
+                <div class="text-sm text-gray-300">Mulai</div>
+            </a>
+            <a href="#transactions" class="bg-gray-800/50 rounded-xl p-4 text-center hover:bg-gray-700/50 transition">
+                <div class="text-2xl mb-2">💰</div>
+                <div class="text-sm text-gray-300">Transaksi</div>
+            </a>
+            <a href="#targets" class="bg-gray-800/50 rounded-xl p-4 text-center hover:bg-gray-700/50 transition">
+                <div class="text-2xl mb-2">🎯</div>
+                <div class="text-sm text-gray-300">Target</div>
+            </a>
+            <a href="#account" class="bg-gray-800/50 rounded-xl p-4 text-center hover:bg-gray-700/50 transition">
+                <div class="text-2xl mb-2">👤</div>
+                <div class="text-sm text-gray-300">Akun</div>
+            </a>
+        </div>
+
+        <!-- FAQ Sections -->
+        <div class="space-y-8">
+            <!-- Getting Started -->
+            <section id="getting-started">
+                <h2 class="text-xl font-semibold text-cyan-300 mb-4 flex items-center">
+                    <span class="mr-2">🚀</span> Memulai
+                </h2>
+                <div class="space-y-3">
+                    <details class="bg-gray-800/50 rounded-lg">
+                        <summary class="p-4 flex justify-between items-center">
+                            <span>Bagaimana cara membuat akun?</span>
+                            <span class="icon transition-transform">▼</span>
+                        </summary>
+                        <div class="px-4 pb-4 text-gray-400">
+                            <ol class="list-decimal list-inside space-y-2">
+                                <li>Buka aplikasi LifePlan</li>
+                                <li>Tekan tombol "Daftar"</li>
+                                <li>Masukkan email dan password</li>
+                                <li>Verifikasi email Anda</li>
+                                <li>Selesai! Anda bisa mulai menggunakan aplikasi</li>
+                            </ol>
+                        </div>
+                    </details>
+
+                    <details class="bg-gray-800/50 rounded-lg">
+                        <summary class="p-4 flex justify-between items-center">
+                            <span>Bagaimana cara login dengan Google?</span>
+                            <span class="icon transition-transform">▼</span>
+                        </summary>
+                        <div class="px-4 pb-4 text-gray-400">
+                            <p>Di halaman login, tekan tombol "Login dengan Google" dan pilih akun Google Anda.
+                                Akun akan otomatis terhubung dengan LifePlan.</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- Transactions -->
+            <section id="transactions">
+                <h2 class="text-xl font-semibold text-cyan-300 mb-4 flex items-center">
+                    <span class="mr-2">💰</span> Transaksi
+                </h2>
+                <div class="space-y-3">
+                    <details class="bg-gray-800/50 rounded-lg">
+                        <summary class="p-4 flex justify-between items-center">
+                            <span>Bagaimana cara menambah transaksi?</span>
+                            <span class="icon transition-transform">▼</span>
+                        </summary>
+                        <div class="px-4 pb-4 text-gray-400">
+                            <ol class="list-decimal list-inside space-y-2">
+                                <li>Dari halaman utama, tekan menu "Pemasukan" atau "Pengeluaran"</li>
+                                <li>Isi jumlah uang</li>
+                                <li>Pilih kategori yang sesuai</li>
+                                <li>Tambahkan deskripsi (opsional)</li>
+                                <li>Tekan "Simpan"</li>
+                            </ol>
+                        </div>
+                    </details>
+
+                    <details class="bg-gray-800/50 rounded-lg">
+                        <summary class="p-4 flex justify-between items-center">
+                            <span>Bagaimana cara mengedit atau menghapus transaksi?</span>
+                            <span class="icon transition-transform">▼</span>
+                        </summary>
+                        <div class="px-4 pb-4 text-gray-400">
+                            <p>Buka halaman "Riwayat", temukan transaksi yang ingin diubah,
+                                lalu geser ke kiri untuk menghapus atau tekan untuk mengedit.</p>
+                        </div>
+                    </details>
+
+                    <details class="bg-gray-800/50 rounded-lg">
+                        <summary class="p-4 flex justify-between items-center">
+                            <span>Apa saja kategori yang tersedia?</span>
+                            <span class="icon transition-transform">▼</span>
+                        </summary>
+                        <div class="px-4 pb-4 text-gray-400">
+                            <p class="mb-2"><strong>Pemasukan:</strong> Gaji, Bonus, Investasi, Hadiah, Lainnya</p>
+                            <p><strong>Pengeluaran:</strong> Makanan, Transportasi, Belanja, Hiburan, Tagihan,
+                                Kesehatan, Pendidikan, Lainnya</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- Targets -->
+            <section id="targets">
+                <h2 class="text-xl font-semibold text-cyan-300 mb-4 flex items-center">
+                    <span class="mr-2">🎯</span> Target Keuangan
+                </h2>
+                <div class="space-y-3">
+                    <details class="bg-gray-800/50 rounded-lg">
+                        <summary class="p-4 flex justify-between items-center">
+                            <span>Bagaimana cara membuat target keuangan?</span>
+                            <span class="icon transition-transform">▼</span>
+                        </summary>
+                        <div class="px-4 pb-4 text-gray-400">
+                            <ol class="list-decimal list-inside space-y-2">
+                                <li>Buka menu "Perencana" dari halaman utama</li>
+                                <li>Tekan tombol "Tambah Target"</li>
+                                <li>Isi nama target dan jumlah yang ingin dicapai</li>
+                                <li>Tentukan tanggal target</li>
+                                <li>Tekan "Simpan"</li>
+                            </ol>
+                        </div>
+                    </details>
+
+                    <details class="bg-gray-800/50 rounded-lg">
+                        <summary class="p-4 flex justify-between items-center">
+                            <span>Bagaimana cara memantau progress target?</span>
+                            <span class="icon transition-transform">▼</span>
+                        </summary>
+                        <div class="px-4 pb-4 text-gray-400">
+                            <p>Di halaman "Perencana", Anda bisa melihat progress setiap target dalam bentuk
+                                progress bar. Tekan target untuk melihat detail dan menambah tabungan.</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- Account -->
+            <section id="account">
+                <h2 class="text-xl font-semibold text-cyan-300 mb-4 flex items-center">
+                    <span class="mr-2">👤</span> Akun & Pengaturan
+                </h2>
+                <div class="space-y-3">
+                    <details class="bg-gray-800/50 rounded-lg">
+                        <summary class="p-4 flex justify-between items-center">
+                            <span>Bagaimana cara mengubah password?</span>
+                            <span class="icon transition-transform">▼</span>
+                        </summary>
+                        <div class="px-4 pb-4 text-gray-400">
+                            <p>Buka menu "Akun" > "Pengaturan" > "Ubah Password".
+                                Masukkan password lama dan password baru, lalu tekan "Simpan".</p>
+                        </div>
+                    </details>
+
+                    <details class="bg-gray-800/50 rounded-lg">
+                        <summary class="p-4 flex justify-between items-center">
+                            <span>Bagaimana cara menghapus akun?</span>
+                            <span class="icon transition-transform">▼</span>
+                        </summary>
+                        <div class="px-4 pb-4 text-gray-400">
+                            <p>Buka menu "Akun" > "Pengaturan" > "Hapus Akun".
+                                Perhatikan bahwa semua data akan dihapus permanen dan tidak dapat dikembalikan.</p>
+                        </div>
+                    </details>
+
+                    <details class="bg-gray-800/50 rounded-lg">
+                        <summary class="p-4 flex justify-between items-center">
+                            <span>Bagaimana cara menonaktifkan notifikasi?</span>
+                            <span class="icon transition-transform">▼</span>
+                        </summary>
+                        <div class="px-4 pb-4 text-gray-400">
+                            <p>Buka menu "Akun" > "Pengaturan" > "Notifikasi".
+                                Anda bisa mengatur jenis notifikasi yang ingin diterima.</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section class="bg-gradient-to-r from-cyan-900/30 to-blue-900/30 rounded-xl p-6 mt-10">
+                <h2 class="text-xl font-semibold text-cyan-300 mb-3">Masih Butuh Bantuan?</h2>
+                <p class="text-gray-400 mb-4">
+                    Jika Anda tidak menemukan jawaban yang dicari, silakan hubungi tim support kami.
+                </p>
+                <a href="mailto:mirwansyah1933@gmail.com"
+                    class="inline-block bg-cyan-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-cyan-600 transition">
+                    Hubungi Support
+                </a>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-12 pt-6 border-t border-gray-700">
+            <p class="text-gray-500 text-sm">&copy; 2026 LifePlan. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+
+</html>

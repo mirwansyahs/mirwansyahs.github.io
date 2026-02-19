@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hapus Akun | LifePlan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0A1929 0%, #1a365d 100%);
+            min-height: 100vh;
+        }
+    </style>
+</head>
+
+<body class="text-gray-200 font-sans">
+    <div class="max-w-3xl mx-auto px-6 py-10">
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-cyan-400">Hapus Akun</h1>
+            <p class="text-gray-400 mt-2">LifePlan - Aplikasi Perencanaan Keuangan</p>
+            <p class="text-gray-500 text-sm mt-1">Terakhir diperbarui: 19 Februari 2026</p>
+        </div>
+
+        <!-- Content -->
+        <div class="space-y-8">
+            <!-- Warning -->
+            <section class="bg-red-900/30 border border-red-700/50 rounded-xl p-6">
+                <h2 class="text-xl font-semibold text-red-400 mb-3 flex items-center">
+                    <span class="mr-2">⚠️</span> Perhatian Penting
+                </h2>
+                <p class="text-gray-300 leading-relaxed">
+                    Menghapus akun adalah tindakan yang tidak dapat dibatalkan. Semua data keuangan,
+                    transaksi, target, dan informasi akun Anda akan dihapus secara permanen.
+                    Pastikan Anda telah melakukan backup data jika diperlukan sebelum melanjutkan.
+                </p>
+            </section>
+
+            <!-- What Gets Deleted -->
+            <section>
+                <h2 class="text-xl font-semibold text-cyan-300 mb-4">Data yang Akan Dihapus</h2>
+                <div class="space-y-3">
+                    <div class="bg-gray-800/50 rounded-lg p-4 flex items-start">
+                        <span class="text-red-400 mr-3 mt-1">❌</span>
+                        <div>
+                            <h3 class="font-medium text-white">Informasi Akun</h3>
+                            <p class="text-gray-400 text-sm">Email, nama, foto profil, dan password</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800/50 rounded-lg p-4 flex items-start">
+                        <span class="text-red-400 mr-3 mt-1">❌</span>
+                        <div>
+                            <h3 class="font-medium text-white">Semua Transaksi</h3>
+                            <p class="text-gray-400 text-sm">Riwayat pemasukan dan pengeluaran Anda</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800/50 rounded-lg p-4 flex items-start">
+                        <span class="text-red-400 mr-3 mt-1">❌</span>
+                        <div>
+                            <h3 class="font-medium text-white">Target Keuangan</h3>
+                            <p class="text-gray-400 text-sm">Semua target dan progress tabungan Anda</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800/50 rounded-lg p-4 flex items-start">
+                        <span class="text-red-400 mr-3 mt-1">❌</span>
+                        <div>
+                            <h3 class="font-medium text-white">Pengaturan & Preferensi</h3>
+                            <p class="text-gray-400 text-sm">Semua pengaturan dan notifikasi yang telah diatur</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Steps to Delete Account -->
+            <section>
+                <h2 class="text-xl font-semibold text-cyan-300 mb-4">Cara Menghapus Akun</h2>
+                <div class="bg-gray-800/50 rounded-lg p-6 space-y-4">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div
+                                class="flex items-center justify-center h-8 w-8 rounded-full bg-cyan-500/20 text-cyan-400 font-semibold">
+                                1
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="font-medium text-white">Buka Aplikasi LifePlan</h3>
+                            <p class="text-gray-400 text-sm mt-1">Pastikan Anda sudah login dengan akun yang ingin
+                                dihapus</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div
+                                class="flex items-center justify-center h-8 w-8 rounded-full bg-cyan-500/20 text-cyan-400 font-semibold">
+                                2
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="font-medium text-white">Masuk ke Menu Akun</h3>
+                            <p class="text-gray-400 text-sm mt-1">Tap ikon profil atau menu akun di sudut kanan atas</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div
+                                class="flex items-center justify-center h-8 w-8 rounded-full bg-cyan-500/20 text-cyan-400 font-semibold">
+                                3
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="font-medium text-white">Pilih Pengaturan / Settings</h3>
+                            <p class="text-gray-400 text-sm mt-1">Cari opsi "Pengaturan Akun" atau "Account Settings"
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div
+                                class="flex items-center justify-center h-8 w-8 rounded-full bg-cyan-500/20 text-cyan-400 font-semibold">
+                                4
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="font-medium text-white">Scroll ke Bawah dan Cari "Hapus Akun"</h3>
+                            <p class="text-gray-400 text-sm mt-1">Tombol ini biasanya berada di bagian paling bawah
+                                pengaturan</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div
+                                class="flex items-center justify-center h-8 w-8 rounded-full bg-cyan-500/20 text-cyan-400 font-semibold">
+                                5
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="font-medium text-white">Konfirmasi Penghapusan</h3>
+                            <p class="text-gray-400 text-sm mt-1">Baca peringatan dengan seksama dan tekan "Hapus Akun"
+                                untuk mengonfirmasi</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div
+                                class="flex items-center justify-center h-8 w-8 rounded-full bg-cyan-500/20 text-cyan-400 font-semibold">
+                                6
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="font-medium text-white">Verifikasi Identitas</h3>
+                            <p class="text-gray-400 text-sm mt-1">Anda mungkin diminta memasukkan password untuk
+                                verifikasi keamanan</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- After Deletion -->
+            <section>
+                <h2 class="text-xl font-semibold text-cyan-300 mb-4">Setelah Akun Dihapus</h2>
+                <div class="space-y-4 text-gray-300">
+                    <div class="flex items-start">
+                        <span class="text-cyan-400 mr-3 mt-1">✓</span>
+                        <div>
+                            <h3 class="font-medium text-white">Data Dihapus Segera</h3>
+                            <p class="text-sm text-gray-400">
+                                Semua data akun Anda akan mulai dihapus dari server kami secara segera.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="text-cyan-400 mr-3 mt-1">✓</span>
+                        <div>
+                            <h3 class="font-medium text-white">Backup Dihapus dalam 90 Hari</h3>
+                            <p class="text-sm text-gray-400">
+                                Backup terenkripsi mungkin masih tersimpan hingga 90 hari untuk keperluan
+                                pemulihan darurat, setelah itu akan dihapus permanen.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="text-cyan-400 mr-3 mt-1">✓</span>
+                        <div>
+                            <h3 class="font-medium text-white">Email Tidak Dapat Digunakan Lagi</h3>
+                            <p class="text-sm text-gray-400">
+                                Email yang terkait dengan akun yang dihapus tidak dapat digunakan untuk
+                                membuat akun baru selama 30 hari.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="text-cyan-400 mr-3 mt-1">✓</span>
+                        <div>
+                            <h3 class="font-medium text-white">Logout Otomatis</h3>
+                            <p class="text-sm text-gray-400">
+                                Anda akan logout dari semua perangkat dan tidak dapat mengakses aplikasi
+                                lagi dengan akun tersebut.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ -->
+            <section>
+                <h2 class="text-xl font-semibold text-cyan-300 mb-4">Pertanyaan yang Sering Diajukan</h2>
+                <div class="space-y-3">
+                    <details class="bg-gray-800/50 rounded-lg">
+                        <summary
+                            class="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-700/50 transition">
+                            <span class="font-medium text-white">Apakah penghapusan akun dapat dibatalkan?</span>
+                            <span class="text-cyan-400">▼</span>
+                        </summary>
+                        <div class="px-4 pb-4 text-gray-400">
+                            <p>
+                                Tidak. Penghapusan akun adalah tindakan permanen. Setelah dikonfirmasi,
+                                akun dan semua datanya akan dihapus dan tidak dapat dipulihkan.
+                            </p>
+                        </div>
+                    </details>
+
+                    <details class="bg-gray-800/50 rounded-lg">
+                        <summary
+                            class="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-700/50 transition">
+                            <span class="font-medium text-white">Bisakah saya mengunduh data saya sebelum menghapus
+                                akun?</span>
+                            <span class="text-cyan-400">▼</span>
+                        </summary>
+                        <div class="px-4 pb-4 text-gray-400">
+                            <p>
+                                Ya. Sebelum menghapus akun, Anda bisa mengunduh atau mengekspor data keuangan
+                                Anda dari menu pengaturan. Kami merekomendasikan untuk melakukan ini sebelum
+                                menghapus akun.
+                            </p>
+                        </div>
+                    </details>
+
+                    <details class="bg-gray-800/50 rounded-lg">
+                        <summary
+                            class="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-700/50 transition">
+                            <span class="font-medium text-white">Bagaimana jika saya memiliki akun Google/Gmail yang
+                                terhubung?</span>
+                            <span class="text-cyan-400">▼</span>
+                        </summary>
+                        <div class="px-4 pb-4 text-gray-400">
+                            <p>
+                                Menghapus akun LifePlan tidak akan mempengaruhi akun Google Anda. Hanya
+                                data LifePlan yang akan dihapus. Koneksi akan diputus secara otomatis.
+                            </p>
+                        </div>
+                    </details>
+
+                    <details class="bg-gray-800/50 rounded-lg">
+                        <summary
+                            class="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-700/50 transition">
+                            <span class="font-medium text-white">Bisakah email saya digunakan untuk membuat akun
+                                baru?</span>
+                            <span class="text-cyan-400">▼</span>
+                        </summary>
+                        <div class="px-4 pb-4 text-gray-400">
+                            <p>
+                                Tidak dalam 30 hari ke depan. Untuk alasan keamanan, email yang terkait
+                                dengan akun yang dihapus tidak dapat digunakan untuk mendaftar selama 30 hari.
+                            </p>
+                        </div>
+                    </details>
+
+                    <details class="bg-gray-800/50 rounded-lg">
+                        <summary
+                            class="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-700/50 transition">
+                            <span class="font-medium text-white">Apakah penghapusan akun gratis?</span>
+                            <span class="text-cyan-400">▼</span>
+                        </summary>
+                        <div class="px-4 pb-4 text-gray-400">
+                            <p>
+                                Ya. Penghapusan akun sepenuhnya gratis dan tidak ada biaya yang dikenakan.
+                            </p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- Legal Requirement -->
+            <section class="bg-blue-900/20 border border-blue-700/50 rounded-xl p-6">
+                <h2 class="text-lg font-semibold text-blue-300 mb-3">Persyaratan Hukum - Google Play Store</h2>
+                <p class="text-gray-300 text-sm leading-relaxed">
+                    Kami menyediakan opsi pengurangan akun ini karena persyaratan Google Play Store dan
+                    standar privasi internasional. Pengguna memiliki hak untuk menghapus akun dan semua
+                    data yang terkait kapan saja sesuai dengan GDPR dan peraturan perlindungan data lainnya.
+                </p>
+            </section>
+
+            <!-- Contact Support -->
+            <section class="bg-gradient-to-r from-cyan-900/30 to-blue-900/30 rounded-xl p-6">
+                <h2 class="text-lg font-semibold text-cyan-300 mb-3">Butuh Bantuan?</h2>
+                <p class="text-gray-300 mb-4">
+                    Jika Anda mengalami masalah saat menghapus akun atau memiliki pertanyaan tambahan,
+                    jangan ragu untuk menghubungi kami.
+                </p>
+                <a href="mailto:mirwansyah1933@gmail.com"
+                    class="inline-block bg-cyan-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-cyan-600 transition">
+                    Hubungi Support
+                </a>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-12 pt-6 border-t border-gray-700">
+            <p class="text-gray-500 text-sm">&copy; 2026 LifePlan. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,108 @@
+---
+import "../styles/global.css";
+import AdSlot from "../components/AdSlot.astro";
+import { NAV_ITEMS, SITE } from "../config/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+}
+
+const {
+  title = SITE.title,
+  description = SITE.description,
+  canonicalPath = Astro.url.pathname
+} = Astro.props;
+
+const canonical = new URL(canonicalPath, SITE.url).toString();
+const adsenseClient = import.meta.env.PUBLIC_GOOGLE_ADSENSE_CLIENT;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE.name,
+  url: SITE.url,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${SITE.url}/?q={search_term_string}`,
+    "query-input": "required name=search_term_string"
+  }
+};
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap"
+    />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:creator" content={SITE.twitter} />
+    <link rel="canonical" href={canonical} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+    {
+      adsenseClient && (
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+          crossorigin="anonymous"
+        ></script>
+      )
+    }
+    <title>{title}</title>
+  </head>
+  <body class="bg-slate-50 text-slate-900 antialiased">
+    <div class="relative min-h-screen overflow-x-hidden">
+      <div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,_#ffd8a8,_transparent_42%),radial-gradient(circle_at_bottom_left,_#99f6e4,_transparent_38%)]"></div>
+
+      <header class="border-b border-slate-200/80 bg-white/80 backdrop-blur">
+        <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 md:px-8">
+          <a href="/" class="text-xl font-black tracking-tight text-slate-900">Irwansyah Tools</a>
+          <nav aria-label="Main Navigation" class="flex flex-wrap gap-2 text-sm">
+            {
+              NAV_ITEMS.map((item) => (
+                <a
+                  href={item.href}
+                  class="rounded-full border border-transparent px-4 py-2 font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-white hover:text-slate-900"
+                >
+                  {item.label}
+                </a>
+              ))
+            }
+          </nav>
+        </div>
+      </header>
+
+      <main class="mx-auto grid w-full max-w-6xl gap-6 px-4 py-8 md:grid-cols-[minmax(0,1fr)_300px] md:px-8 md:py-10">
+        <section>
+          <slot />
+        </section>
+        <aside class="space-y-4">
+          <AdSlot slot="1000000001" className="sticky top-6" />
+        </aside>
+      </main>
+
+      <footer class="border-t border-slate-200/80 bg-white/80">
+        <div class="mx-auto max-w-6xl px-4 py-8 md:px-8">
+          <p class="text-sm text-slate-600">
+            Build for speed, SEO, and practical daily workflows. Update layout once, reflected across all pages.
+          </p>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

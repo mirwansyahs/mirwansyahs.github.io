@@ -1,0 +1,39 @@
+---
+interface Props {
+  slot: string;
+  className?: string;
+  format?: string;
+  responsive?: boolean;
+}
+
+const {
+  slot,
+  className = "",
+  format = "auto",
+  responsive = true
+} = Astro.props;
+
+const adsenseClient = import.meta.env.PUBLIC_GOOGLE_ADSENSE_CLIENT;
+---
+
+{
+  adsenseClient ? (
+    <div class={className}>
+      <ins
+        class="adsbygoogle"
+        style="display:block"
+        data-ad-client={adsenseClient}
+        data-ad-slot={slot}
+        data-ad-format={format}
+        data-full-width-responsive={responsive ? "true" : "false"}
+      ></ins>
+      <script is:inline>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  ) : (
+    <div class={`rounded-2xl border border-slate-200 bg-white p-4 text-xs text-slate-500 ${className}`}>
+      Ad slot placeholder. Set <code>PUBLIC_GOOGLE_ADSENSE_CLIENT</code> and update slot IDs.
+    </div>
+  )
+}

@@ -1,6 +1,5 @@
 ---
 import "../styles/global.css";
-import AdSlot from "../components/AdSlot.astro";
 import { NAV_ITEMS, SITE } from "../config/site";
 
 interface Props {
@@ -92,7 +91,10 @@ const jsonLd = {
           <slot />
         </section>
         <aside class="space-y-4">
-          <AdSlot slot="1000000001" className="sticky top-6" />
+          <div class="sticky top-6 rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600">
+            Utility tools ini dioptimalkan untuk pengalaman cepat dan bersih.
+            Pengaturan Auto Ads dikelola dari dashboard AdSense.
+          </div>
         </aside>
       </main>
 

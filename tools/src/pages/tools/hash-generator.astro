@@ -1,0 +1,632 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+    title="Hash Generator (MD5, SHA, Tiger, bcrypt, Argon2, scrypt) - Irwansyah Tools"
+    description="Generate hash one-way untuk MD5, SHA-1, SHA-256, SHA-384, SHA-512, Tiger, bcrypt, Argon2id, dan scrypt."
+    canonicalPath="/tools/hash-generator"
+>
+    <section
+        class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-5"
+    >
+        <h1 class="text-2xl font-black text-slate-900 md:text-3xl">
+            Hash Generator (One-Way)
+        </h1>
+        <p class="mt-1 text-sm text-slate-600">
+            Hash bersifat satu arah, dipakai untuk verifikasi integritas atau
+            penyimpanan sidik data. Tidak bisa dikembalikan ke plaintext.
+        </p>
+
+        <div class="mt-3 grid gap-3 md:grid-cols-2">
+            <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-slate-700"
+                    >Cari Algoritma Hash</span
+                >
+                <input
+                    id="hashSearch"
+                    type="text"
+                    class="w-full rounded-2xl border border-slate-300 p-3 text-sm"
+                    placeholder="Cari: md5, sha256, tiger, bcrypt, argon2, scrypt"
+                />
+            </label>
+            <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-slate-700"
+                    >Pilih Algoritma</span
+                >
+                <select
+                    id="hashAlgorithm"
+                    class="w-full rounded-2xl border border-slate-300 bg-white p-3 text-sm"
+                ></select>
+            </label>
+        </div>
+
+        <div
+            id="bcryptSettings"
+            class="mt-3 hidden rounded-2xl border border-slate-200 bg-slate-50 p-3"
+        >
+            <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-slate-700"
+                    >bcrypt Cost Factor</span
+                >
+                <input
+                    id="bcryptCost"
+                    type="range"
+                    min="8"
+                    max="14"
+                    step="1"
+                    value="11"
+                    class="w-full"
+                />
+                <p class="mt-1 text-xs text-slate-600">
+                    Nilai saat ini: <span id="bcryptCostValue">11</span>
+                </p>
+            </label>
+        </div>
+
+        <div
+            id="argon2Settings"
+            class="mt-3 hidden rounded-2xl border border-slate-200 bg-slate-50 p-3"
+        >
+            <p class="text-sm font-semibold text-slate-800">
+                Argon2id Settings
+            </p>
+            <div class="mt-2 grid gap-3 md:grid-cols-3">
+                <label class="block">
+                    <span
+                        class="mb-1 block text-xs font-semibold text-slate-700"
+                        >Iterations</span
+                    >
+                    <input
+                        id="argon2Iterations"
+                        type="number"
+                        min="1"
+                        max="10"
+                        value="3"
+                        class="w-full rounded-xl border border-slate-300 p-2 text-sm"
+                    />
+                </label>
+                <label class="block">
+                    <span
+                        class="mb-1 block text-xs font-semibold text-slate-700"
+                        >Memory (KB)</span
+                    >
+                    <input
+                        id="argon2Memory"
+                        type="number"
+                        min="8"
+                        max="262144"
+                        value="4096"
+                        class="w-full rounded-xl border border-slate-300 p-2 text-sm"
+                    />
+                </label>
+                <label class="block">
+                    <span
+                        class="mb-1 block text-xs font-semibold text-slate-700"
+                        >Parallelism</span
+                    >
+                    <input
+                        id="argon2Parallelism"
+                        type="number"
+                        min="1"
+                        max="8"
+                        value="1"
+                        class="w-full rounded-xl border border-slate-300 p-2 text-sm"
+                    />
+                </label>
+            </div>
+        </div>
+
+        <div
+            id="scryptSettings"
+            class="mt-3 hidden rounded-2xl border border-slate-200 bg-slate-50 p-3"
+        >
+            <p class="text-sm font-semibold text-slate-800">scrypt Settings</p>
+            <div class="mt-2 grid gap-3 md:grid-cols-3">
+                <label class="block">
+                    <span
+                        class="mb-1 block text-xs font-semibold text-slate-700"
+                        >Cost Factor (N)</span
+                    >
+                    <input
+                        id="scryptCost"
+                        type="number"
+                        min="2"
+                        step="1"
+                        value="1024"
+                        class="w-full rounded-xl border border-slate-300 p-2 text-sm"
+                    />
+                </label>
+                <label class="block">
+                    <span
+                        class="mb-1 block text-xs font-semibold text-slate-700"
+                        >Block Size (r)</span
+                    >
+                    <input
+                        id="scryptBlock"
+                        type="number"
+                        min="1"
+                        max="32"
+                        value="8"
+                        class="w-full rounded-xl border border-slate-300 p-2 text-sm"
+                    />
+                </label>
+                <label class="block">
+                    <span
+                        class="mb-1 block text-xs font-semibold text-slate-700"
+                        >Parallelism (p)</span
+                    >
+                    <input
+                        id="scryptParallelism"
+                        type="number"
+                        min="1"
+                        max="8"
+                        value="1"
+                        class="w-full rounded-xl border border-slate-300 p-2 text-sm"
+                    />
+                </label>
+            </div>
+        </div>
+
+        <div class="mt-3 grid gap-3 md:grid-cols-2">
+            <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-slate-700"
+                    >Input</span
+                >
+                <textarea
+                    id="hashInput"
+                    class="h-44 w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm md:h-52 lg:h-[34vh]"
+                    placeholder="Masukkan text yang ingin di-hash"></textarea>
+            </label>
+            <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-slate-700"
+                    >Hash Output</span
+                >
+                <textarea
+                    id="hashOutput"
+                    class="h-44 w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm md:h-52 lg:h-[34vh]"
+                    readonly></textarea>
+            </label>
+        </div>
+
+        <div class="mt-3 flex flex-wrap gap-2">
+            <button
+                id="generateHashBtn"
+                class="rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700"
+                >Generate Hash</button
+            >
+            <button
+                id="generateAllHashBtn"
+                class="rounded-xl bg-amber-500 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-amber-400"
+                >Generate All Supported</button
+            >
+            <button
+                id="copyHashBtn"
+                class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                >Copy Output</button
+            >
+        </div>
+        <p id="hashMessage" class="mt-3 text-sm text-slate-600"></p>
+
+        <div class="mt-3 rounded-2xl border border-slate-200 bg-slate-50 p-3">
+            <h2 class="text-sm font-semibold text-slate-800">
+                Keterangan Dasar Hash
+            </h2>
+            <div class="mt-3 space-y-3 text-sm text-slate-700">
+                <p>
+                    Hash adalah fungsi satu arah: `plaintext -> digest`.
+                    Plaintext asli tidak bisa dipulihkan dari hasil hash.
+                </p>
+                <div>
+                    <p class="font-semibold text-slate-900">Use case umum:</p>
+                    <p>
+                        Verifikasi checksum file, fingerprint data, dan
+                        penyimpanan password (khusus password gunakan
+                        bcrypt/argon2 dengan salt dan cost factor).
+                    </p>
+                </div>
+                <div>
+                    <p class="font-semibold text-slate-900">Contoh konsep:</p>
+                    <pre
+                        class="mt-1 overflow-x-auto rounded-xl border border-slate-200 bg-white p-2 font-mono text-xs">Input : hello
+SHA256: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824</pre>
+                </div>
+                <p>
+                    Catatan: MD5 dan SHA-1 sudah dianggap lemah untuk keamanan
+                    modern. Untuk kasus keamanan, prioritaskan SHA-256+ dan
+                    password hashing modern (bcrypt/argon2/scrypt).
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        import { bcrypt as bcryptHash, argon2id, scrypt } from "hash-wasm";
+        import TigerPackage from "fb-tiger-hash";
+        import { Buffer } from "buffer/";
+
+        if (typeof globalThis.Buffer === "undefined") {
+            globalThis.Buffer = Buffer;
+        }
+
+        const inputEl = document.getElementById("hashInput");
+        const outputEl = document.getElementById("hashOutput");
+        const messageEl = document.getElementById("hashMessage");
+        const searchEl = document.getElementById("hashSearch");
+        const algorithmEl = document.getElementById("hashAlgorithm");
+        const bcryptSettingsEl = document.getElementById("bcryptSettings");
+        const bcryptCostEl = document.getElementById("bcryptCost");
+        const bcryptCostValueEl = document.getElementById("bcryptCostValue");
+        const argon2SettingsEl = document.getElementById("argon2Settings");
+        const argon2IterationsEl = document.getElementById("argon2Iterations");
+        const argon2MemoryEl = document.getElementById("argon2Memory");
+        const argon2ParallelismEl =
+            document.getElementById("argon2Parallelism");
+        const scryptSettingsEl = document.getElementById("scryptSettings");
+        const scryptCostEl = document.getElementById("scryptCost");
+        const scryptBlockEl = document.getElementById("scryptBlock");
+        const scryptParallelismEl =
+            document.getElementById("scryptParallelism");
+
+        const Tiger =
+            TigerPackage?.default || TigerPackage?.Tiger || TigerPackage;
+
+        const ALGORITHMS = [
+            { key: "md5", label: "MD5", type: "md5", supported: true },
+            {
+                key: "sha1",
+                label: "SHA-1",
+                type: "subtle",
+                subtleName: "SHA-1",
+                supported: true,
+            },
+            {
+                key: "sha256",
+                label: "SHA-256",
+                type: "subtle",
+                subtleName: "SHA-256",
+                supported: true,
+            },
+            {
+                key: "sha384",
+                label: "SHA-384",
+                type: "subtle",
+                subtleName: "SHA-384",
+                supported: true,
+            },
+            {
+                key: "sha512",
+                label: "SHA-512",
+                type: "subtle",
+                subtleName: "SHA-512",
+                supported: true,
+            },
+            {
+                key: "tiger",
+                label: "Tiger Hash",
+                type: "tiger",
+                supported: true,
+            },
+            {
+                key: "bcrypt",
+                label: "bcrypt",
+                type: "bcrypt",
+                supported: true,
+            },
+            {
+                key: "argon2id",
+                label: "Argon2id",
+                type: "argon2id",
+                supported: true,
+            },
+            {
+                key: "scrypt",
+                label: "scrypt",
+                type: "scrypt",
+                supported: true,
+            },
+        ];
+
+        const encoder = new TextEncoder();
+
+        const toHex = (bytes) =>
+            Array.from(bytes)
+                .map((b) => b.toString(16).padStart(2, "0"))
+                .join("");
+
+        const leftRotate = (x, c) => ((x << c) | (x >>> (32 - c))) >>> 0;
+
+        // MD5 implementation for UTF-8 bytes.
+        const md5Bytes = (inputBytes) => {
+            const s = [
+                7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 5,
+                9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 4, 11, 16,
+                23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 6, 10, 15, 21,
+                6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21,
+            ];
+
+            const K = new Uint32Array(64);
+            for (let i = 0; i < 64; i += 1) {
+                K[i] = Math.floor(Math.abs(Math.sin(i + 1)) * 2 ** 32) >>> 0;
+            }
+
+            const origLen = inputBytes.length;
+            const bitLenLow = (origLen * 8) >>> 0;
+            const bitLenHigh = Math.floor((origLen * 8) / 2 ** 32) >>> 0;
+
+            const padLen = (56 - ((origLen + 1) % 64) + 64) % 64;
+            const totalLen = origLen + 1 + padLen + 8;
+            const bytes = new Uint8Array(totalLen);
+            bytes.set(inputBytes, 0);
+            bytes[origLen] = 0x80;
+
+            bytes[totalLen - 8] = bitLenLow & 0xff;
+            bytes[totalLen - 7] = (bitLenLow >>> 8) & 0xff;
+            bytes[totalLen - 6] = (bitLenLow >>> 16) & 0xff;
+            bytes[totalLen - 5] = (bitLenLow >>> 24) & 0xff;
+            bytes[totalLen - 4] = bitLenHigh & 0xff;
+            bytes[totalLen - 3] = (bitLenHigh >>> 8) & 0xff;
+            bytes[totalLen - 2] = (bitLenHigh >>> 16) & 0xff;
+            bytes[totalLen - 1] = (bitLenHigh >>> 24) & 0xff;
+
+            let a0 = 0x67452301;
+            let b0 = 0xefcdab89;
+            let c0 = 0x98badcfe;
+            let d0 = 0x10325476;
+
+            for (let offset = 0; offset < totalLen; offset += 64) {
+                const M = new Uint32Array(16);
+                for (let i = 0; i < 16; i += 1) {
+                    const j = offset + i * 4;
+                    M[i] =
+                        bytes[j] |
+                        (bytes[j + 1] << 8) |
+                        (bytes[j + 2] << 16) |
+                        (bytes[j + 3] << 24);
+                }
+
+                let A = a0;
+                let B = b0;
+                let C = c0;
+                let D = d0;
+
+                for (let i = 0; i < 64; i += 1) {
+                    let F = 0;
+                    let g = 0;
+
+                    if (i < 16) {
+                        F = (B & C) | (~B & D);
+                        g = i;
+                    } else if (i < 32) {
+                        F = (D & B) | (~D & C);
+                        g = (5 * i + 1) % 16;
+                    } else if (i < 48) {
+                        F = B ^ C ^ D;
+                        g = (3 * i + 5) % 16;
+                    } else {
+                        F = C ^ (B | ~D);
+                        g = (7 * i) % 16;
+                    }
+
+                    F = (F + A + K[i] + M[g]) >>> 0;
+                    A = D;
+                    D = C;
+                    C = B;
+                    B = (B + leftRotate(F, s[i])) >>> 0;
+                }
+
+                a0 = (a0 + A) >>> 0;
+                b0 = (b0 + B) >>> 0;
+                c0 = (c0 + C) >>> 0;
+                d0 = (d0 + D) >>> 0;
+            }
+
+            const out = new Uint8Array(16);
+            const words = [a0, b0, c0, d0];
+            for (let i = 0; i < words.length; i += 1) {
+                const w = words[i];
+                out[i * 4] = w & 0xff;
+                out[i * 4 + 1] = (w >>> 8) & 0xff;
+                out[i * 4 + 2] = (w >>> 16) & 0xff;
+                out[i * 4 + 3] = (w >>> 24) & 0xff;
+            }
+            return out;
+        };
+
+        const populateAlgorithms = (query = "") => {
+            if (!(algorithmEl instanceof HTMLSelectElement)) return;
+            const q = query.trim().toLowerCase();
+            const prev = algorithmEl.value || "sha256";
+            const filtered = ALGORITHMS.filter((alg) =>
+                `${alg.label} ${alg.key}`.toLowerCase().includes(q),
+            );
+            const items = filtered.length ? filtered : ALGORITHMS;
+
+            algorithmEl.innerHTML = "";
+            for (const alg of items) {
+                const option = document.createElement("option");
+                option.value = alg.key;
+                option.textContent = alg.supported
+                    ? alg.label
+                    : `${alg.label} (info only)`;
+                algorithmEl.appendChild(option);
+            }
+
+            const exists = items.some((item) => item.key === prev);
+            algorithmEl.value = exists ? prev : items[0].key;
+        };
+
+        const syncAlgorithmUi = () => {
+            const current = getAlgorithm();
+            const showBcrypt = current.type === "bcrypt";
+            const showArgon2 = current.type === "argon2id";
+            const showScrypt = current.type === "scrypt";
+            bcryptSettingsEl?.classList.toggle("hidden", !showBcrypt);
+            argon2SettingsEl?.classList.toggle("hidden", !showArgon2);
+            scryptSettingsEl?.classList.toggle("hidden", !showScrypt);
+        };
+
+        const getAlgorithm = () => {
+            const key =
+                algorithmEl instanceof HTMLSelectElement
+                    ? algorithmEl.value
+                    : "sha256";
+            return ALGORITHMS.find((alg) => alg.key === key) || ALGORITHMS[2];
+        };
+
+        const hashByAlgorithm = async (algorithm, text) => {
+            const bytes = encoder.encode(text);
+
+            if (algorithm.type === "md5") {
+                return toHex(md5Bytes(bytes));
+            }
+
+            if (algorithm.type === "subtle") {
+                const digest = await crypto.subtle.digest(
+                    algorithm.subtleName,
+                    bytes,
+                );
+                return toHex(new Uint8Array(digest));
+            }
+
+            if (algorithm.type === "tiger") {
+                const tiger = new Tiger(Tiger.L192);
+                return tiger.hash(text);
+            }
+
+            if (algorithm.type === "bcrypt") {
+                const salt = crypto.getRandomValues(new Uint8Array(16));
+                const cost = Number(bcryptCostEl?.value || 11);
+                return bcryptHash({
+                    password: text,
+                    salt,
+                    costFactor: cost,
+                    outputType: "encoded",
+                });
+            }
+
+            if (algorithm.type === "argon2id") {
+                const salt = crypto.getRandomValues(new Uint8Array(16));
+                const iterations = Number(argon2IterationsEl?.value || 3);
+                const memorySize = Number(argon2MemoryEl?.value || 4096);
+                const parallelism = Number(argon2ParallelismEl?.value || 1);
+
+                return argon2id({
+                    password: text,
+                    salt,
+                    iterations,
+                    memorySize,
+                    parallelism,
+                    hashLength: 32,
+                    outputType: "encoded",
+                });
+            }
+
+            if (algorithm.type === "scrypt") {
+                const salt = crypto.getRandomValues(new Uint8Array(16));
+                const costFactor = Number(scryptCostEl?.value || 1024);
+                const blockSize = Number(scryptBlockEl?.value || 8);
+                const parallelism = Number(scryptParallelismEl?.value || 1);
+
+                return scrypt({
+                    password: text,
+                    salt,
+                    costFactor,
+                    blockSize,
+                    parallelism,
+                    hashLength: 32,
+                    outputType: "hex",
+                });
+            }
+
+            return null;
+        };
+
+        const generateSingle = async () => {
+            const text = inputEl?.value ?? "";
+            if (!text.trim()) {
+                messageEl.textContent = "Input masih kosong.";
+                outputEl.value = "";
+                return;
+            }
+
+            const algorithm = getAlgorithm();
+            const digest = await hashByAlgorithm(algorithm, text);
+            outputEl.value = digest || "";
+            if (algorithm.type === "bcrypt") {
+                messageEl.textContent =
+                    "bcrypt hash berhasil dibuat (encoded). Tiap generate bisa berbeda karena salt acak.";
+                return;
+            }
+
+            if (algorithm.type === "argon2id") {
+                messageEl.textContent =
+                    "Argon2id hash berhasil dibuat (encoded). Tiap generate bisa berbeda karena salt acak.";
+                return;
+            }
+
+            if (algorithm.type === "scrypt") {
+                messageEl.textContent =
+                    "scrypt hash berhasil dibuat. Tiap generate bisa berbeda karena salt acak.";
+                return;
+            }
+
+            messageEl.textContent = `${algorithm.label} hash berhasil dibuat (one-way).`;
+        };
+
+        const generateAllSupported = async () => {
+            const text = inputEl?.value ?? "";
+            if (!text.trim()) {
+                messageEl.textContent = "Input masih kosong.";
+                outputEl.value = "";
+                return;
+            }
+
+            const lines = [];
+            for (const algorithm of ALGORITHMS) {
+                if (!algorithm.supported) continue;
+                const digest = await hashByAlgorithm(algorithm, text);
+                lines.push(`${algorithm.label}: ${digest}`);
+            }
+
+            outputEl.value = lines.join("\n");
+            messageEl.textContent = "Semua hash supported berhasil dibuat.";
+        };
+
+        populateAlgorithms();
+        syncAlgorithmUi();
+
+        bcryptCostEl?.addEventListener("input", () => {
+            if (bcryptCostValueEl) {
+                bcryptCostValueEl.textContent = String(bcryptCostEl.value);
+            }
+        });
+
+        searchEl?.addEventListener("input", () => {
+            populateAlgorithms(searchEl.value || "");
+            syncAlgorithmUi();
+        });
+
+        algorithmEl?.addEventListener("change", syncAlgorithmUi);
+
+        document
+            .getElementById("generateHashBtn")
+            ?.addEventListener("click", async () => {
+                await generateSingle();
+            });
+
+        document
+            .getElementById("generateAllHashBtn")
+            ?.addEventListener("click", async () => {
+                await generateAllSupported();
+            });
+
+        document
+            .getElementById("copyHashBtn")
+            ?.addEventListener("click", async () => {
+                if (!outputEl.value) return;
+                await navigator.clipboard.writeText(outputEl.value);
+                messageEl.textContent = "Output hash tersalin ke clipboard.";
+            });
+    </script>
+</BaseLayout>

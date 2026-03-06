@@ -1,0 +1,900 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+    title="Encrypt / Decrypt (AES + RSA) - Irwansyah Tools"
+    description="Enkripsi dan dekripsi teks dua arah dengan pilihan algoritma AES (GCM/CBC/CTR) dan RSA-OAEP langsung di browser."
+    canonicalPath="/tools/aes-encrypt-decrypt"
+>
+    <section
+        class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-5"
+    >
+        <h1 class="text-2xl font-black text-slate-900 md:text-3xl">
+            Encrypt and Decrypt (Two-Way)
+        </h1>
+        <p class="mt-1 text-sm text-slate-600">
+            Tool enkripsi-dekripsi dua arah (bukan hash) dengan pilihan
+            algoritma AES dan RSA-OAEP.
+        </p>
+
+        <div class="mt-3 grid gap-3 md:grid-cols-2">
+            <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-slate-700"
+                    >Cari Algoritma</span
+                >
+                <input
+                    id="algorithmSearch"
+                    type="text"
+                    class="w-full rounded-2xl border border-slate-300 p-3 text-sm"
+                    placeholder="Cari: GCM, CBC, CTR, RSA"
+                />
+            </label>
+            <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-slate-700"
+                    >Pilih Algoritma (Two-Way)</span
+                >
+                <select
+                    id="algorithmSelect"
+                    class="w-full rounded-2xl border border-slate-300 bg-white p-3 text-sm"
+                ></select>
+            </label>
+        </div>
+
+        <div id="passphraseWrap" class="mt-3">
+            <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-slate-700"
+                    >Passphrase / Kunci (AES)</span
+                >
+                <input
+                    id="aesPassphrase"
+                    type="password"
+                    class="w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm"
+                    placeholder="Masukkan passphrase minimal 8 karakter"
+                />
+            </label>
+        </div>
+
+        <div
+            id="rsaFlowPanel"
+            class="mt-3 hidden rounded-2xl border border-slate-200 bg-slate-50 p-3"
+        >
+            <p class="text-sm font-semibold text-slate-800">
+                RSA-OAEP Flow (Muncul saat RSA dipilih)
+            </p>
+            <p class="mt-1 text-xs text-slate-600">
+                Encrypt memakai Public Key, decrypt memakai Private Key.
+            </p>
+
+            <div class="mt-3 flex flex-wrap gap-2">
+                <button
+                    id="generateRsaKeyBtn"
+                    class="rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700"
+                    type="button">Generate RSA Keypair</button
+                >
+                <button
+                    id="copyPublicKeyBtn"
+                    class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                    type="button">Copy Public Key</button
+                >
+                <button
+                    id="copyPrivateKeyBtn"
+                    class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                    type="button">Copy Private Key</button
+                >
+            </div>
+
+            <div class="mt-3 grid gap-3 md:grid-cols-2">
+                <label class="block">
+                    <span
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                        >RSA Public Key (PEM)</span
+                    >
+                    <textarea
+                        id="rsaPublicKey"
+                        class="h-40 w-full rounded-2xl border border-slate-300 p-3 font-mono text-xs"
+                        placeholder="-----BEGIN PUBLIC KEY-----"></textarea>
+                </label>
+                <label class="block">
+                    <span
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                        >RSA Private Key (PEM)</span
+                    >
+                    <textarea
+                        id="rsaPrivateKey"
+                        class="h-40 w-full rounded-2xl border border-slate-300 p-3 font-mono text-xs"
+                        placeholder="-----BEGIN PRIVATE KEY-----"></textarea>
+                </label>
+            </div>
+        </div>
+
+        <div class="mt-3 grid gap-3 md:grid-cols-2">
+            <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-slate-700"
+                    >Input</span
+                >
+                <textarea
+                    id="aesInput"
+                    class="h-44 w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm md:h-52 lg:h-[34vh]"
+                    placeholder="Tulis plaintext untuk enkripsi, atau ciphertext LPENCv2/LPENCv1/LPRSA1 untuk dekripsi"
+                ></textarea>
+            </label>
+            <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-slate-700"
+                    >Output</span
+                >
+                <textarea
+                    id="aesOutput"
+                    class="h-44 w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm md:h-52 lg:h-[34vh]"
+                    readonly></textarea>
+            </label>
+        </div>
+
+        <div class="mt-3 flex flex-wrap gap-2">
+            <button
+                id="encryptBtn"
+                class="rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700"
+                >Encrypt</button
+            >
+            <button
+                id="decryptBtn"
+                class="rounded-xl bg-amber-500 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-amber-400"
+                >Decrypt</button
+            >
+            <button
+                id="copyAesBtn"
+                class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                >Copy Output</button
+            >
+        </div>
+        <p id="aesMessage" class="mt-3 text-sm text-slate-600"></p>
+
+        <div class="mt-3 rounded-2xl border border-slate-200 bg-slate-50 p-3">
+            <h2 class="text-sm font-semibold text-slate-800">
+                Keterangan Dasar Enkripsi vs Hash
+            </h2>
+            <div class="mt-3 space-y-3 text-sm text-slate-700">
+                <p>
+                    Halaman ini mendukung enkripsi dua arah untuk keluarga AES
+                    (simetris) dan RSA-OAEP (asimetris).
+                </p>
+                <div>
+                    <p class="font-semibold text-slate-900">
+                        Beda dengan hash:
+                    </p>
+                    <p>
+                        Hash (misalnya SHA-256) bersifat satu arah dan tidak
+                        bisa di-decrypt. Enkripsi bersifat dua arah: encrypt
+                        lalu decrypt.
+                    </p>
+                </div>
+                <div>
+                    <p class="font-semibold text-slate-900">
+                        Algoritma dua arah di halaman ini:
+                    </p>
+                    <p>
+                        `AES-GCM` (default, recommended), `AES-CBC`, dan
+                        `AES-CTR` (passphrase-based), plus `RSA-OAEP`
+                        (public/private key).
+                    </p>
+                </div>
+                <div>
+                    <p class="font-semibold text-slate-900">
+                        Keterangan algoritma terpilih:
+                    </p>
+                    <div
+                        id="selectedAlgorithmGuide"
+                        class="mt-2 rounded-xl border border-slate-200 bg-white p-3"
+                    >
+                    </div>
+                </div>
+                <div>
+                    <p class="font-semibold text-slate-900">
+                        Format output ciphertext baru:
+                    </p>
+                    <pre
+                        class="mt-1 overflow-x-auto rounded-xl border border-slate-200 bg-white p-2 font-mono text-xs">LPENCv2.&lt;algorithmKey&gt;.&lt;saltBase64&gt;.&lt;ivBase64&gt;.&lt;cipherBase64&gt;</pre>
+                    <p class="mt-2">
+                        Tetap kompatibel dengan format lama:
+                        `LPENCv1.&lt;salt&gt;.&lt;iv&gt;.&lt;cipher&gt;`
+                        (diasumsikan AES-GCM).
+                    </p>
+                    <p class="mt-2">
+                        Format RSA: `LPRSA1.rsa-oaep.&lt;cipherBase64&gt;`.
+                    </p>
+                </div>
+                <div>
+                    <p class="font-semibold text-slate-900">
+                        Cara pakai cepat:
+                    </p>
+                    <pre
+                        class="mt-1 overflow-x-auto rounded-xl border border-slate-200 bg-white p-2 font-mono text-xs">1) Isi passphrase
+2) Pilih algoritma dari select (bisa dicari)
+3) Tulis teks di kolom Input
+4) Klik Encrypt
+5) Untuk buka lagi, paste ciphertext lalu klik Decrypt</pre>
+                </div>
+                <p>
+                    Khusus RSA-OAEP, tampilan flow keypair akan muncul hanya
+                    saat algoritma RSA dipilih.
+                </p>
+                <p>
+                    Catatan: Jangan lupa passphrase. Jika passphrase salah,
+                    ciphertext tidak bisa dibuka.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const passphraseEl = document.getElementById("aesPassphrase");
+        const inputEl = document.getElementById("aesInput");
+        const outputEl = document.getElementById("aesOutput");
+        const messageEl = document.getElementById("aesMessage");
+        const algorithmSearchEl = document.getElementById("algorithmSearch");
+        const algorithmSelectEl = document.getElementById("algorithmSelect");
+        const passphraseWrapEl = document.getElementById("passphraseWrap");
+        const rsaFlowPanelEl = document.getElementById("rsaFlowPanel");
+        const rsaPublicKeyEl = document.getElementById("rsaPublicKey");
+        const rsaPrivateKeyEl = document.getElementById("rsaPrivateKey");
+        const selectedAlgorithmGuideEl = document.getElementById(
+            "selectedAlgorithmGuide",
+        );
+
+        const encoder = new TextEncoder();
+        const decoder = new TextDecoder();
+
+        const ALGORITHMS = [
+            {
+                key: "aes-gcm",
+                label: "AES-GCM (Recommended)",
+                subtleName: "AES-GCM",
+                ivLength: 12,
+                params: (iv) => ({ name: "AES-GCM", iv }),
+            },
+            {
+                key: "aes-cbc",
+                label: "AES-CBC",
+                subtleName: "AES-CBC",
+                ivLength: 16,
+                params: (iv) => ({ name: "AES-CBC", iv }),
+            },
+            {
+                key: "aes-ctr",
+                label: "AES-CTR",
+                subtleName: "AES-CTR",
+                ivLength: 16,
+                params: (iv) => ({ name: "AES-CTR", counter: iv, length: 64 }),
+            },
+            {
+                key: "rsa-oaep",
+                label: "RSA-OAEP (Public/Private Key)",
+                subtleName: "RSA-OAEP",
+                family: "rsa",
+                params: () => ({ name: "RSA-OAEP" }),
+            },
+        ];
+
+        const getAlgorithmByKey = (key) =>
+            ALGORITHMS.find((alg) => alg.key === key) || ALGORITHMS[0];
+
+        const populateAlgorithmSelect = (query = "") => {
+            if (!(algorithmSelectEl instanceof HTMLSelectElement)) return;
+            const q = query.trim().toLowerCase();
+            const selectedValue = algorithmSelectEl.value || ALGORITHMS[0].key;
+
+            const filtered = ALGORITHMS.filter((alg) =>
+                `${alg.label} ${alg.key}`.toLowerCase().includes(q),
+            );
+
+            const items = filtered.length > 0 ? filtered : ALGORITHMS;
+            algorithmSelectEl.innerHTML = "";
+
+            for (const alg of items) {
+                const opt = document.createElement("option");
+                opt.value = alg.key;
+                opt.textContent = alg.label;
+                algorithmSelectEl.appendChild(opt);
+            }
+
+            const stillExists = items.some((alg) => alg.key === selectedValue);
+            algorithmSelectEl.value = stillExists
+                ? selectedValue
+                : items[0].key;
+        };
+
+        populateAlgorithmSelect();
+
+        algorithmSearchEl?.addEventListener("input", () => {
+            populateAlgorithmSelect(algorithmSearchEl.value || "");
+            syncAlgorithmDependentUi();
+        });
+
+        const getSelectedAlgorithm = () => {
+            if (!(algorithmSelectEl instanceof HTMLSelectElement)) {
+                return ALGORITHMS[0];
+            }
+            return getAlgorithmByKey(algorithmSelectEl.value);
+        };
+
+        const getAlgorithmFamily = (algorithm) =>
+            algorithm.family === "rsa" ? "rsa" : "aes";
+
+        const ALGORITHM_GUIDES = {
+            "aes-gcm": {
+                title: "AES-GCM (Recommended)",
+                flow: "Flow sederhana berbasis passphrase. Memiliki autentikasi bawaan (integrity check).",
+                useCase:
+                    "Pilihan utama untuk data teks umum karena seimbang: aman, modern, dan cepat.",
+                format: "LPENCv2.aes-gcm.<salt>.<iv>.<cipher>",
+                calculation: `K = PBKDF2(passphrase, salt, 120000, SHA-256, 256-bit)\n( C, T ) = GCM_Encrypt(K, IV, P, AAD="")\nOutput = IV || C || T\nDecrypt valid jika tag T cocok (integrity pass).`,
+                flowchartHtml: `<div class="flowchart-visual">
+                    <div class="flow-lane">
+                        <div class="flow-node flow-start">Mulai</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-io">Input Plaintext + Passphrase</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node">Derive Key (PBKDF2)</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node">Generate IV 12-byte</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node">AES-GCM Encrypt (Cipher + Tag)</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-io">Output Ciphertext</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-end">Selesai</div>
+                    </div>
+                </div>`,
+            },
+            "aes-cbc": {
+                title: "AES-CBC",
+                flow: "Flow sederhana berbasis passphrase dengan IV 16 byte.",
+                useCase:
+                    "Dipakai saat butuh kompatibilitas dengan sistem lama yang masih menggunakan CBC.",
+                format: "LPENCv2.aes-cbc.<salt>.<iv>.<cipher>",
+                calculation: `K = PBKDF2(passphrase, salt, 120000, SHA-256, 256-bit)\nC1 = E_K(P1 XOR IV)\nCi = E_K(Pi XOR C(i-1))  untuk i > 1\nDecrypt kebalikan proses blok, lalu unpadding.`,
+                flowchartHtml: `<div class="flowchart-visual">
+                    <div class="flow-lane">
+                        <div class="flow-node flow-start">Mulai</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-io">Input Ciphertext + Passphrase</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node">Derive Key (PBKDF2)</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node">Init IV 16-byte</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node">AES Decrypt Round Core</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-decision"><span>Blok terakhir?</span></div>
+                        <div class="flow-branches">
+                            <div class="flow-branch">Ya → Unpadding → Output Plaintext</div>
+                            <div class="flow-branch">Tidak → Proses blok berikutnya</div>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-end">Selesai</div>
+                    </div>
+                </div>`,
+            },
+            "aes-ctr": {
+                title: "AES-CTR",
+                flow: "Flow sederhana berbasis passphrase dengan mode counter.",
+                useCase:
+                    "Cocok untuk kebutuhan stream-like encryption dan interoperabilitas tertentu.",
+                format: "LPENCv2.aes-ctr.<salt>.<iv>.<cipher>",
+                calculation: `K = PBKDF2(passphrase, salt, 120000, SHA-256, 256-bit)\nS_i = E_K(counter + i)\nC_i = P_i XOR S_i\nDecrypt: P_i = C_i XOR S_i (XOR simetris).`,
+                flowchartHtml: `<div class="flowchart-visual">
+                    <div class="flow-lane">
+                        <div class="flow-node flow-start">Mulai</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-io">Input Data + Passphrase</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node">Derive Key (PBKDF2)</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node">Init Counter / Nonce</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node">Generate Keystream AES</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node">XOR dengan data</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-io">Output Cipher / Plaintext</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-end">Selesai</div>
+                    </div>
+                </div>`,
+            },
+            "rsa-oaep": {
+                title: "RSA-OAEP",
+                flow: "Flow kompleks berbasis keypair. Encrypt pakai public key, decrypt pakai private key.",
+                useCase:
+                    "Cocok untuk skenario pertukaran data lintas pihak tanpa berbagi passphrase.",
+                format: "LPRSA1.rsa-oaep.<cipher>",
+                calculation: `KeyGen: pilih n = p*q, public exponent e, private exponent d\nOAEP pad: m -> EM\nEncrypt: c = EM^e mod n (public key)\nDecrypt: EM = c^d mod n (private key), lalu OAEP unpad -> m`,
+                flowchartHtml: `<div class="flowchart-visual">
+                    <div class="flow-lane">
+                        <div class="flow-node flow-start">Mulai</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node">Generate / Load Keypair</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node">Encrypt (Public Key + OAEP)</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-io">Output Ciphertext</div>
+                    </div>
+                    <div class="flow-lane">
+                        <div class="flow-node">Input Ciphertext</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node">Decrypt (Private Key + OAEP)</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-io">Output Plaintext</div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-node flow-end">Selesai</div>
+                    </div>
+                </div>`,
+            },
+        };
+
+        const escapeHtml = (text) =>
+            String(text)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+
+        const renderSelectedAlgorithmGuide = (algorithm) => {
+            if (!(selectedAlgorithmGuideEl instanceof HTMLDivElement)) return;
+            const guide =
+                ALGORITHM_GUIDES[algorithm.key] || ALGORITHM_GUIDES["aes-gcm"];
+
+            selectedAlgorithmGuideEl.innerHTML = `
+                <p class="text-sm font-semibold text-slate-900">${guide.title}</p>
+                <p class="mt-2 text-sm text-slate-700"><span class="font-semibold text-slate-900">Flow:</span> ${guide.flow}</p>
+                <p class="mt-2 text-sm text-slate-700"><span class="font-semibold text-slate-900">Use case:</span> ${guide.useCase}</p>
+                <p class="mt-2 text-sm text-slate-700"><span class="font-semibold text-slate-900">Format:</span> <code>${guide.format}</code></p>
+                <p class="mt-3 text-sm font-semibold text-slate-900">Perhitungan Inti</p>
+                <pre class="mt-1 overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 p-2 font-mono text-xs text-slate-700">${escapeHtml(guide.calculation)}</pre>
+                <p class="mt-3 text-sm font-semibold text-slate-900">Flowchart</p>
+                <div class="mt-1 overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 p-3">${guide.flowchartHtml || `<pre class="font-mono text-xs text-slate-700">${escapeHtml(guide.flowchart || "")}</pre>`}</div>
+            `;
+        };
+
+        const syncAlgorithmDependentUi = () => {
+            const selected = getSelectedAlgorithm();
+            const isRsa = getAlgorithmFamily(selected) === "rsa";
+
+            passphraseWrapEl?.classList.toggle("hidden", isRsa);
+            rsaFlowPanelEl?.classList.toggle("hidden", !isRsa);
+
+            if (inputEl instanceof HTMLTextAreaElement) {
+                inputEl.placeholder = isRsa
+                    ? "Tulis plaintext untuk encrypt RSA, atau ciphertext format LPRSA1 untuk decrypt"
+                    : "Tulis plaintext untuk enkripsi, atau ciphertext LPENCv2/LPENCv1 untuk dekripsi";
+            }
+
+            renderSelectedAlgorithmGuide(selected);
+        };
+
+        algorithmSelectEl?.addEventListener("change", syncAlgorithmDependentUi);
+        syncAlgorithmDependentUi();
+
+        const toBase64 = (bytes) => {
+            let binary = "";
+            const chunk = 0x8000;
+            for (let i = 0; i < bytes.length; i += chunk) {
+                binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+            }
+            return btoa(binary);
+        };
+
+        const fromBase64 = (base64) => {
+            const binary = atob(base64);
+            const out = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i += 1) {
+                out[i] = binary.charCodeAt(i);
+            }
+            return out;
+        };
+
+        const pemBodyToBase64 = (pem) =>
+            pem
+                .replace(/-----BEGIN [^-]+-----/g, "")
+                .replace(/-----END [^-]+-----/g, "")
+                .replace(/\s+/g, "");
+
+        const bytesToPem = (bytes, label) => {
+            const base64 = toBase64(bytes);
+            const lines = base64.match(/.{1,64}/g)?.join("\n") || base64;
+            return `-----BEGIN ${label}-----\n${lines}\n-----END ${label}-----`;
+        };
+
+        const pemToBytes = (pem) => fromBase64(pemBodyToBase64(pem));
+
+        const deriveAesKey = async (passphrase, salt, subtleName) => {
+            const keyMaterial = await crypto.subtle.importKey(
+                "raw",
+                encoder.encode(passphrase),
+                { name: "PBKDF2" },
+                false,
+                ["deriveKey"],
+            );
+
+            return crypto.subtle.deriveKey(
+                {
+                    name: "PBKDF2",
+                    salt,
+                    iterations: 120000,
+                    hash: "SHA-256",
+                },
+                keyMaterial,
+                { name: subtleName, length: 256 },
+                false,
+                ["encrypt", "decrypt"],
+            );
+        };
+
+        const importRsaPublicKey = async (pem) =>
+            crypto.subtle.importKey(
+                "spki",
+                pemToBytes(pem),
+                { name: "RSA-OAEP", hash: "SHA-256" },
+                false,
+                ["encrypt"],
+            );
+
+        const importRsaPrivateKey = async (pem) =>
+            crypto.subtle.importKey(
+                "pkcs8",
+                pemToBytes(pem),
+                { name: "RSA-OAEP", hash: "SHA-256" },
+                false,
+                ["decrypt"],
+            );
+
+        const validateInputText = () => {
+            const input = inputEl?.value ?? "";
+            if (!input.trim()) {
+                messageEl.textContent = "Input masih kosong.";
+                return null;
+            }
+
+            return input.trim();
+        };
+
+        const validateInputsForEncrypt = (algorithm) => {
+            const input = validateInputText();
+            if (!input) return null;
+
+            const passphrase = passphraseEl?.value ?? "";
+
+            if (getAlgorithmFamily(algorithm) === "aes") {
+                if (passphrase.trim().length < 8) {
+                    messageEl.textContent =
+                        "Passphrase minimal 8 karakter untuk keamanan dasar.";
+                    return null;
+                }
+                return { passphrase, input };
+            }
+
+            const publicKeyPem = rsaPublicKeyEl?.value?.trim() || "";
+            if (!publicKeyPem) {
+                messageEl.textContent =
+                    "Untuk RSA encrypt, isi RSA Public Key atau generate keypair dulu.";
+                return null;
+            }
+
+            return {
+                passphrase,
+                input,
+                publicKeyPem,
+            };
+        };
+
+        document
+            .getElementById("generateRsaKeyBtn")
+            ?.addEventListener("click", async () => {
+                try {
+                    const keyPair = await crypto.subtle.generateKey(
+                        {
+                            name: "RSA-OAEP",
+                            modulusLength: 2048,
+                            publicExponent: new Uint8Array([1, 0, 1]),
+                            hash: "SHA-256",
+                        },
+                        true,
+                        ["encrypt", "decrypt"],
+                    );
+
+                    const spki = new Uint8Array(
+                        await crypto.subtle.exportKey(
+                            "spki",
+                            keyPair.publicKey,
+                        ),
+                    );
+                    const pkcs8 = new Uint8Array(
+                        await crypto.subtle.exportKey(
+                            "pkcs8",
+                            keyPair.privateKey,
+                        ),
+                    );
+
+                    if (rsaPublicKeyEl instanceof HTMLTextAreaElement) {
+                        rsaPublicKeyEl.value = bytesToPem(spki, "PUBLIC KEY");
+                    }
+
+                    if (rsaPrivateKeyEl instanceof HTMLTextAreaElement) {
+                        rsaPrivateKeyEl.value = bytesToPem(
+                            pkcs8,
+                            "PRIVATE KEY",
+                        );
+                    }
+
+                    messageEl.textContent =
+                        "RSA keypair berhasil dibuat. Simpan private key dengan aman.";
+                } catch (error) {
+                    messageEl.textContent = `Gagal generate RSA keypair: ${error instanceof Error ? error.message : "terjadi kesalahan."}`;
+                }
+            });
+
+        document
+            .getElementById("copyPublicKeyBtn")
+            ?.addEventListener("click", async () => {
+                const value = rsaPublicKeyEl?.value || "";
+                if (!value.trim()) return;
+                await navigator.clipboard.writeText(value);
+                messageEl.textContent = "Public key tersalin ke clipboard.";
+            });
+
+        document
+            .getElementById("copyPrivateKeyBtn")
+            ?.addEventListener("click", async () => {
+                const value = rsaPrivateKeyEl?.value || "";
+                if (!value.trim()) return;
+                await navigator.clipboard.writeText(value);
+                messageEl.textContent = "Private key tersalin ke clipboard.";
+            });
+
+        document
+            .getElementById("encryptBtn")
+            ?.addEventListener("click", async () => {
+                try {
+                    const selectedAlgorithm = getSelectedAlgorithm();
+                    const values = validateInputsForEncrypt(selectedAlgorithm);
+                    if (!values) return;
+
+                    if (getAlgorithmFamily(selectedAlgorithm) === "rsa") {
+                        const publicKey = await importRsaPublicKey(
+                            values.publicKeyPem,
+                        );
+
+                        const cipherBuffer = await crypto.subtle.encrypt(
+                            { name: "RSA-OAEP" },
+                            publicKey,
+                            encoder.encode(values.input),
+                        );
+
+                        outputEl.value = `LPRSA1.rsa-oaep.${toBase64(new Uint8Array(cipherBuffer))}`;
+                        messageEl.textContent =
+                            "Encrypt RSA berhasil. Decrypt membutuhkan private key yang sesuai.";
+                        return;
+                    }
+
+                    const salt = crypto.getRandomValues(new Uint8Array(16));
+                    const iv = crypto.getRandomValues(
+                        new Uint8Array(selectedAlgorithm.ivLength),
+                    );
+                    const key = await deriveAesKey(
+                        values.passphrase,
+                        salt,
+                        selectedAlgorithm.subtleName,
+                    );
+
+                    const cipherBuffer = await crypto.subtle.encrypt(
+                        selectedAlgorithm.params(iv),
+                        key,
+                        encoder.encode(values.input),
+                    );
+
+                    const ciphertext = `LPENCv2.${selectedAlgorithm.key}.${toBase64(salt)}.${toBase64(iv)}.${toBase64(new Uint8Array(cipherBuffer))}`;
+
+                    outputEl.value = ciphertext;
+                    messageEl.textContent = `Encrypt berhasil dengan ${selectedAlgorithm.label}. Simpan ciphertext dan passphrase Anda.`;
+                } catch (error) {
+                    outputEl.value = "";
+                    messageEl.textContent = `Gagal encrypt: ${error instanceof Error ? error.message : "terjadi kesalahan."}`;
+                }
+            });
+
+        document
+            .getElementById("decryptBtn")
+            ?.addEventListener("click", async () => {
+                try {
+                    const input = validateInputText();
+                    if (!input) return;
+
+                    const parts = input.split(".");
+                    let algorithm = ALGORITHMS[0];
+                    let salt;
+                    let iv;
+                    let cipherBytes;
+
+                    if (
+                        parts.length === 3 &&
+                        parts[0] === "LPRSA1" &&
+                        parts[1] === "rsa-oaep"
+                    ) {
+                        const privateKeyPem =
+                            rsaPrivateKeyEl?.value?.trim() || "";
+                        if (!privateKeyPem) {
+                            messageEl.textContent =
+                                "Untuk RSA decrypt, isi RSA Private Key atau generate keypair dulu.";
+                            return;
+                        }
+
+                        const privateKey =
+                            await importRsaPrivateKey(privateKeyPem);
+                        const cipher = fromBase64(parts[2]);
+                        const plain = await crypto.subtle.decrypt(
+                            { name: "RSA-OAEP" },
+                            privateKey,
+                            cipher,
+                        );
+
+                        if (algorithmSelectEl instanceof HTMLSelectElement) {
+                            algorithmSelectEl.value = "rsa-oaep";
+                            syncAlgorithmDependentUi();
+                        }
+
+                        outputEl.value = decoder.decode(plain);
+                        messageEl.textContent =
+                            "Decrypt RSA berhasil. Teks asli dipulihkan.";
+                        return;
+                    }
+
+                    if (parts.length === 5 && parts[0] === "LPENCv2") {
+                        algorithm = getAlgorithmByKey(parts[1]);
+                        salt = fromBase64(parts[2]);
+                        iv = fromBase64(parts[3]);
+                        cipherBytes = fromBase64(parts[4]);
+                    } else if (parts.length === 4 && parts[0] === "LPENCv1") {
+                        algorithm = getAlgorithmByKey("aes-gcm");
+                        salt = fromBase64(parts[1]);
+                        iv = fromBase64(parts[2]);
+                        cipherBytes = fromBase64(parts[3]);
+                    } else {
+                        messageEl.textContent =
+                            "Format ciphertext tidak valid. Gunakan LPENCv2 atau LPENCv1.";
+                        return;
+                    }
+
+                    if (getAlgorithmFamily(algorithm) === "rsa") {
+                        messageEl.textContent =
+                            "Ciphertext RSA gunakan format LPRSA1.rsa-oaep.<cipher>.";
+                        return;
+                    }
+
+                    const passphrase = passphraseEl?.value ?? "";
+                    if (passphrase.trim().length < 8) {
+                        messageEl.textContent =
+                            "Passphrase minimal 8 karakter untuk keamanan dasar.";
+                        return;
+                    }
+
+                    const key = await deriveAesKey(
+                        passphrase,
+                        salt,
+                        algorithm.subtleName,
+                    );
+                    const plainBuffer = await crypto.subtle.decrypt(
+                        algorithm.params(iv),
+                        key,
+                        cipherBytes,
+                    );
+
+                    if (algorithmSelectEl instanceof HTMLSelectElement) {
+                        algorithmSelectEl.value = algorithm.key;
+                        syncAlgorithmDependentUi();
+                    }
+
+                    outputEl.value = decoder.decode(plainBuffer);
+                    messageEl.textContent = `Decrypt berhasil dengan ${algorithm.label}. Teks asli dipulihkan.`;
+                } catch {
+                    outputEl.value = "";
+                    messageEl.textContent =
+                        "Decrypt gagal. Cek passphrase atau pastikan ciphertext tidak berubah.";
+                }
+            });
+
+        document
+            .getElementById("copyAesBtn")
+            ?.addEventListener("click", async () => {
+                if (!outputEl.value) return;
+                await navigator.clipboard.writeText(outputEl.value);
+                messageEl.textContent = "Output tersalin ke clipboard.";
+            });
+    </script>
+
+    <style>
+        .flowchart-visual {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .flow-lane {
+            display: flex;
+            min-width: 220px;
+            flex: 1 1 260px;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .flow-node {
+            width: 100%;
+            border: 1px solid #94a3b8;
+            background: #ffffff;
+            color: #0f172a;
+            padding: 8px 10px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.3;
+            border-radius: 8px;
+        }
+
+        .flow-start,
+        .flow-end {
+            max-width: 180px;
+            border-radius: 999px;
+        }
+
+        .flow-io {
+            transform: skewX(-12deg);
+        }
+
+        .flow-io::before {
+            content: "";
+            display: block;
+            transform: skewX(12deg);
+        }
+
+        .flow-decision {
+            max-width: 200px;
+            padding: 0;
+            height: 74px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+
+        .flow-decision span {
+            display: inline-block;
+            max-width: 120px;
+        }
+
+        .flow-arrow {
+            color: #334155;
+            font-size: 14px;
+            line-height: 1;
+        }
+
+        .flow-branches {
+            width: 100%;
+            display: grid;
+            gap: 6px;
+        }
+
+        .flow-branch {
+            border: 1px dashed #94a3b8;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: #334155;
+            padding: 6px 8px;
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.3;
+        }
+    </style>
+</BaseLayout>

@@ -5,13 +5,21 @@ import { SITE } from "../config/site";
 ---
 
 <BaseLayout title={SITE.title} description={SITE.description} canonicalPath="/">
-	<section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-10">
-		<p class="text-xs font-bold uppercase tracking-[0.16em] text-teal-700">SEO + Fast Utilities</p>
-		<h1 class="mt-4 text-4xl font-black leading-tight text-slate-900 md:text-5xl">Developer Tools Cepat, Ringan, dan Bisa Diindeks Google</h1>
+	<section
+		class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-10"
+	>
+		<p class="text-xs font-bold uppercase tracking-[0.16em] text-teal-700">
+			SEO + Fast Utilities
+		</p>
+		<h1
+			class="mt-4 text-4xl font-black leading-tight text-slate-900 md:text-5xl"
+		>
+			Developer Tools Cepat, Ringan, dan Bisa Diindeks Google
+		</h1>
 		<p class="mt-4 max-w-3xl text-base leading-relaxed text-slate-600">
-			Fokus utama: JSON Viewer suite (unstringify, beautify, JSON ke XML, JSON ke CSV),
-			plus tool Base64. Semua halaman memakai layout reusable agar perubahan global tidak perlu
-			diedit satu per satu.
+			Fokus utama: JSON Viewer suite (unstringify, beautify, JSON ke XML,
+			JSON ke CSV), plus tool Base64. Semua halaman memakai layout
+			reusable agar perubahan global tidak perlu diedit satu per satu.
 		</p>
 	</section>
 
@@ -31,6 +39,16 @@ import { SITE } from "../config/site";
 			title="Base64 to Image"
 			description="Render Base64 image (PNG/JPG/WEBP), preview, dan download hasil gambar."
 			href="/tools/base64-to-image"
+		/>
+		<ToolCard
+			title="AES Encrypt / Decrypt"
+			description="Enkripsi-dekripsi dua arah (bukan hash) dengan AES-GCM langsung di browser."
+			href="/tools/aes-encrypt-decrypt"
+		/>
+		<ToolCard
+			title="Hash Generator"
+			description="Generate hash one-way: MD5, SHA-1, SHA-256, SHA-384, SHA-512, plus info Tiger dan bcrypt."
+			href="/tools/hash-generator"
 		/>
 	</section>
 </BaseLayout>

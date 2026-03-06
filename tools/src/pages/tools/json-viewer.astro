@@ -3,232 +3,391 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout
-  title="JSON Viewer Suite - Unstringify, Beautify, JSON to XML/CSV"
-  description="JSON Viewer lengkap: unstringify JSON string, beautify JSON, convert JSON ke XML, dan JSON ke CSV."
-  canonicalPath="/tools/json-viewer"
+    title="JSON Viewer Suite - Unstringify, Beautify, JSON to XML/CSV"
+    description="JSON Viewer lengkap: unstringify JSON string, beautify JSON, convert JSON ke XML, dan JSON ke CSV."
+    canonicalPath="/tools/json-viewer"
 >
-  <section class="rounded-3xl border border-slate-200 bg-white p-3 shadow-sm md:p-4 lg:h-full lg:overflow-hidden">
-    <div class="grid gap-3 lg:h-full lg:grid-cols-[minmax(0,1fr)_220px_minmax(0,1fr)] lg:items-stretch">
-      <label class="block lg:h-full lg:min-h-0">
-        <span class="mb-2 block text-sm font-semibold text-slate-700">JSON Input</span>
-        <textarea
-          id="jsonInput"
-          class="h-52 w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm md:h-[56vh] lg:h-[calc(100%-28px)]"
-          placeholder='Contoh: "{\"name\":\"Irwansyah\",\"age\":29}" atau {"name":"Irwansyah"}'
-        ></textarea>
-      </label>
+    <section
+        class="rounded-3xl border border-slate-200 bg-white p-3 shadow-sm md:p-4"
+    >
+        <div
+            class="grid gap-3 lg:grid-cols-[minmax(0,1fr)_220px_minmax(0,1fr)]"
+        >
+            <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-slate-700"
+                    >JSON Input</span
+                >
+                <textarea
+                    id="jsonInput"
+                    class="h-52 w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm md:h-[56vh] lg:h-[calc(100%-28px)]"
+                    placeholder='Contoh: "{\"name\":\"Irwansyah\",\"age\":29}" atau {"name":"Irwansyah"}'
+                ></textarea>
+            </label>
 
-      <div class="rounded-2xl border border-slate-200 bg-slate-50 p-3 lg:mx-auto lg:w-full lg:self-start">
-        <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-600">Mode</p>
-        <label class="mt-2 flex items-center gap-2 text-xs font-medium text-slate-700">
-          <input id="autoUpdateToggle" type="checkbox" class="h-4 w-4 rounded border-slate-300" checked />
-          Auto Update
-        </label>
-        <div class="mt-2 grid gap-2">
-          <button class="json-mode-btn rounded-lg bg-teal-600 px-2 py-2 text-xs font-semibold text-white hover:bg-teal-700" data-mode="beautify">Beautify</button>
-          <button class="json-mode-btn rounded-lg border border-slate-300 bg-white px-2 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-100" data-mode="unstringify">Unstringify</button>
-          <button class="json-mode-btn rounded-lg border border-slate-300 bg-white px-2 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-100" data-mode="xml">to XML</button>
-          <button class="json-mode-btn rounded-lg border border-slate-300 bg-white px-2 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-100" data-mode="csv">to CSV</button>
+            <div
+                class="rounded-2xl border border-slate-200 bg-slate-50 p-3 mt-[50%] lg:mx-auto lg:w-full lg:self-start"
+            >
+                <p
+                    class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-600"
+                >
+                    Mode
+                </p>
+                <label
+                    class="mt-2 flex items-center gap-2 text-xs font-medium text-slate-700"
+                >
+                    <input
+                        id="autoUpdateToggle"
+                        type="checkbox"
+                        class="h-4 w-4 rounded border-slate-300"
+                        checked
+                    />
+                    Auto Update
+                </label>
+                <div class="mt-2 grid gap-2">
+                    <button
+                        class="json-mode-btn rounded-lg bg-teal-600 px-2 py-2 text-xs font-semibold text-white hover:bg-teal-700"
+                        data-mode="beautify">Beautify</button
+                    >
+                    <button
+                        class="json-mode-btn rounded-lg border border-slate-300 bg-white px-2 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-100"
+                        data-mode="unstringify">Unstringify</button
+                    >
+                    <button
+                        class="json-mode-btn rounded-lg border border-slate-300 bg-white px-2 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-100"
+                        data-mode="xml">to XML</button
+                    >
+                    <button
+                        class="json-mode-btn rounded-lg border border-slate-300 bg-white px-2 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-100"
+                        data-mode="csv">to CSV</button
+                    >
+                </div>
+
+                <button
+                    id="copyJsonBtn"
+                    class="mt-3 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100"
+                >
+                    Copy Output
+                </button>
+                <p id="jsonMessage" class="mt-2 text-xs text-slate-600"></p>
+            </div>
+
+            <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-slate-700"
+                    >Output</span
+                >
+                <textarea
+                    id="jsonOutput"
+                    class="h-52 w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm md:h-[56vh] lg:h-[calc(100%-28px)]"
+                    readonly></textarea>
+            </label>
         </div>
 
-        <button id="copyJsonBtn" class="mt-3 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100">
-          Copy Output
-        </button>
-        <p id="jsonMessage" class="mt-2 text-xs text-slate-600"></p>
-      </div>
+        <div class="mt-3 rounded-2xl border border-slate-200 bg-slate-50 p-3">
+            <h2 class="text-sm font-semibold text-slate-800">
+                Keterangan Dasar JSON
+            </h2>
+            <div class="mt-3 space-y-3 text-sm text-slate-700">
+                <p>
+                    JSON (JavaScript Object Notation) adalah format data
+                    berbasis teks yang ringan, umum dipakai untuk pertukaran
+                    data antara frontend, backend, dan API.
+                </p>
+                <div>
+                    <p class="font-semibold text-slate-900">
+                        Ada JSON apa saja:
+                    </p>
+                    <p>
+                        Secara struktur utama, JSON biasanya berbentuk `object`
+                        (pasangan key-value) atau `array` (list data). Di
+                        dalamnya, nilai yang valid adalah `string`, `number`,
+                        `boolean`, `null`, `object`, dan `array`.
+                    </p>
+                </div>
+                <div>
+                    <p class="font-semibold text-slate-900">
+                        Contoh JSON object:
+                    </p>
+                    <pre
+                        class="mt-1 overflow-x-auto rounded-xl border border-slate-200 bg-white p-2 font-mono text-xs">&#123;
+  "name": "Irwansyah",
+  "age": 29,
+  "isActive": true,
+  "skills": ["Go", "React Native", "Astro"],
+  "address": &#123;
+    "city": "Jakarta",
+    "country": "Indonesia"
+  &#125;
+&#125;</pre>
+                </div>
+                <div>
+                    <p class="font-semibold text-slate-900">
+                        Contoh JSON array:
+                    </p>
+                    <pre
+                        class="mt-1 overflow-x-auto rounded-xl border border-slate-200 bg-white p-2 font-mono text-xs">[
+  &#123;"id": 1, "title": "Belajar JSON"&#125;,
+  &#123;"id": 2, "title": "Bangun API"&#125;,
+  &#123;"id": 3, "title": "Deploy Aplikasi"&#125;
+]</pre>
+                </div>
+                <div>
+                    <p class="font-semibold text-slate-900">
+                        Mode di halaman ini:
+                    </p>
+                    <p>
+                        `Beautify` untuk merapikan format, `Unstringify` untuk
+                        membuka JSON yang masih berupa string escape, `to XML`
+                        dan `to CSV` untuk konversi format.
+                    </p>
+                </div>
+                <div>
+                    <p class="font-semibold text-slate-900">
+                        Kapan mode ini dipakai:
+                    </p>
+                    <p>
+                        Gunakan `Beautify` saat response API sulit dibaca,
+                        `Unstringify` saat data JSON terbungkus string, `to XML`
+                        saat integrasi dengan sistem lama, dan `to CSV` saat
+                        data ingin dianalisis di spreadsheet.
+                    </p>
+                </div>
+                <div>
+                    <p class="font-semibold text-slate-900">
+                        Error JSON yang umum:
+                    </p>
+                    <pre
+                        class="mt-1 overflow-x-auto rounded-xl border border-slate-200 bg-white p-2 font-mono text-xs">1) Kurang tanda kutip pada key:
+   &#123;name: "Irwansyah"&#125;  (salah)
+   &#123;"name": "Irwansyah"&#125; (benar)
 
-      <label class="block lg:h-full lg:min-h-0">
-        <span class="mb-2 block text-sm font-semibold text-slate-700">Output</span>
-        <textarea id="jsonOutput" class="h-52 w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm md:h-[56vh] lg:h-[calc(100%-28px)]" readonly></textarea>
-      </label>
-    </div>
-  </section>
+2) Pakai single quote:
+   &#123;'name': 'Irwansyah'&#125; (salah)
 
-  <script>
-    const inputEl = document.getElementById("jsonInput");
-    const outputEl = document.getElementById("jsonOutput");
-    const msgEl = document.getElementById("jsonMessage");
-    const autoUpdateEl = document.getElementById("autoUpdateToggle");
-    const modeButtons = Array.from(document.querySelectorAll(".json-mode-btn"));
+3) Trailing comma:
+   &#123;"name": "Irwansyah",&#125; (salah)</pre>
+                </div>
+                <div>
+                    <p class="font-semibold text-slate-900">
+                        Best practice JSON:
+                    </p>
+                    <p>
+                        Gunakan nama key yang konsisten, hindari nesting terlalu
+                        dalam, dan simpan tanggal dalam format ISO seperti
+                        `2026-03-06T10:30:00Z` agar lintas sistem lebih aman.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    let activeMode = "beautify";
+    <script>
+        const inputEl = document.getElementById("jsonInput");
+        const outputEl = document.getElementById("jsonOutput");
+        const msgEl = document.getElementById("jsonMessage");
+        const autoUpdateEl = document.getElementById("autoUpdateToggle");
+        const modeButtons = Array.from(
+            document.querySelectorAll(".json-mode-btn"),
+        );
 
-    const setModeStyle = () => {
-      for (const btn of modeButtons) {
-        const isActive = btn.dataset.mode === activeMode;
-        btn.classList.toggle("bg-teal-600", isActive);
-        btn.classList.toggle("text-white", isActive);
-        btn.classList.toggle("border-slate-300", !isActive);
-        btn.classList.toggle("bg-white", !isActive);
-        btn.classList.toggle("text-slate-800", !isActive);
-      }
-    };
+        let activeMode = "beautify";
 
-    for (const btn of modeButtons) {
-      btn.addEventListener("click", () => {
-        activeMode = btn.dataset.mode || "beautify";
+        const setModeStyle = () => {
+            for (const btn of modeButtons) {
+                const isActive = btn.dataset.mode === activeMode;
+                btn.classList.toggle("bg-teal-600", isActive);
+                btn.classList.toggle("text-white", isActive);
+                btn.classList.toggle("border-slate-300", !isActive);
+                btn.classList.toggle("bg-white", !isActive);
+                btn.classList.toggle("text-slate-800", !isActive);
+            }
+        };
+
+        for (const btn of modeButtons) {
+            btn.addEventListener("click", () => {
+                activeMode = btn.dataset.mode || "beautify";
+                setModeStyle();
+            });
+        }
+
+        const parseFlexibleJson = (raw) => {
+            let value = JSON.parse(raw);
+            // Unwrap stringified JSON up to 5 levels to support deeply escaped payloads.
+            for (let i = 0; i < 5; i += 1) {
+                if (typeof value !== "string") break;
+                try {
+                    value = JSON.parse(value);
+                } catch {
+                    break;
+                }
+            }
+            return value;
+        };
+
+        const escapeXml = (value) =>
+            String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&apos;");
+
+        const toXmlNode = (key, value) => {
+            if (Array.isArray(value)) {
+                return value.map((item) => toXmlNode(key, item)).join("");
+            }
+            if (value !== null && typeof value === "object") {
+                const children = Object.entries(value)
+                    .map(([childKey, childValue]) =>
+                        toXmlNode(childKey, childValue),
+                    )
+                    .join("");
+                return `<${key}>${children}</${key}>`;
+            }
+            return `<${key}>${escapeXml(value)}</${key}>`;
+        };
+
+        const jsonToXml = (data) => {
+            if (
+                data !== null &&
+                typeof data === "object" &&
+                !Array.isArray(data)
+            ) {
+                const body = Object.entries(data)
+                    .map(([key, value]) => toXmlNode(key, value))
+                    .join("");
+                return `<?xml version="1.0" encoding="UTF-8"?>\n<root>${body}</root>`;
+            }
+            if (Array.isArray(data)) {
+                const rows = data
+                    .map((item) => toXmlNode("item", item))
+                    .join("");
+                return `<?xml version="1.0" encoding="UTF-8"?>\n<root>${rows}</root>`;
+            }
+            return `<?xml version="1.0" encoding="UTF-8"?>\n<root>${escapeXml(data)}</root>`;
+        };
+
+        const flattenRecord = (record, prefix = "") => {
+            const out = {};
+            for (const [key, value] of Object.entries(record)) {
+                const col = prefix ? `${prefix}.${key}` : key;
+                if (
+                    value !== null &&
+                    typeof value === "object" &&
+                    !Array.isArray(value)
+                ) {
+                    Object.assign(out, flattenRecord(value, col));
+                } else if (Array.isArray(value)) {
+                    out[col] = JSON.stringify(value);
+                } else {
+                    out[col] = value;
+                }
+            }
+            return out;
+        };
+
+        const escapeCsv = (value) => {
+            const stringValue = value == null ? "" : String(value);
+            if (/[",\n]/.test(stringValue)) {
+                return `"${stringValue.replace(/"/g, '""')}"`;
+            }
+            return stringValue;
+        };
+
+        const jsonToCsv = (data) => {
+            const rows = Array.isArray(data) ? data : [data];
+            const normalized = rows.map((row) =>
+                row !== null && typeof row === "object"
+                    ? flattenRecord(row)
+                    : { value: row },
+            );
+
+            const headers = Array.from(
+                normalized.reduce((set, row) => {
+                    Object.keys(row).forEach((key) => set.add(key));
+                    return set;
+                }, new Set()),
+            );
+
+            const csvRows = [headers.join(",")];
+            for (const row of normalized) {
+                csvRows.push(headers.map((h) => escapeCsv(row[h])).join(","));
+            }
+            return csvRows.join("\n");
+        };
+
+        const processJson = () => {
+            try {
+                const raw = inputEl?.value?.trim() || "";
+                if (!raw) {
+                    msgEl.textContent = "Input JSON masih kosong.";
+                    outputEl.value = "";
+                    return;
+                }
+
+                const parsed = parseFlexibleJson(raw);
+                if (activeMode === "beautify") {
+                    outputEl.value = JSON.stringify(parsed, null, 2);
+                    msgEl.textContent = "JSON berhasil di-beautify.";
+                    return;
+                }
+
+                if (activeMode === "unstringify") {
+                    outputEl.value =
+                        typeof parsed === "string"
+                            ? parsed
+                            : JSON.stringify(parsed, null, 2);
+                    msgEl.textContent = "JSON string berhasil di-unstringify.";
+                    return;
+                }
+
+                if (activeMode === "xml") {
+                    outputEl.value = jsonToXml(parsed);
+                    msgEl.textContent = "Konversi JSON ke XML berhasil.";
+                    return;
+                }
+
+                outputEl.value = jsonToCsv(parsed);
+                msgEl.textContent = "Konversi JSON ke CSV berhasil.";
+            } catch (error) {
+                outputEl.value = "";
+                msgEl.textContent = `Error: ${error instanceof Error ? error.message : "JSON tidak valid."}`;
+            }
+        };
+
+        const isAutoUpdateEnabled = () =>
+            autoUpdateEl instanceof HTMLInputElement
+                ? autoUpdateEl.checked
+                : true;
+
+        // Process automatically when user leaves input area.
+        inputEl?.addEventListener("blur", processJson);
+
+        // Optional live processing while typing.
+        inputEl?.addEventListener("input", () => {
+            if (!isAutoUpdateEnabled()) return;
+            processJson();
+        });
+
+        autoUpdateEl?.addEventListener("change", () => {
+            if (!isAutoUpdateEnabled()) return;
+            if ((inputEl?.value?.trim() || "") !== "") processJson();
+        });
+
+        document
+            .getElementById("copyJsonBtn")
+            ?.addEventListener("click", async () => {
+                if (!outputEl.value) return;
+                await navigator.clipboard.writeText(outputEl.value);
+                msgEl.textContent = "Output tersalin ke clipboard.";
+            });
+
+        // Re-process immediately when mode changes.
+        for (const btn of modeButtons) {
+            btn.addEventListener("click", () => {
+                if ((inputEl?.value?.trim() || "") !== "") processJson();
+            });
+        }
+
         setModeStyle();
-      });
-    }
-
-    const parseFlexibleJson = (raw) => {
-      let value = JSON.parse(raw);
-      // Unwrap stringified JSON up to 5 levels to support deeply escaped payloads.
-      for (let i = 0; i < 5; i += 1) {
-        if (typeof value !== "string") break;
-        try {
-          value = JSON.parse(value);
-        } catch {
-          break;
-        }
-      }
-      return value;
-    };
-
-    const escapeXml = (value) =>
-      String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&apos;");
-
-    const toXmlNode = (key, value) => {
-      if (Array.isArray(value)) {
-        return value.map((item) => toXmlNode(key, item)).join("");
-      }
-      if (value !== null && typeof value === "object") {
-        const children = Object.entries(value)
-          .map(([childKey, childValue]) => toXmlNode(childKey, childValue))
-          .join("");
-        return `<${key}>${children}</${key}>`;
-      }
-      return `<${key}>${escapeXml(value)}</${key}>`;
-    };
-
-    const jsonToXml = (data) => {
-      if (data !== null && typeof data === "object" && !Array.isArray(data)) {
-        const body = Object.entries(data)
-          .map(([key, value]) => toXmlNode(key, value))
-          .join("");
-        return `<?xml version="1.0" encoding="UTF-8"?>\n<root>${body}</root>`;
-      }
-      if (Array.isArray(data)) {
-        const rows = data.map((item) => toXmlNode("item", item)).join("");
-        return `<?xml version="1.0" encoding="UTF-8"?>\n<root>${rows}</root>`;
-      }
-      return `<?xml version="1.0" encoding="UTF-8"?>\n<root>${escapeXml(data)}</root>`;
-    };
-
-    const flattenRecord = (record, prefix = "") => {
-      const out = {};
-      for (const [key, value] of Object.entries(record)) {
-        const col = prefix ? `${prefix}.${key}` : key;
-        if (value !== null && typeof value === "object" && !Array.isArray(value)) {
-          Object.assign(out, flattenRecord(value, col));
-        } else if (Array.isArray(value)) {
-          out[col] = JSON.stringify(value);
-        } else {
-          out[col] = value;
-        }
-      }
-      return out;
-    };
-
-    const escapeCsv = (value) => {
-      const stringValue = value == null ? "" : String(value);
-      if (/[",\n]/.test(stringValue)) {
-        return `"${stringValue.replace(/"/g, '""')}"`;
-      }
-      return stringValue;
-    };
-
-    const jsonToCsv = (data) => {
-      const rows = Array.isArray(data) ? data : [data];
-      const normalized = rows.map((row) =>
-        row !== null && typeof row === "object" ? flattenRecord(row) : { value: row }
-      );
-
-      const headers = Array.from(
-        normalized.reduce((set, row) => {
-          Object.keys(row).forEach((key) => set.add(key));
-          return set;
-        }, new Set())
-      );
-
-      const csvRows = [headers.join(",")];
-      for (const row of normalized) {
-        csvRows.push(headers.map((h) => escapeCsv(row[h])).join(","));
-      }
-      return csvRows.join("\n");
-    };
-
-    const processJson = () => {
-      try {
-        const raw = inputEl?.value?.trim() || "";
-        if (!raw) {
-          msgEl.textContent = "Input JSON masih kosong.";
-          outputEl.value = "";
-          return;
-        }
-
-        const parsed = parseFlexibleJson(raw);
-        if (activeMode === "beautify") {
-          outputEl.value = JSON.stringify(parsed, null, 2);
-          msgEl.textContent = "JSON berhasil di-beautify.";
-          return;
-        }
-
-        if (activeMode === "unstringify") {
-          outputEl.value = typeof parsed === "string" ? parsed : JSON.stringify(parsed, null, 2);
-          msgEl.textContent = "JSON string berhasil di-unstringify.";
-          return;
-        }
-
-        if (activeMode === "xml") {
-          outputEl.value = jsonToXml(parsed);
-          msgEl.textContent = "Konversi JSON ke XML berhasil.";
-          return;
-        }
-
-        outputEl.value = jsonToCsv(parsed);
-        msgEl.textContent = "Konversi JSON ke CSV berhasil.";
-      } catch (error) {
-        outputEl.value = "";
-        msgEl.textContent = `Error: ${error instanceof Error ? error.message : "JSON tidak valid."}`;
-      }
-    };
-
-    const isAutoUpdateEnabled = () =>
-      autoUpdateEl instanceof HTMLInputElement ? autoUpdateEl.checked : true;
-
-    // Process automatically when user leaves input area.
-    inputEl?.addEventListener("blur", processJson);
-
-    // Optional live processing while typing.
-    inputEl?.addEventListener("input", () => {
-      if (!isAutoUpdateEnabled()) return;
-      processJson();
-    });
-
-    autoUpdateEl?.addEventListener("change", () => {
-      if (!isAutoUpdateEnabled()) return;
-      if ((inputEl?.value?.trim() || "") !== "") processJson();
-    });
-
-    document.getElementById("copyJsonBtn")?.addEventListener("click", async () => {
-      if (!outputEl.value) return;
-      await navigator.clipboard.writeText(outputEl.value);
-      msgEl.textContent = "Output tersalin ke clipboard.";
-    });
-
-    // Re-process immediately when mode changes.
-    for (const btn of modeButtons) {
-      btn.addEventListener("click", () => {
-        if ((inputEl?.value?.trim() || "") !== "") processJson();
-      });
-    }
-
-    setModeStyle();
-  </script>
+    </script>
 </BaseLayout>

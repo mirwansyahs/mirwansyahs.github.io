@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://irwansyah.my.id/sitemap.xml
+Sitemap: https://tools.irwansyah.my.id/sitemap-index.xml

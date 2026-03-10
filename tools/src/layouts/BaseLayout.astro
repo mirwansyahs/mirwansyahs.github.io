@@ -208,6 +208,40 @@ const toolJsonLd = isToolsPage
                         </nav>
                     </div>
 
+                    <form
+                        id="globalToolSearchForm"
+                        action="/"
+                        method="get"
+                        class="mt-3 flex flex-col gap-2 md:flex-row"
+                        data-nav-items={JSON.stringify(NAV_ITEMS)}
+                    >
+                        <label class="sr-only" for="globalToolSearchInput"
+                            >Cari tools</label
+                        >
+                        <input
+                            id="globalToolSearchInput"
+                            name="q"
+                            type="search"
+                            list="globalToolSearchOptions"
+                            autocomplete="off"
+                            placeholder="Cari tools... contoh: jwt, regex, timestamp"
+                            class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm text-slate-900 outline-none ring-teal-500 transition focus:ring"
+                        />
+                        <datalist id="globalToolSearchOptions">
+                            {
+                                NAV_ITEMS.map((item) => (
+                                    <option value={item.label} />
+                                ))
+                            }
+                        </datalist>
+                        <button
+                            type="submit"
+                            class="rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-700 md:self-start"
+                        >
+                            Search
+                        </button>
+                    </form>
+
                     <nav
                         id="mobileNavMenu"
                         aria-label="Main Navigation Mobile"
@@ -289,6 +323,47 @@ const toolJsonLd = isToolsPage
         <script>
             const toggleBtn = document.getElementById("mobileNavToggle");
             const menu = document.getElementById("mobileNavMenu");
+            const globalSearchForm = document.getElementById(
+                "globalToolSearchForm",
+            ) as HTMLFormElement | null;
+            const globalSearchInput = document.getElementById(
+                "globalToolSearchInput",
+            ) as HTMLInputElement | null;
+
+            if (globalSearchInput) {
+                const params = new URLSearchParams(window.location.search);
+                const existingQuery = params.get("q");
+                if (existingQuery) {
+                    globalSearchInput.value = existingQuery;
+                }
+            }
+
+            globalSearchForm?.addEventListener("submit", (event) => {
+                const query = globalSearchInput?.value.trim() ?? "";
+                if (!query) {
+                    event.preventDefault();
+                    return;
+                }
+
+                const rawNavItems =
+                    globalSearchForm.dataset.navItems?.trim() ?? "[]";
+                let navItems: Array<{ label: string; href: string }> = [];
+                try {
+                    navItems = JSON.parse(rawNavItems);
+                } catch {
+                    navItems = [];
+                }
+
+                const normalized = query.toLowerCase();
+                const exact = navItems.find(
+                    (item) => item.label.toLowerCase() === normalized,
+                );
+
+                if (exact) {
+                    event.preventDefault();
+                    window.location.href = exact.href;
+                }
+            });
 
             toggleBtn?.addEventListener("click", () => {
                 const isOpen =

@@ -24,7 +24,28 @@ import { SITE } from "../config/site";
 		</p>
 	</section>
 
-	<section class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+	<section
+		class="mt-6 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-6"
+	>
+		<label
+			for="homeToolSearch"
+			class="mb-2 block text-sm font-semibold text-slate-700"
+		>
+			Cari Tool
+		</label>
+		<input
+			id="homeToolSearch"
+			type="search"
+			placeholder="Cari berdasarkan nama atau fungsi tools..."
+			class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none ring-teal-500 transition focus:ring"
+		/>
+		<p id="homeToolSearchMeta" class="mt-2 text-xs text-slate-600"></p>
+	</section>
+
+	<section
+		id="toolsGrid"
+		class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3"
+	>
 		<ToolCard
 			title="JSON Formatter / Validator"
 			description="Validasi, beautify, dan minify JSON untuk debugging API request/response."
@@ -103,4 +124,53 @@ import { SITE } from "../config/site";
 			sanitasi.
 		</p>
 	</section>
+
+	<script>
+		const searchInput = document.getElementById(
+			"homeToolSearch",
+		) as HTMLInputElement | null;
+		const metaEl = document.getElementById(
+			"homeToolSearchMeta",
+		) as HTMLParagraphElement | null;
+		const toolsGrid = document.getElementById(
+			"toolsGrid",
+		) as HTMLElement | null;
+
+		const cards = Array.from(
+			toolsGrid?.querySelectorAll("a") ?? [],
+		) as HTMLAnchorElement[];
+
+		const applyFilter = (rawQuery: string) => {
+			const query = rawQuery.trim().toLowerCase();
+			let visibleCount = 0;
+
+			cards.forEach((card) => {
+				const searchableText = (card.textContent ?? "").toLowerCase();
+				const isVisible = !query || searchableText.includes(query);
+				card.classList.toggle("hidden", !isVisible);
+				if (isVisible) visibleCount += 1;
+			});
+
+			if (metaEl) {
+				metaEl.textContent = query
+					? `${visibleCount} tool ditemukan untuk "${rawQuery.trim()}".`
+					: `Menampilkan semua tool (${cards.length}).`;
+			}
+		};
+
+		if (searchInput) {
+			const params = new URLSearchParams(window.location.search);
+			const initialQuery = params.get("q") ?? "";
+			if (initialQuery) {
+				searchInput.value = initialQuery;
+			}
+			applyFilter(initialQuery);
+
+			searchInput.addEventListener("input", () => {
+				applyFilter(searchInput.value);
+			});
+		} else {
+			applyFilter("");
+		}
+	</script>
 </BaseLayout>

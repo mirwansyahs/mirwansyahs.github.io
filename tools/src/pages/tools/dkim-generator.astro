@@ -1,0 +1,178 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+    title="DKIM Generator - Irwansyah Tools"
+    description="Generate DKIM RSA key pair di browser dan hasilkan template TXT record untuk DNS publishing."
+    canonicalPath="/tools/dkim-generator"
+>
+    <section
+        class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-5"
+    >
+        <h1 class="text-2xl font-black text-slate-900 md:text-3xl">
+            DKIM Generator
+        </h1>
+        <p class="mt-1 text-sm text-slate-600">
+            Generate pasangan private/public key DKIM (RSA) dan template TXT
+            record DNS.
+        </p>
+
+        <div class="mt-3 grid gap-3 md:grid-cols-[minmax(0,1fr)_220px_220px]">
+            <input
+                id="dkimGenDomain"
+                type="text"
+                class="w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm"
+                placeholder="domain, contoh: yourdomain.com"
+            />
+            <input
+                id="dkimGenSelector"
+                type="text"
+                class="w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm"
+                placeholder="selector, contoh: mail"
+            />
+            <select
+                id="dkimKeySize"
+                class="rounded-2xl border border-slate-300 p-3 text-sm"
+            >
+                <option value="1024">1024-bit</option>
+                <option value="2048" selected>2048-bit</option>
+            </select>
+        </div>
+
+        <button
+            id="dkimGenBtn"
+            class="mt-3 rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700"
+            >Generate DKIM</button
+        >
+        <p id="dkimGenMessage" class="mt-3 text-sm text-slate-600"></p>
+
+        <label class="mt-3 block">
+            <span class="mb-2 block text-sm font-semibold text-slate-700"
+                >DKIM TXT Record</span
+            >
+            <textarea
+                id="dkimTxtOutput"
+                class="h-28 w-full rounded-2xl border border-slate-300 p-3 font-mono text-xs"
+                readonly></textarea>
+        </label>
+
+        <label class="mt-3 block">
+            <span class="mb-2 block text-sm font-semibold text-slate-700"
+                >Public Key PEM</span
+            >
+            <textarea
+                id="dkimPublicPem"
+                class="h-40 w-full rounded-2xl border border-slate-300 p-3 font-mono text-xs"
+                readonly></textarea>
+        </label>
+
+        <label class="mt-3 block">
+            <span class="mb-2 block text-sm font-semibold text-slate-700"
+                >Private Key PEM</span
+            >
+            <textarea
+                id="dkimPrivatePem"
+                class="h-52 w-full rounded-2xl border border-slate-300 p-3 font-mono text-xs"
+                readonly></textarea>
+        </label>
+    </section>
+
+    <script>
+        const domainEl = document.getElementById(
+            "dkimGenDomain",
+        ) as HTMLInputElement | null;
+        const selectorEl = document.getElementById(
+            "dkimGenSelector",
+        ) as HTMLInputElement | null;
+        const keySizeEl = document.getElementById(
+            "dkimKeySize",
+        ) as HTMLSelectElement | null;
+        const txtEl = document.getElementById(
+            "dkimTxtOutput",
+        ) as HTMLTextAreaElement | null;
+        const pubEl = document.getElementById(
+            "dkimPublicPem",
+        ) as HTMLTextAreaElement | null;
+        const privEl = document.getElementById(
+            "dkimPrivatePem",
+        ) as HTMLTextAreaElement | null;
+        const messageEl = document.getElementById(
+            "dkimGenMessage",
+        ) as HTMLParagraphElement | null;
+
+        const arrayBufferToBase64 = (buffer: ArrayBuffer) => {
+            const bytes = new Uint8Array(buffer);
+            let binary = "";
+            bytes.forEach((b) => {
+                binary += String.fromCharCode(b);
+            });
+            return btoa(binary);
+        };
+
+        const wrapPem = (label: string, base64: string) => {
+            const lines = base64.match(/.{1,64}/g) ?? [base64];
+            return `-----BEGIN ${label}-----\n${lines.join("\n")}\n-----END ${label}-----`;
+        };
+
+        document
+            .getElementById("dkimGenBtn")
+            ?.addEventListener("click", async () => {
+                try {
+                    const domain = (domainEl?.value ?? "").trim().toLowerCase();
+                    const selector = (selectorEl?.value ?? "")
+                        .trim()
+                        .toLowerCase();
+                    const modulusLength = Number(keySizeEl?.value ?? "2048");
+
+                    if (!domain || !selector) {
+                        if (messageEl)
+                            messageEl.textContent =
+                                "Domain dan selector wajib diisi.";
+                        return;
+                    }
+
+                    if (messageEl)
+                        messageEl.textContent = "Menghasilkan key pair DKIM...";
+
+                    const keyPair = await crypto.subtle.generateKey(
+                        {
+                            name: "RSASSA-PKCS1-v1_5",
+                            modulusLength,
+                            publicExponent: new Uint8Array([1, 0, 1]),
+                            hash: "SHA-256",
+                        },
+                        true,
+                        ["sign", "verify"],
+                    );
+
+                    const publicSpki = await crypto.subtle.exportKey(
+                        "spki",
+                        keyPair.publicKey,
+                    );
+                    const privatePkcs8 = await crypto.subtle.exportKey(
+                        "pkcs8",
+                        keyPair.privateKey,
+                    );
+
+                    const publicB64 = arrayBufferToBase64(publicSpki);
+                    const privateB64 = arrayBufferToBase64(privatePkcs8);
+
+                    const pubPem = wrapPem("PUBLIC KEY", publicB64);
+                    const privPem = wrapPem("PRIVATE KEY", privateB64);
+                    const host = `${selector}._domainkey.${domain}`;
+                    const txtRecord = `${host} IN TXT \"v=DKIM1; k=rsa; p=${publicB64}\"`;
+
+                    if (txtEl) txtEl.value = txtRecord;
+                    if (pubEl) pubEl.value = pubPem;
+                    if (privEl) privEl.value = privPem;
+                    if (messageEl)
+                        messageEl.textContent =
+                            "DKIM key pair berhasil dibuat. Simpan private key dengan aman.";
+                } catch (error) {
+                    if (messageEl)
+                        messageEl.textContent = `Gagal generate DKIM: ${error instanceof Error ? error.message : "Unknown error"}`;
+                }
+            });
+    </script>
+</BaseLayout>

@@ -1,0 +1,168 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+    title="CNAME Lookup - Irwansyah Tools"
+    description="Cek CNAME record domain/subdomain secara cepat dengan DNS over HTTPS untuk troubleshooting DNS."
+    canonicalPath="/tools/cname-lookup"
+>
+    <section
+        class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-5"
+    >
+        <h1 class="text-2xl font-black text-slate-900 md:text-3xl">
+            CNAME Lookup
+        </h1>
+        <p class="mt-1 text-sm text-slate-600">
+            Lookup CNAME record untuk melihat canonical target dari sebuah host.
+        </p>
+
+        <div class="mt-3 grid gap-3 md:grid-cols-[minmax(0,1fr)_220px]">
+            <input
+                id="cnameDomain"
+                type="text"
+                class="w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm"
+                placeholder="contoh: www.github.com"
+            />
+            <select
+                id="cnameProvider"
+                class="rounded-2xl border border-slate-300 p-3 text-sm"
+            >
+                <option value="cloudflare">Cloudflare DNS</option>
+                <option value="google">Google DNS</option>
+            </select>
+        </div>
+
+        <div class="mt-3 flex flex-wrap gap-2">
+            <button
+                id="cnameLookupBtn"
+                class="rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700"
+                >Lookup CNAME</button
+            >
+            <button
+                id="cnameCopyJsonBtn"
+                class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                >Copy JSON</button
+            >
+            <button
+                id="cnameExportTxtBtn"
+                class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                >Export .txt</button
+            >
+        </div>
+
+        <p id="cnameMessage" class="mt-3 text-sm text-slate-600"></p>
+        <pre
+            id="cnameOutput"
+            class="mt-3 overflow-x-auto rounded-2xl border border-slate-200 bg-slate-50 p-3 font-mono text-xs text-slate-700">
+        </pre>
+    </section>
+
+    <script>
+        const domainEl = document.getElementById(
+            "cnameDomain",
+        ) as HTMLInputElement | null;
+        const providerEl = document.getElementById(
+            "cnameProvider",
+        ) as HTMLSelectElement | null;
+        const messageEl = document.getElementById(
+            "cnameMessage",
+        ) as HTMLParagraphElement | null;
+        const outputEl = document.getElementById(
+            "cnameOutput",
+        ) as HTMLPreElement | null;
+
+        let lastResult: unknown = null;
+
+        const downloadTxt = (filename: string, text: string) => {
+            const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(url);
+        };
+
+        const runLookup = async () => {
+            try {
+                const domain = (domainEl?.value ?? "").trim();
+                const provider = providerEl?.value ?? "cloudflare";
+                if (!domain) {
+                    if (messageEl)
+                        messageEl.textContent = "Domain wajib diisi.";
+                    return;
+                }
+
+                const endpoint =
+                    provider === "google"
+                        ? `https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=CNAME`
+                        : `https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=CNAME`;
+                if (messageEl)
+                    messageEl.textContent = "Memproses CNAME lookup...";
+
+                const res = await fetch(endpoint, {
+                    headers: { Accept: "application/dns-json" },
+                });
+                if (!res.ok)
+                    throw new Error(`DNS request gagal (${res.status})`);
+                const data = await res.json();
+                lastResult = data;
+
+                const answers = (data.Answer ?? []) as Array<{
+                    data?: string;
+                    TTL?: number;
+                }>;
+                if (answers.length === 0) {
+                    if (outputEl)
+                        outputEl.textContent = "CNAME record tidak ditemukan.";
+                    if (messageEl)
+                        messageEl.textContent =
+                            "Lookup selesai. Tidak ada CNAME record.";
+                    return;
+                }
+
+                if (outputEl) {
+                    outputEl.textContent = answers
+                        .map(
+                            (item, index) =>
+                                `#${index + 1} ${item.data ?? ""} TTL=${item.TTL ?? "-"}`,
+                        )
+                        .join("\n");
+                }
+                if (messageEl)
+                    messageEl.textContent = `Lookup selesai. Ditemukan ${answers.length} CNAME record.`;
+            } catch (error) {
+                if (outputEl) outputEl.textContent = "";
+                if (messageEl)
+                    messageEl.textContent = `Gagal lookup CNAME: ${error instanceof Error ? error.message : "Unknown error"}`;
+            }
+        };
+
+        document
+            .getElementById("cnameLookupBtn")
+            ?.addEventListener("click", runLookup);
+        document
+            .getElementById("cnameCopyJsonBtn")
+            ?.addEventListener("click", async () => {
+                if (!lastResult) return;
+                await navigator.clipboard.writeText(
+                    JSON.stringify(lastResult, null, 2),
+                );
+                if (messageEl)
+                    messageEl.textContent =
+                        "JSON hasil lookup tersalin ke clipboard.";
+            });
+        document
+            .getElementById("cnameExportTxtBtn")
+            ?.addEventListener("click", () => {
+                const domain = (domainEl?.value ?? "lookup").trim() || "lookup";
+                const output = outputEl?.textContent?.trim() ?? "";
+                if (!output) return;
+                downloadTxt(`cname-lookup-${domain}.txt`, output);
+                if (messageEl)
+                    messageEl.textContent =
+                        "Hasil lookup berhasil diexport ke .txt.";
+            });
+    </script>
+</BaseLayout>

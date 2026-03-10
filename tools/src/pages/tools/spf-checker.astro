@@ -1,0 +1,160 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+    title="SPF Checker - Irwansyah Tools"
+    description="Cek SPF record domain dan validasi dasar format v=spf1 untuk kebutuhan email authentication."
+    canonicalPath="/tools/spf-checker"
+>
+    <section
+        class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-5"
+    >
+        <h1 class="text-2xl font-black text-slate-900 md:text-3xl">
+            SPF Checker
+        </h1>
+        <p class="mt-1 text-sm text-slate-600">
+            Periksa SPF TXT record domain untuk memastikan konfigurasi
+            pengiriman email valid.
+        </p>
+
+        <input
+            id="spfDomain"
+            type="text"
+            class="mt-3 w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm"
+            placeholder="contoh: google.com"
+        />
+
+        <div class="mt-3 flex flex-wrap gap-2">
+            <button
+                id="spfCheckBtn"
+                class="rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700"
+                >Check SPF</button
+            >
+            <button
+                id="spfCopyJsonBtn"
+                class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                >Copy JSON</button
+            >
+            <button
+                id="spfExportTxtBtn"
+                class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                >Export .txt</button
+            >
+        </div>
+
+        <p id="spfMessage" class="mt-3 text-sm text-slate-600"></p>
+        <pre
+            id="spfOutput"
+            class="mt-3 overflow-x-auto rounded-2xl border border-slate-200 bg-slate-50 p-3 font-mono text-xs text-slate-700">
+        </pre>
+    </section>
+
+    <script>
+        const domainEl = document.getElementById(
+            "spfDomain",
+        ) as HTMLInputElement | null;
+        const messageEl = document.getElementById(
+            "spfMessage",
+        ) as HTMLParagraphElement | null;
+        const outputEl = document.getElementById(
+            "spfOutput",
+        ) as HTMLPreElement | null;
+
+        let lastResult: unknown = null;
+
+        const downloadTxt = (filename: string, text: string) => {
+            const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(url);
+        };
+
+        const runCheck = async () => {
+            try {
+                const domain = (domainEl?.value ?? "").trim().toLowerCase();
+                if (!domain) {
+                    if (messageEl)
+                        messageEl.textContent = "Domain wajib diisi.";
+                    return;
+                }
+
+                if (messageEl) messageEl.textContent = "Memproses SPF check...";
+                const endpoint = `https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=TXT`;
+                const res = await fetch(endpoint, {
+                    headers: { Accept: "application/dns-json" },
+                });
+                if (!res.ok)
+                    throw new Error(`DNS request gagal (${res.status})`);
+
+                const data = await res.json();
+                lastResult = data;
+                const answers = (data.Answer ?? []) as Array<{
+                    data?: string;
+                    TTL?: number;
+                }>;
+                const txtRecords = answers.map((a) =>
+                    (a.data ?? "").replace(/^"|"$/g, ""),
+                );
+                const spfRecords = txtRecords.filter((record) =>
+                    /^v=spf1\s/i.test(record),
+                );
+
+                if (spfRecords.length === 0) {
+                    if (outputEl)
+                        outputEl.textContent =
+                            "SPF record tidak ditemukan (v=spf1).";
+                    if (messageEl)
+                        messageEl.textContent =
+                            "Check selesai. SPF belum terdeteksi.";
+                    return;
+                }
+
+                const summary = [
+                    `Domain            : ${domain}`,
+                    `SPF record found  : ${spfRecords.length}`,
+                    "",
+                    ...spfRecords.map(
+                        (record, index) => `#${index + 1} ${record}`,
+                    ),
+                ];
+
+                if (outputEl) outputEl.textContent = summary.join("\n");
+                if (messageEl) messageEl.textContent = "SPF check selesai.";
+            } catch (error) {
+                if (outputEl) outputEl.textContent = "";
+                if (messageEl)
+                    messageEl.textContent = `Gagal check SPF: ${error instanceof Error ? error.message : "Unknown error"}`;
+            }
+        };
+
+        document
+            .getElementById("spfCheckBtn")
+            ?.addEventListener("click", runCheck);
+        document
+            .getElementById("spfCopyJsonBtn")
+            ?.addEventListener("click", async () => {
+                if (!lastResult) return;
+                await navigator.clipboard.writeText(
+                    JSON.stringify(lastResult, null, 2),
+                );
+                if (messageEl)
+                    messageEl.textContent =
+                        "JSON hasil check tersalin ke clipboard.";
+            });
+        document
+            .getElementById("spfExportTxtBtn")
+            ?.addEventListener("click", () => {
+                const domain = (domainEl?.value ?? "lookup").trim() || "lookup";
+                const output = outputEl?.textContent?.trim() ?? "";
+                if (!output) return;
+                downloadTxt(`spf-check-${domain}.txt`, output);
+                if (messageEl)
+                    messageEl.textContent =
+                        "Hasil check berhasil diexport ke .txt.";
+            });
+    </script>
+</BaseLayout>

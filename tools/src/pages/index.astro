@@ -19,8 +19,10 @@ import { SITE } from "../config/site";
 		<p class="mt-4 max-w-3xl text-base leading-relaxed text-slate-600">
 			Koleksi utility paling sering dipakai developer: JSON formatter,
 			regex tester, JWT decoder, timestamp converter, UUID generator,
-			base64, URL encode/decode, dan HTML encode/decode. Semua halaman
-			dioptimalkan untuk load cepat dan mudah diindeks mesin pencari.
+			base64, URL encode/decode, HTML encode/decode, plus networking tools
+			seperti MX/A/CNAME/TXT/NS lookup, DNS propagation, SPF, DKIM, dan
+			DMARC checker. Semua halaman dioptimalkan untuk load cepat dan mudah
+			diindeks mesin pencari.
 		</p>
 	</section>
 
@@ -40,6 +42,38 @@ import { SITE } from "../config/site";
 			class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none ring-teal-500 transition focus:ring"
 		/>
 		<p id="homeToolSearchMeta" class="mt-2 text-xs text-slate-600"></p>
+		<div id="toolCategoryFilters" class="mt-3 flex flex-wrap gap-2">
+			<button
+				data-category="all"
+				class="rounded-full bg-teal-600 px-3 py-1.5 text-xs font-semibold text-white"
+				>Semua</button
+			>
+			<button
+				data-category="Networking"
+				class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700"
+				>Networking</button
+			>
+			<button
+				data-category="Email Auth"
+				class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700"
+				>Email Auth</button
+			>
+			<button
+				data-category="Data"
+				class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700"
+				>Data</button
+			>
+			<button
+				data-category="Encoding"
+				class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700"
+				>Encoding</button
+			>
+			<button
+				data-category="Security"
+				class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700"
+				>Security</button
+			>
+		</div>
 	</section>
 
 	<section
@@ -47,66 +81,169 @@ import { SITE } from "../config/site";
 		class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3"
 	>
 		<ToolCard
+			title="DNS Propagation Checker"
+			description="Bandingkan hasil record DNS dari beberapa resolver publik untuk cek propagasi."
+			href="/tools/dns-propagation"
+			status="Networking"
+			category="Networking"
+		/>
+		<ToolCard
+			title="DNS Lookup Toolbox"
+			description="Lookup TXT, CNAME, AAAA, PTR, SOA untuk troubleshooting DNS."
+			href="/tools/dns-lookup"
+			status="Networking"
+			category="Networking"
+		/>
+		<ToolCard
+			title="MX Lookup"
+			description="Cek MX record domain untuk validasi routing mail server."
+			href="/tools/mx-lookup"
+			status="Networking"
+			category="Networking"
+		/>
+		<ToolCard
+			title="A Lookup"
+			description="Cek A record domain untuk mengetahui IPv4 tujuan."
+			href="/tools/a-lookup"
+			status="Networking"
+			category="Networking"
+		/>
+		<ToolCard
+			title="CAA Checker"
+			description="Periksa CAA record untuk validasi otorisasi CA penerbit SSL/TLS."
+			href="/tools/caa-checker"
+			status="Networking"
+			category="Networking"
+		/>
+		<ToolCard
+			title="SRV Checker"
+			description="Periksa SRV record layanan seperti SIP/XMPP/LDAP."
+			href="/tools/srv-checker"
+			status="Networking"
+			category="Networking"
+		/>
+		<ToolCard
+			title="CNAME Lookup"
+			description="Cek canonical target subdomain lewat record CNAME."
+			href="/tools/cname-lookup"
+			status="Networking"
+			category="Networking"
+		/>
+		<ToolCard
+			title="TXT Lookup"
+			description="Cek TXT record domain untuk verifikasi DNS dan email-auth."
+			href="/tools/txt-lookup"
+			status="Networking"
+			category="Networking"
+		/>
+		<ToolCard
+			title="NS Lookup"
+			description="Verifikasi nameserver aktif untuk delegasi DNS domain."
+			href="/tools/ns-lookup"
+			status="Networking"
+			category="Networking"
+		/>
+		<ToolCard
+			title="SPF Checker"
+			description="Periksa SPF record (v=spf1) untuk validasi pengirim email."
+			href="/tools/spf-checker"
+			status="Email"
+			category="Email Auth"
+		/>
+		<ToolCard
+			title="DKIM Checker"
+			description="Periksa record DKIM selector._domainkey agar email auth valid."
+			href="/tools/dkim-checker"
+			status="Email"
+			category="Email Auth"
+		/>
+		<ToolCard
+			title="DKIM Generator"
+			description="Generate pasangan key DKIM dan template TXT record DNS."
+			href="/tools/dkim-generator"
+			status="Email"
+			category="Email Auth"
+		/>
+		<ToolCard
+			title="DMARC Checker"
+			description="Validasi record _dmarc dan policy email domain."
+			href="/tools/dmarc-checker"
+			status="Email"
+			category="Email Auth"
+		/>
+		<ToolCard
 			title="JSON Formatter / Validator"
 			description="Validasi, beautify, dan minify JSON untuk debugging API request/response."
 			href="/tools/json-formatter-validator"
 			status="Popular"
+			category="Data"
 		/>
 		<ToolCard
 			title="JSON Viewer Suite"
 			description="Parse JSON, unstringify JSON string, beautify output, convert to XML/CSV dalam satu halaman."
 			href="/tools/json-viewer"
 			status="Priority"
+			category="Data"
 		/>
 		<ToolCard
 			title="Regex Tester"
 			description="Uji pola regular expression lengkap dengan flags dan daftar hasil match."
 			href="/tools/regex-tester"
+			category="Data"
 		/>
 		<ToolCard
 			title="JWT Decoder"
 			description="Decode JWT header dan payload untuk debugging autentikasi token."
 			href="/tools/jwt-decoder"
+			category="Security"
 		/>
 		<ToolCard
 			title="Timestamp Converter"
 			description="Konversi Unix timestamp ke tanggal normal dan sebaliknya."
 			href="/tools/timestamp-converter"
+			category="Data"
 		/>
 		<ToolCard
 			title="UUID Generator"
 			description="Generate UUID v4 cepat untuk kebutuhan ID unik aplikasi."
 			href="/tools/uuid-generator"
+			category="Data"
 		/>
 		<ToolCard
 			title="HTML Encode / Decode"
 			description="Encode/decode HTML entities untuk output aman di frontend/CMS."
 			href="/tools/html-encode-decode"
+			category="Encoding"
 		/>
 		<ToolCard
 			title="Base64 Encode / Decode"
 			description="Encode text ke Base64 dan decode kembali dengan cepat langsung di browser."
 			href="/tools/base64-encode-decode"
+			category="Encoding"
 		/>
 		<ToolCard
 			title="URL Encode / Decode"
 			description="Encode karakter spesial untuk query/path URL dan decode kembali ke teks normal."
 			href="/tools/url-encode-decode"
+			category="Encoding"
 		/>
 		<ToolCard
 			title="Base64 to Image"
 			description="Render Base64 image (PNG/JPG/WEBP), preview, dan download hasil gambar."
 			href="/tools/base64-to-image"
+			category="Encoding"
 		/>
 		<ToolCard
 			title="AES Encrypt / Decrypt"
 			description="Enkripsi-dekripsi dua arah (bukan hash) dengan AES-GCM langsung di browser."
 			href="/tools/aes-encrypt-decrypt"
+			category="Security"
 		/>
 		<ToolCard
 			title="Hash Generator"
 			description="Generate hash one-way: MD5, SHA-1, SHA-256, SHA-384, SHA-512, plus info Tiger dan bcrypt."
 			href="/tools/hash-generator"
+			category="Security"
 		/>
 	</section>
 
@@ -121,7 +258,9 @@ import { SITE } from "../config/site";
 			paling sering dipakai saat debugging API. Timestamp converter dan
 			UUID generator membantu operasi backend sehari-hari, sedangkan
 			URL/HTML encode-decode berguna untuk query string, rendering, dan
-			sanitasi.
+			sanitasi. Untuk networking, tersedia DNS propagation + DNS record
+			lookup lengkap (A/CNAME/TXT/MX/NS) serta paket email-auth SPF, DKIM,
+			dan DMARC checker.
 		</p>
 	</section>
 
@@ -132,6 +271,9 @@ import { SITE } from "../config/site";
 		const metaEl = document.getElementById(
 			"homeToolSearchMeta",
 		) as HTMLParagraphElement | null;
+		const categoryFilterWrap = document.getElementById(
+			"toolCategoryFilters",
+		) as HTMLElement | null;
 		const toolsGrid = document.getElementById(
 			"toolsGrid",
 		) as HTMLElement | null;
@@ -140,13 +282,22 @@ import { SITE } from "../config/site";
 			toolsGrid?.querySelectorAll("a") ?? [],
 		) as HTMLAnchorElement[];
 
+		let activeCategory = "all";
+
 		const applyFilter = (rawQuery: string) => {
 			const query = rawQuery.trim().toLowerCase();
 			let visibleCount = 0;
 
 			cards.forEach((card) => {
 				const searchableText = (card.textContent ?? "").toLowerCase();
-				const isVisible = !query || searchableText.includes(query);
+				const cardCategory = (
+					card.getAttribute("data-category") ?? ""
+				).toLowerCase();
+				const passCategory =
+					activeCategory === "all" ||
+					cardCategory === activeCategory.toLowerCase();
+				const passQuery = !query || searchableText.includes(query);
+				const isVisible = passCategory && passQuery;
 				card.classList.toggle("hidden", !isVisible);
 				if (isVisible) visibleCount += 1;
 			});
@@ -172,5 +323,41 @@ import { SITE } from "../config/site";
 		} else {
 			applyFilter("");
 		}
+
+		categoryFilterWrap?.querySelectorAll("button").forEach((button) => {
+			button.addEventListener("click", () => {
+				const selected =
+					(button as HTMLButtonElement).dataset.category ?? "all";
+				activeCategory = selected;
+
+				categoryFilterWrap
+					.querySelectorAll("button")
+					.forEach((item) => {
+						item.classList.remove(
+							"bg-teal-600",
+							"text-white",
+							"border-teal-600",
+						);
+						item.classList.add(
+							"border-slate-300",
+							"bg-white",
+							"text-slate-700",
+						);
+					});
+
+				button.classList.remove(
+					"border-slate-300",
+					"bg-white",
+					"text-slate-700",
+				);
+				button.classList.add(
+					"border-teal-600",
+					"bg-teal-600",
+					"text-white",
+				);
+
+				applyFilter(searchInput?.value ?? "");
+			});
+		});
 	</script>
 </BaseLayout>

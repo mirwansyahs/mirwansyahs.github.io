@@ -174,9 +174,9 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         </div>
     </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"
-    ></script>
     <script>
+        import QRCode from "qrcode";
+
         const baseEl = document.getElementById(
             "utmBaseUrl",
         ) as HTMLInputElement | null;
@@ -216,6 +216,30 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         const downloadEl = document.getElementById(
             "qrDownloadBtn",
         ) as HTMLAnchorElement | null;
+
+        const renderFallbackQr = (
+            value: string,
+            size: number,
+            margin: number,
+            level: "L" | "M" | "Q" | "H",
+        ) => {
+            if (!wrapEl) return;
+            const encoded = encodeURIComponent(value);
+            const fallbackUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&margin=${margin}&ecc=${level}&data=${encoded}`;
+            wrapEl.innerHTML = "";
+            const img = document.createElement("img");
+            img.src = fallbackUrl;
+            img.alt = "QR code preview";
+            img.width = size;
+            img.height = size;
+            img.className = "h-auto max-w-full rounded-lg";
+            wrapEl.appendChild(img);
+
+            if (downloadEl) {
+                downloadEl.href = fallbackUrl;
+                downloadEl.classList.remove("hidden");
+            }
+        };
 
         const parseInsight = (raw: string) => {
             try {
@@ -265,17 +289,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         };
 
         const renderQr = async (rawValue: string) => {
-            const qrLib = (
-                window as unknown as {
-                    QRCode?: { toCanvas: (...args: unknown[]) => void };
-                }
-            ).QRCode;
-            if (!qrLib || !wrapEl) {
-                if (messageEl)
-                    messageEl.textContent =
-                        "Library QR belum siap. Coba beberapa detik lagi.";
-                return;
-            }
+            if (!wrapEl) return;
 
             const value = rawValue.trim();
             if (!value) {
@@ -298,25 +312,25 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
             const canvas = document.createElement("canvas");
             wrapEl.appendChild(canvas);
 
-            await new Promise<void>((resolve, reject) => {
-                qrLib.toCanvas(
-                    canvas,
-                    value,
-                    {
-                        width: size,
-                        margin,
-                        errorCorrectionLevel: level,
-                        color: {
-                            dark: "#0f172a",
-                            light: "#ffffff",
-                        },
+            try {
+                await QRCode.toCanvas(canvas, value, {
+                    width: size,
+                    margin,
+                    errorCorrectionLevel: level,
+                    color: {
+                        dark: "#0f172a",
+                        light: "#ffffff",
                     },
-                    (err?: Error) => {
-                        if (err) reject(err);
-                        else resolve();
-                    },
-                );
-            });
+                });
+            } catch {
+                renderFallbackQr(value, size, margin, level);
+                parseInsight(value);
+                if (messageEl) {
+                    messageEl.textContent =
+                        "QR lokal gagal dirender. Ditampilkan via fallback server QR.";
+                }
+                return;
+            }
 
             if (downloadEl) {
                 downloadEl.href = canvas.toDataURL("image/png");

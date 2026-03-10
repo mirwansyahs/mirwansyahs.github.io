@@ -1,0 +1,152 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+    title="URL Encode and Decode - Irwansyah Tools"
+    description="Tool gratis untuk URL encode dan URL decode query/path secara instan langsung dari browser."
+    canonicalPath="/tools/url-encode-decode"
+>
+    <section
+        class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-5"
+    >
+        <h1 class="text-2xl font-black text-slate-900 md:text-3xl">
+            URL Encode and Decode
+        </h1>
+        <p class="mt-1 text-sm text-slate-600">
+            Encode karakter spesial untuk URL, atau decode kembali ke teks
+            normal.
+        </p>
+
+        <div class="mt-3 grid gap-3 md:grid-cols-2">
+            <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-slate-700"
+                    >Input</span
+                >
+                <textarea
+                    id="urlInput"
+                    class="h-44 w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm md:h-52 lg:h-[34vh]"
+                    placeholder="contoh: nama=Irwan & kota=Jakarta"></textarea>
+            </label>
+            <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-slate-700"
+                    >Output</span
+                >
+                <textarea
+                    id="urlOutput"
+                    class="h-44 w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm md:h-52 lg:h-[34vh]"
+                    readonly></textarea>
+            </label>
+        </div>
+
+        <label
+            class="mt-3 inline-flex items-center gap-2 text-sm text-slate-700"
+        >
+            <input id="plusAsSpace" type="checkbox" class="h-4 w-4" />
+            Anggap <code>+</code> sebagai spasi saat decode query string
+        </label>
+
+        <div class="mt-3 flex flex-wrap gap-2">
+            <button
+                id="urlEncodeBtn"
+                class="rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700"
+                >Encode</button
+            >
+            <button
+                id="urlDecodeBtn"
+                class="rounded-xl bg-amber-500 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-amber-400"
+                >Decode</button
+            >
+            <button
+                id="copyUrlBtn"
+                class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                >Copy Output</button
+            >
+        </div>
+        <p id="urlMessage" class="mt-3 text-sm text-slate-600"></p>
+
+        <div class="mt-3 rounded-2xl border border-slate-200 bg-slate-50 p-3">
+            <h2 class="text-sm font-semibold text-slate-800">
+                Keterangan URL Encoding
+            </h2>
+            <div class="mt-3 space-y-3 text-sm text-slate-700">
+                <p>
+                    URL encoding (percent-encoding) mengubah karakter spesial
+                    menjadi format aman URL seperti <code>%20</code>,
+                    <code>%3D</code>, dan <code>%26</code>.
+                </p>
+                <div>
+                    <p class="font-semibold text-slate-900">Contoh:</p>
+                    <pre
+                        class="mt-1 overflow-x-auto rounded-xl border border-slate-200 bg-white p-2 font-mono text-xs">Teks: nama=Irwan & kota=Jakarta
+Encode: nama%3DIrwan%20%26%20kota%3DJakarta
+
+Decode: nama%3DIrwan%20%26%20kota%3DJakarta
+Hasil : nama=Irwan & kota=Jakarta</pre>
+                </div>
+                <p>
+                    Tool ini cocok untuk menyiapkan parameter query API,
+                    redirect URL, atau debugging data URL di frontend/backend.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const inputEl = document.getElementById("urlInput");
+        const outputEl = document.getElementById("urlOutput");
+        const messageEl = document.getElementById("urlMessage");
+        const plusAsSpaceEl = document.getElementById("plusAsSpace");
+
+        const inputArea = inputEl as HTMLTextAreaElement | null;
+        const outputArea = outputEl as HTMLTextAreaElement | null;
+        const messageText = messageEl as HTMLParagraphElement | null;
+        const plusAsSpaceCheckbox = plusAsSpaceEl as HTMLInputElement | null;
+
+        document
+            .getElementById("urlEncodeBtn")
+            ?.addEventListener("click", () => {
+                const value = inputArea?.value ?? "";
+                if (outputArea) {
+                    outputArea.value = encodeURIComponent(value);
+                }
+                if (messageText) {
+                    messageText.textContent =
+                        "Text berhasil di-encode untuk URL.";
+                }
+            });
+
+        document
+            .getElementById("urlDecodeBtn")
+            ?.addEventListener("click", () => {
+                try {
+                    const value = inputArea?.value ?? "";
+                    const normalized = plusAsSpaceCheckbox?.checked
+                        ? value.replace(/\+/g, " ")
+                        : value;
+                    if (outputArea) {
+                        outputArea.value = decodeURIComponent(normalized);
+                    }
+                    if (messageText) {
+                        messageText.textContent = "URL berhasil di-decode.";
+                    }
+                } catch {
+                    if (messageText) {
+                        messageText.textContent =
+                            "Format URL encoded tidak valid untuk decode.";
+                    }
+                }
+            });
+
+        document
+            .getElementById("copyUrlBtn")
+            ?.addEventListener("click", async () => {
+                const value = outputArea?.value ?? "";
+                if (!value) return;
+                await navigator.clipboard.writeText(value);
+                if (messageText) {
+                    messageText.textContent = "Output tersalin ke clipboard.";
+                }
+            });
+    </script>
+</BaseLayout>

@@ -1,20 +1,27 @@
 <svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="bg1" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#0B3B5C"/>
-      <stop offset="1" stop-color="#06263D"/>
-    </linearGradient>
-    <linearGradient id="gold1" x1="140" y1="140" x2="940" y2="940" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FDE68A"/>
-      <stop offset="1" stop-color="#F59E0B"/>
-    </linearGradient>
-  </defs>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H1080V1080H0V0ZM540 820C716.731 820 860 676.731 860 500C860 323.269 716.731 180 540 180C363.269 180 220 323.269 220 500C220 676.731 363.269 820 540 820Z" fill="url(#bg1)"/>
-  <circle cx="540" cy="500" r="360" stroke="url(#gold1)" stroke-width="36"/>
-  <circle cx="540" cy="500" r="392" stroke="#FCD34D" stroke-opacity="0.45" stroke-width="8" stroke-dasharray="10 16"/>
-  <path d="M180 110H900" stroke="#FCD34D" stroke-opacity="0.5" stroke-width="5"/>
-  <path d="M220 150H860" stroke="#FCD34D" stroke-opacity="0.35" stroke-width="3"/>
-  <path d="M700 210C760 210 810 160 810 100C790 130 760 150 724 150C670 150 626 106 626 52C626 46 627 40 628 34C612 44 600 62 600 84C600 154 656 210 700 210Z" fill="#FCD34D"/>
-  <text x="540" y="120" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="52" font-weight="700">RAMADHAN BLESSINGS</text>
-  <text x="540" y="970" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="38">Semoga Ibadahmu Diterima</text>
+    <defs>
+        <linearGradient id="bg1" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0B3B5C" />
+            <stop offset="1" stop-color="#06263D" />
+        </linearGradient>
+        <linearGradient id="gold1" x1="140" y1="140" x2="940" y2="940" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FDE68A" />
+            <stop offset="1" stop-color="#F59E0B" />
+        </linearGradient>
+    </defs>
+    <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M0 0H1080V1080H0V0ZM540 820C716.731 820 860 676.731 860 500C860 323.269 716.731 180 540 180C363.269 180 220 323.269 220 500C220 676.731 363.269 820 540 820Z"
+        fill="url(#bg1)" />
+    <circle cx="540" cy="500" r="360" stroke="url(#gold1)" stroke-width="36" />
+    <circle cx="540" cy="500" r="392" stroke="#FCD34D" stroke-opacity="0.45" stroke-width="8"
+        stroke-dasharray="10 16" />
+    <path d="M180 110H900" stroke="#FCD34D" stroke-opacity="0.5" stroke-width="5" />
+    <path d="M220 150H860" stroke="#FCD34D" stroke-opacity="0.35" stroke-width="3" />
+    <path
+        d="M700 210C760 210 810 160 810 100C790 130 760 150 724 150C670 150 626 106 626 52C626 46 627 40 628 34C612 44 600 62 600 84C600 154 656 210 700 210Z"
+        fill="#FCD34D" />
+    <text x="540" y="120" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="52"
+        font-weight="700">RAMADHAN BLESSINGS</text>
+    <text x="540" y="970" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="38">Semoga
+        Ibadahmu Diterima</text>
 </svg>

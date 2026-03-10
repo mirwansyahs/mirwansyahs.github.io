@@ -1,14 +1,18 @@
 <svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="bg5" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#0F766E"/>
-      <stop offset="1" stop-color="#14532D"/>
-    </linearGradient>
-  </defs>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H1080V1080H0V0ZM540 820C725.567 820 876 669.567 876 484C876 298.433 725.567 148 540 148C354.433 148 204 298.433 204 484C204 669.567 354.433 820 540 820Z" fill="url(#bg5)"/>
-  <circle cx="540" cy="484" r="372" stroke="#FDE68A" stroke-width="36"/>
-  <path d="M140 870L210 800L280 870L210 940L140 870Z" fill="#A3E635" fill-opacity="0.75"/>
-  <path d="M800 870L870 800L940 870L870 940L800 870Z" fill="#A3E635" fill-opacity="0.75"/>
-  <text x="540" y="120" text-anchor="middle" fill="#ECFCCB" font-family="Georgia, serif" font-size="56" font-weight="700">SELAMAT IDUL FITRI</text>
-  <text x="540" y="970" text-anchor="middle" fill="#ECFCCB" font-family="Georgia, serif" font-size="38">Mohon Maaf Lahir dan Batin</text>
+    <defs>
+        <linearGradient id="bg5" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0F766E" />
+            <stop offset="1" stop-color="#14532D" />
+        </linearGradient>
+    </defs>
+    <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M0 0H1080V1080H0V0ZM540 820C725.567 820 876 669.567 876 484C876 298.433 725.567 148 540 148C354.433 148 204 298.433 204 484C204 669.567 354.433 820 540 820Z"
+        fill="url(#bg5)" />
+    <circle cx="540" cy="484" r="372" stroke="#FDE68A" stroke-width="36" />
+    <path d="M140 870L210 800L280 870L210 940L140 870Z" fill="#A3E635" fill-opacity="0.75" />
+    <path d="M800 870L870 800L940 870L870 940L800 870Z" fill="#A3E635" fill-opacity="0.75" />
+    <text x="540" y="120" text-anchor="middle" fill="#ECFCCB" font-family="Georgia, serif" font-size="56"
+        font-weight="700">SELAMAT IDUL FITRI</text>
+    <text x="540" y="970" text-anchor="middle" fill="#ECFCCB" font-family="Georgia, serif" font-size="38">Mohon Maaf
+        Lahir dan Batin</text>
 </svg>

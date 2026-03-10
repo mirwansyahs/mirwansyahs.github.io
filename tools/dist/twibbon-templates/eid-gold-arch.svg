@@ -1,15 +1,19 @@
 <svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="bg6" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#0B3B5C"/>
-      <stop offset="1" stop-color="#0F172A"/>
-    </linearGradient>
-  </defs>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H1080V1080H0V0ZM540 810C715.64 810 858 667.64 858 492C858 316.36 715.64 174 540 174C364.36 174 222 316.36 222 492C222 667.64 364.36 810 540 810Z" fill="url(#bg6)"/>
-  <circle cx="540" cy="492" r="350" stroke="#FBBF24" stroke-width="42"/>
-  <circle cx="540" cy="492" r="390" stroke="#FDE68A" stroke-opacity="0.45" stroke-width="6"/>
-  <path d="M100 940H980" stroke="#FBBF24" stroke-width="16"/>
-  <path d="M150 900H930" stroke="#FDE68A" stroke-width="6" stroke-opacity="0.55"/>
-  <text x="540" y="122" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="58" font-weight="700">EID MUBARAK</text>
-  <text x="540" y="970" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="36">Joy, Peace, and Forgiveness</text>
+    <defs>
+        <linearGradient id="bg6" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0B3B5C" />
+            <stop offset="1" stop-color="#0F172A" />
+        </linearGradient>
+    </defs>
+    <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M0 0H1080V1080H0V0ZM540 810C715.64 810 858 667.64 858 492C858 316.36 715.64 174 540 174C364.36 174 222 316.36 222 492C222 667.64 364.36 810 540 810Z"
+        fill="url(#bg6)" />
+    <circle cx="540" cy="492" r="350" stroke="#FBBF24" stroke-width="42" />
+    <circle cx="540" cy="492" r="390" stroke="#FDE68A" stroke-opacity="0.45" stroke-width="6" />
+    <path d="M100 940H980" stroke="#FBBF24" stroke-width="16" />
+    <path d="M150 900H930" stroke="#FDE68A" stroke-width="6" stroke-opacity="0.55" />
+    <text x="540" y="122" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="58"
+        font-weight="700">EID MUBARAK</text>
+    <text x="540" y="970" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="36">Joy, Peace,
+        and Forgiveness</text>
 </svg>

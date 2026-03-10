@@ -1,19 +1,23 @@
 <svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="bg4" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#1E3A8A"/>
-      <stop offset="1" stop-color="#111827"/>
-    </linearGradient>
-  </defs>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H1080V1080H0V0ZM540 832C735.509 832 894 673.509 894 478C894 282.491 735.509 124 540 124C344.491 124 186 282.491 186 478C186 673.509 344.491 832 540 832Z" fill="url(#bg4)"/>
-  <circle cx="540" cy="478" r="390" stroke="#FDE68A" stroke-width="32"/>
-  <circle cx="540" cy="478" r="420" stroke="#FCD34D" stroke-opacity="0.35" stroke-width="6" stroke-dasharray="4 14"/>
-  <circle cx="180" cy="180" r="4" fill="#FDE68A"/>
-  <circle cx="920" cy="220" r="3" fill="#FDE68A"/>
-  <circle cx="850" cy="130" r="5" fill="#FDE68A"/>
-  <circle cx="280" cy="120" r="3" fill="#FDE68A"/>
-  <circle cx="110" cy="320" r="4" fill="#FDE68A"/>
-  <circle cx="980" cy="360" r="4" fill="#FDE68A"/>
-  <text x="540" y="110" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="52" font-weight="700">RAMADHAN NIGHT</text>
-  <text x="540" y="958" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="36">Shine With Faith</text>
+    <defs>
+        <linearGradient id="bg4" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#1E3A8A" />
+            <stop offset="1" stop-color="#111827" />
+        </linearGradient>
+    </defs>
+    <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M0 0H1080V1080H0V0ZM540 832C735.509 832 894 673.509 894 478C894 282.491 735.509 124 540 124C344.491 124 186 282.491 186 478C186 673.509 344.491 832 540 832Z"
+        fill="url(#bg4)" />
+    <circle cx="540" cy="478" r="390" stroke="#FDE68A" stroke-width="32" />
+    <circle cx="540" cy="478" r="420" stroke="#FCD34D" stroke-opacity="0.35" stroke-width="6" stroke-dasharray="4 14" />
+    <circle cx="180" cy="180" r="4" fill="#FDE68A" />
+    <circle cx="920" cy="220" r="3" fill="#FDE68A" />
+    <circle cx="850" cy="130" r="5" fill="#FDE68A" />
+    <circle cx="280" cy="120" r="3" fill="#FDE68A" />
+    <circle cx="110" cy="320" r="4" fill="#FDE68A" />
+    <circle cx="980" cy="360" r="4" fill="#FDE68A" />
+    <text x="540" y="110" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="52"
+        font-weight="700">RAMADHAN NIGHT</text>
+    <text x="540" y="958" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="36">Shine With
+        Faith</text>
 </svg>

@@ -9,11 +9,12 @@ SEO + Fast Utilities
 </p> <h1 class="mt-4 text-4xl font-black leading-tight text-slate-900 md:text-5xl">
 Developer Tools Cepat, Ringan, dan Bisa Diindeks Google
 </h1> <p class="mt-4 max-w-3xl text-base leading-relaxed text-slate-600">
-Koleksi utility paling sering dipakai developer, creator, dan marketer:
-			caption generator, paraphraser, headline generator, emoji text style,
-			generator ucapan hari besar, template poster momen spesial, QR/link
-			tools, plus networking stack lengkap seperti MX/A/CNAME/TXT/NS lookup,
-			DNS propagation, SPF, DKIM, dan DMARC checker.
+Koleksi utility paling sering dipakai developer, creator, dan
+			marketer: caption generator, paraphraser, headline generator, emoji
+			text style, generator ucapan hari besar, template poster momen
+			spesial, QR/link tools, plus networking stack lengkap seperti
+			MX/A/CNAME/TXT/NS lookup, DNS propagation, SPF, DKIM, dan DMARC
+			checker.
 </p> </section> <section class="mt-6 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-6"> <label for="homeToolSearch" class="mb-2 block text-sm font-semibold text-slate-700">
 Cari Tool
 </label> <input id="homeToolSearch" type="search" placeholder="Cari berdasarkan nama atau fungsi tools..." class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none ring-teal-500 transition focus:ring"> <p id="homeToolSearchMeta" class="mt-2 text-xs text-slate-600"></p> <div id="toolCategoryFilters" class="mt-3 flex flex-wrap gap-2"> <button data-category="all" class="rounded-full bg-teal-600 px-3 py-1.5 text-xs font-semibold text-white">Semua</button> <button data-category="Content" class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700">Content</button> <button data-category="Marketing" class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700">Marketing</button> <button data-category="Networking" class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700">Networking</button> <button data-category="Email Auth" class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700">Email Auth</button> <button data-category="Data" class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700">Data</button> <button data-category="Encoding" class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700">Encoding</button> <button data-category="Security" class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700">Security</button> <button data-category="Media" class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700">Media</button> </div> </section> <section id="toolsGrid" class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3"> <a href="/tools/caption-generator" data-tool-title="Caption Generator" data-category="Content" class="group block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"> <div class="flex flex-wrap items-center gap-2"> <p class="text-xs font-semibold uppercase tracking-[0.14em] text-teal-600"> Viral </p> <span class="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-700">Content</span> </div> <h3 class="mt-3 text-2xl font-bold text-slate-900">Caption Generator</h3> <p class="mt-2 text-sm leading-relaxed text-slate-600">Generate caption Instagram, TikTok, X, dan LinkedIn lengkap dengan CTA dan hashtag.</p> <p class="mt-6 text-sm font-semibold text-amber-700 group-hover:text-amber-800">
@@ -99,11 +100,12 @@ Open tool ->
 </p> </a> </section> <section class="mt-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8"> <h2 class="text-2xl font-black text-slate-900">
 Tools Populer untuk Workflow Harian
 </h2> <p class="mt-2 text-sm leading-relaxed text-slate-600">
-Selain JSON formatter, regex tester, dan JWT decoder, sekarang tersedia
-			paket content tools yang sempat viral: caption generator, paraphraser,
-			headline generator, emoji text style, ucapan otomatis hari besar, dan
-			template poster momen musiman. Untuk campaign tracking, tersedia juga
-			QR/link tools lengkap dengan UTM builder dan URL insights.
+Selain JSON formatter, regex tester, dan JWT decoder, sekarang
+			tersedia paket content tools yang sempat viral: caption generator,
+			paraphraser, headline generator, emoji text style, ucapan otomatis
+			hari besar, dan template poster momen musiman. Untuk campaign
+			tracking, tersedia juga QR/link tools lengkap dengan UTM builder dan
+			URL insights.
 </p> </section> <script type="module">const a=document.getElementById("homeToolSearch"),n=document.getElementById("homeToolSearchMeta"),i=document.getElementById("toolCategoryFilters"),h=document.getElementById("toolsGrid"),d=Array.from(h?.querySelectorAll("a")??[]);let r="all";const s=e=>{const t=e.trim().toLowerCase();let o=0;d.forEach(l=>{const m=(l.textContent??"").toLowerCase(),g=(l.getAttribute("data-category")??"").toLowerCase(),u=r==="all"||g===r.toLowerCase(),y=!t||m.includes(t),c=u&&y;l.classList.toggle("hidden",!c),c&&(o+=1)}),n&&(n.textContent=t?`${o} tool ditemukan untuk "${e.trim()}".`:`Menampilkan semua tool (${d.length}).`)};if(a){const t=new URLSearchParams(window.location.search).get("q")??"";t&&(a.value=t),s(t),a.addEventListener("input",()=>{s(a.value)})}else s("");i?.querySelectorAll("button").forEach(e=>{e.addEventListener("click",()=>{r=e.dataset.category??"all",i.querySelectorAll("button").forEach(o=>{o.classList.remove("bg-teal-600","text-white","border-teal-600"),o.classList.add("border-slate-300","bg-white","text-slate-700")}),e.classList.remove("border-slate-300","bg-white","text-slate-700"),e.classList.add("border-teal-600","bg-teal-600","text-white"),s(a?.value??"")})});</script>  </section> <aside class="space-y-4"> <div class="sticky top-6 rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600">
 Utility tools ini dioptimalkan untuk pengalaman
                                 cepat dan bersih. Pengaturan Auto Ads dikelola

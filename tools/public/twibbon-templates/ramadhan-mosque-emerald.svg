@@ -1,0 +1,25 @@
+<svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="bg2" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0F766E" />
+            <stop offset="1" stop-color="#14532D" />
+        </linearGradient>
+        <linearGradient id="gold2" x1="160" y1="160" x2="920" y2="920" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFF7C2" />
+            <stop offset="1" stop-color="#F59E0B" />
+        </linearGradient>
+    </defs>
+    <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M0 0H1080V1080H0V0ZM540 830C728.329 830 881 677.329 881 489C881 300.671 728.329 148 540 148C351.671 148 199 300.671 199 489C199 677.329 351.671 830 540 830Z"
+        fill="url(#bg2)" />
+    <circle cx="540" cy="489" r="382" stroke="url(#gold2)" stroke-width="34" />
+    <path d="M110 910C210 830 330 780 540 780C750 780 870 830 970 910" stroke="#FDE68A" stroke-opacity="0.4"
+        stroke-width="14" />
+    <path d="M150 900H930" stroke="#FDE68A" stroke-opacity="0.5" stroke-width="6" />
+    <path d="M250 860H300V940H250V860Z" fill="#052E16" fill-opacity="0.6" />
+    <path d="M780 860H830V940H780V860Z" fill="#052E16" fill-opacity="0.6" />
+    <text x="540" y="118" text-anchor="middle" fill="#FFF7C2" font-family="Georgia, serif" font-size="50"
+        font-weight="700">RAMADHAN MUBARAK</text>
+    <text x="540" y="978" text-anchor="middle" fill="#FFF7C2" font-family="Georgia, serif" font-size="36">Ibadah Penuh
+        Berkah</text>
+</svg>

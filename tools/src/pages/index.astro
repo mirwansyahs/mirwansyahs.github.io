@@ -73,6 +73,11 @@ import { SITE } from "../config/site";
 				class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700"
 				>Security</button
 			>
+			<button
+				data-category="Media"
+				class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700"
+				>Media</button
+			>
 		</div>
 	</section>
 
@@ -80,6 +85,48 @@ import { SITE } from "../config/site";
 		id="toolsGrid"
 		class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3"
 	>
+		<ToolCard
+			title="Twibbon Maker"
+			description="Buat twibbon dari template Ramadhan/Idul Fitri bawaan atau upload template sendiri."
+			href="/tools/twibbon-maker"
+			status="Media"
+			category="Media"
+		/>
+		<ToolCard
+			title="Image Compress"
+			description="Kompres gambar JPG/PNG/WEBP dengan quality dan resize langsung di browser."
+			href="/tools/image-compress"
+			status="Media"
+			category="Media"
+		/>
+		<ToolCard
+			title="Image to PDF"
+			description="Gabungkan satu atau banyak gambar menjadi satu file PDF."
+			href="/tools/image-to-pdf"
+			status="Media"
+			category="Media"
+		/>
+		<ToolCard
+			title="PDF to Image"
+			description="Konversi tiap halaman PDF menjadi PNG/JPEG dan download per halaman."
+			href="/tools/pdf-to-image"
+			status="Media"
+			category="Media"
+		/>
+		<ToolCard
+			title="PDF Compress"
+			description="Kompres PDF berbasis scan/image dengan re-encode kualitas terkontrol."
+			href="/tools/pdf-compress"
+			status="Media"
+			category="Media"
+		/>
+		<ToolCard
+			title="Image to ASCII"
+			description="Konversi gambar ke ASCII art untuk terminal atau konten kreatif."
+			href="/tools/image-to-ascii"
+			status="Media"
+			category="Media"
+		/>
 		<ToolCard
 			title="DNS Propagation Checker"
 			description="Bandingkan hasil record DNS dari beberapa resolver publik untuk cek propagasi."

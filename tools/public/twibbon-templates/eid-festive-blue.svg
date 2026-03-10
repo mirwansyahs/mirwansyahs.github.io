@@ -1,0 +1,21 @@
+<svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="bg8" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#2563EB" />
+            <stop offset="1" stop-color="#1E3A8A" />
+        </linearGradient>
+    </defs>
+    <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M0 0H1080V1080H0V0ZM540 820C720.036 820 866 674.036 866 494C866 313.964 720.036 168 540 168C359.964 168 214 313.964 214 494C214 674.036 359.964 820 540 820Z"
+        fill="url(#bg8)" />
+    <circle cx="540" cy="494" r="356" stroke="#FDE68A" stroke-width="40" />
+    <circle cx="540" cy="494" r="394" stroke="#93C5FD" stroke-opacity="0.45" stroke-width="6" stroke-dasharray="8 12" />
+    <circle cx="120" cy="200" r="7" fill="#FDE68A" />
+    <circle cx="960" cy="180" r="6" fill="#FDE68A" />
+    <circle cx="920" cy="300" r="5" fill="#FDE68A" />
+    <circle cx="160" cy="320" r="6" fill="#FDE68A" />
+    <text x="540" y="120" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="58"
+        font-weight="700">EID FESTIVE</text>
+    <text x="540" y="970" text-anchor="middle" fill="#DBEAFE" font-family="Georgia, serif" font-size="36">Selamat Hari
+        Raya Idul Fitri</text>
+</svg>

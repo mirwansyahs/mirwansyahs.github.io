@@ -1,0 +1,21 @@
+<svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="bg7" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#F8FAFC" />
+            <stop offset="1" stop-color="#E2E8F0" />
+        </linearGradient>
+    </defs>
+    <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M0 0H1080V1080H0V0ZM540 826C728.882 826 882 672.882 882 484C882 295.118 728.882 142 540 142C351.118 142 198 295.118 198 484C198 672.882 351.118 826 540 826Z"
+        fill="url(#bg7)" />
+    <circle cx="540" cy="484" r="372" stroke="#F59E0B" stroke-width="34" />
+    <circle cx="540" cy="484" r="404" stroke="#065F46" stroke-opacity="0.45" stroke-width="8" />
+    <path d="M200 80V220" stroke="#F59E0B" stroke-width="5" />
+    <rect x="164" y="220" width="72" height="120" rx="14" fill="#FCD34D" />
+    <path d="M880 80V220" stroke="#F59E0B" stroke-width="5" />
+    <rect x="844" y="220" width="72" height="120" rx="14" fill="#FCD34D" />
+    <text x="540" y="114" text-anchor="middle" fill="#065F46" font-family="Georgia, serif" font-size="56"
+        font-weight="700">IDUL FITRI</text>
+    <text x="540" y="970" text-anchor="middle" fill="#065F46" font-family="Georgia, serif" font-size="36">Taqabbalallahu
+        Minna Wa Minkum</text>
+</svg>

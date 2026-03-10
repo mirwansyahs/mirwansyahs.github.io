@@ -1,0 +1,27 @@
+<svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0F766E" />
+            <stop offset="1" stop-color="#0B3B5C" />
+        </linearGradient>
+        <linearGradient id="ring" x1="140" y1="140" x2="940" y2="940" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FDE68A" />
+            <stop offset="1" stop-color="#F59E0B" />
+        </linearGradient>
+    </defs>
+
+    <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M0 0H1080V1080H0V0ZM540 860C716.731 860 860 716.731 860 540C860 363.269 716.731 220 540 220C363.269 220 220 363.269 220 540C220 716.731 363.269 860 540 860Z"
+        fill="url(#bg)" />
+    <circle cx="540" cy="540" r="372" stroke="url(#ring)" stroke-width="44" />
+    <circle cx="540" cy="540" r="404" stroke="#FBBF24" stroke-opacity="0.45" stroke-width="8" stroke-dasharray="8 20" />
+
+    <path d="M540 98L557 148H610L567 179L583 230L540 200L497 230L513 179L470 148H523L540 98Z" fill="#FDE68A" />
+    <path d="M160 860C220 760 320 700 430 700" stroke="#FDE68A" stroke-opacity="0.45" stroke-width="10" />
+    <path d="M920 860C860 760 760 700 650 700" stroke="#FDE68A" stroke-opacity="0.45" stroke-width="10" />
+
+    <text x="540" y="130" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="56"
+        font-weight="700">RAMADHAN KAREEM</text>
+    <text x="540" y="980" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="42">1447 H /
+        2026</text>
+</svg>

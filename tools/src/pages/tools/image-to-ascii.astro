@@ -1,0 +1,201 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+    title="Image to ASCII - Irwansyah Tools"
+    description="Konversi gambar menjadi ASCII art langsung di browser dengan pengaturan lebar karakter."
+    canonicalPath="/tools/image-to-ascii"
+>
+    <section
+        class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-5"
+    >
+        <h1 class="text-2xl font-black text-slate-900 md:text-3xl">
+            Image to ASCII
+        </h1>
+        <p class="mt-1 text-sm text-slate-600">
+            Ubah gambar jadi teks ASCII untuk kebutuhan kreatif, terminal art,
+            atau preview teks.
+        </p>
+
+        <input
+            id="asciiImageInput"
+            type="file"
+            accept="image/*"
+            class="mt-3 block w-full text-sm"
+        />
+
+        <div class="mt-3 grid gap-3 md:grid-cols-2">
+            <label class="block text-sm">
+                <span class="mb-1 block font-semibold text-slate-700"
+                    >Character Width</span
+                >
+                <input
+                    id="asciiWidth"
+                    type="number"
+                    min="20"
+                    max="300"
+                    value="120"
+                    class="w-full rounded-2xl border border-slate-300 p-2"
+                />
+            </label>
+            <label
+                class="mt-6 inline-flex items-center gap-2 text-sm text-slate-700 md:mt-0"
+            >
+                <input id="asciiInvert" type="checkbox" class="h-4 w-4" />
+                Invert grayscale
+            </label>
+        </div>
+
+        <div class="mt-3 flex flex-wrap gap-2">
+            <button
+                id="asciiRunBtn"
+                class="rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700"
+                >Convert to ASCII</button
+            >
+            <button
+                id="asciiCopyBtn"
+                class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                >Copy ASCII</button
+            >
+            <button
+                id="asciiExportBtn"
+                class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                >Export .txt</button
+            >
+        </div>
+
+        <p id="asciiMessage" class="mt-3 text-sm text-slate-600"></p>
+        <pre
+            id="asciiOutput"
+            class="mt-3 max-h-[55vh] overflow-auto rounded-2xl border border-slate-200 bg-slate-50 p-3 font-mono text-[10px] leading-[1.05] text-slate-700">
+        </pre>
+    </section>
+
+    <script>
+        const inputEl = document.getElementById(
+            "asciiImageInput",
+        ) as HTMLInputElement | null;
+        const widthEl = document.getElementById(
+            "asciiWidth",
+        ) as HTMLInputElement | null;
+        const invertEl = document.getElementById(
+            "asciiInvert",
+        ) as HTMLInputElement | null;
+        const outputEl = document.getElementById(
+            "asciiOutput",
+        ) as HTMLPreElement | null;
+        const messageEl = document.getElementById(
+            "asciiMessage",
+        ) as HTMLParagraphElement | null;
+
+        const chars = "@%#*+=-:. ";
+
+        const loadImage = (src: string) =>
+            new Promise<HTMLImageElement>((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = () => reject(new Error("Gagal memuat gambar."));
+                img.src = src;
+            });
+
+        const downloadTxt = (filename: string, text: string) => {
+            const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(url);
+        };
+
+        document
+            .getElementById("asciiRunBtn")
+            ?.addEventListener("click", async () => {
+                try {
+                    const file = inputEl?.files?.[0];
+                    if (!file) {
+                        if (messageEl)
+                            messageEl.textContent =
+                                "Silakan pilih file gambar terlebih dahulu.";
+                        return;
+                    }
+
+                    if (messageEl)
+                        messageEl.textContent = "Memproses image ke ASCII...";
+                    const image = await loadImage(URL.createObjectURL(file));
+
+                    const targetWidth = Math.max(
+                        20,
+                        Math.min(300, Number(widthEl?.value ?? 120)),
+                    );
+                    const aspect = image.height / image.width;
+                    const targetHeight = Math.max(
+                        1,
+                        Math.round(targetWidth * aspect * 0.55),
+                    );
+
+                    const canvas = document.createElement("canvas");
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+                    const ctx = canvas.getContext("2d");
+                    if (!ctx) throw new Error("Canvas context tidak tersedia.");
+
+                    ctx.drawImage(image, 0, 0, targetWidth, targetHeight);
+                    const pixels = ctx.getImageData(
+                        0,
+                        0,
+                        targetWidth,
+                        targetHeight,
+                    ).data;
+                    const invert = Boolean(invertEl?.checked);
+
+                    let ascii = "";
+                    for (let y = 0; y < targetHeight; y += 1) {
+                        for (let x = 0; x < targetWidth; x += 1) {
+                            const i = (y * targetWidth + x) * 4;
+                            const r = pixels[i];
+                            const g = pixels[i + 1];
+                            const b = pixels[i + 2];
+                            const gray =
+                                (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+                            const normalized = invert ? gray : 1 - gray;
+                            const idx = Math.min(
+                                chars.length - 1,
+                                Math.floor(normalized * (chars.length - 1)),
+                            );
+                            ascii += chars[idx];
+                        }
+                        ascii += "\n";
+                    }
+
+                    if (outputEl) outputEl.textContent = ascii;
+                    if (messageEl) messageEl.textContent = "Konversi selesai.";
+                } catch (error) {
+                    if (messageEl)
+                        messageEl.textContent = `Gagal convert image ke ASCII: ${error instanceof Error ? error.message : "Unknown error"}`;
+                }
+            });
+
+        document
+            .getElementById("asciiCopyBtn")
+            ?.addEventListener("click", async () => {
+                const value = outputEl?.textContent?.trim() ?? "";
+                if (!value) return;
+                await navigator.clipboard.writeText(value);
+                if (messageEl)
+                    messageEl.textContent =
+                        "ASCII berhasil disalin ke clipboard.";
+            });
+
+        document
+            .getElementById("asciiExportBtn")
+            ?.addEventListener("click", () => {
+                const value = outputEl?.textContent?.trim() ?? "";
+                if (!value) return;
+                downloadTxt("image-to-ascii.txt", value);
+                if (messageEl)
+                    messageEl.textContent = "ASCII berhasil diexport ke .txt.";
+            });
+    </script>
+</BaseLayout>

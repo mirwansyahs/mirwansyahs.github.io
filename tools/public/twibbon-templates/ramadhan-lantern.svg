@@ -1,0 +1,29 @@
+<svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="bg2" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#1E3A8A" />
+            <stop offset="1" stop-color="#0F172A" />
+        </linearGradient>
+        <linearGradient id="ring2" x1="180" y1="180" x2="900" y2="900" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FDE68A" />
+            <stop offset="1" stop-color="#FBBF24" />
+        </linearGradient>
+    </defs>
+
+    <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M0 0H1080V1080H0V0ZM540 848C709.035 848 846 711.035 846 542C846 372.965 709.035 236 540 236C370.965 236 234 372.965 234 542C234 711.035 370.965 848 540 848Z"
+        fill="url(#bg2)" />
+    <circle cx="540" cy="542" r="350" stroke="url(#ring2)" stroke-width="40" />
+
+    <path d="M230 60V220" stroke="#FDE68A" stroke-width="6" />
+    <rect x="190" y="220" width="80" height="130" rx="16" fill="#FBBF24" fill-opacity="0.85" />
+    <path d="M850 40V210" stroke="#FDE68A" stroke-width="6" />
+    <rect x="810" y="210" width="80" height="130" rx="16" fill="#FBBF24" fill-opacity="0.85" />
+
+    <path d="M540 122C500 122 467 154 467 194C467 234 500 266 540 266C580 266 613 234 613 194C613 154 580 122 540 122Z"
+        stroke="#FDE68A" stroke-width="8" />
+    <text x="540" y="120" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="52"
+        font-weight="700">RAMADHAN</text>
+    <text x="540" y="960" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="40">Blessed Night,
+        Peaceful Heart</text>
+</svg>

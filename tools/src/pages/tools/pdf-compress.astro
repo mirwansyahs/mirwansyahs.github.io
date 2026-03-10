@@ -1,0 +1,203 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+    title="PDF Compress - Irwansyah Tools"
+    description="Kompres PDF di browser dengan re-encode halaman menjadi gambar JPEG lalu dibentuk ulang ke PDF."
+    canonicalPath="/tools/pdf-compress"
+>
+    <section
+        class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-5"
+    >
+        <h1 class="text-2xl font-black text-slate-900 md:text-3xl">
+            PDF Compress
+        </h1>
+        <p class="mt-1 text-sm text-slate-600">
+            Metode kompres: render halaman jadi gambar lalu generate PDF baru.
+            Cocok untuk PDF scan.
+        </p>
+
+        <input
+            id="pdfCompressInput"
+            type="file"
+            accept="application/pdf"
+            class="mt-3 block w-full text-sm"
+        />
+
+        <div class="mt-3 grid gap-3 md:grid-cols-3">
+            <label class="block text-sm">
+                <span class="mb-1 block font-semibold text-slate-700"
+                    >Render Scale</span
+                >
+                <input
+                    id="pdfCompressScale"
+                    type="number"
+                    min="1"
+                    step="0.2"
+                    value="1.6"
+                    class="w-full rounded-2xl border border-slate-300 p-2"
+                />
+            </label>
+            <label class="block text-sm">
+                <span class="mb-1 block font-semibold text-slate-700"
+                    >JPEG Quality</span
+                >
+                <input
+                    id="pdfCompressQuality"
+                    type="range"
+                    min="0.4"
+                    max="1"
+                    step="0.05"
+                    value="0.7"
+                    class="w-full"
+                />
+            </label>
+            <label class="block text-sm">
+                <span class="mb-1 block font-semibold text-slate-700"
+                    >Orientation</span
+                >
+                <select
+                    id="pdfCompressOrientation"
+                    class="w-full rounded-2xl border border-slate-300 p-2"
+                >
+                    <option value="portrait">Portrait</option>
+                    <option value="landscape">Landscape</option>
+                </select>
+            </label>
+        </div>
+
+        <button
+            id="pdfCompressRunBtn"
+            class="mt-3 rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700"
+            >Compress PDF</button
+        >
+        <p id="pdfCompressMessage" class="mt-3 text-sm text-slate-600"></p>
+        <p id="pdfCompressStats" class="mt-2 text-xs text-slate-600"></p>
+        <a
+            id="pdfCompressDownload"
+            class="mt-3 hidden inline-flex rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+            download="compressed.pdf">Download Compressed PDF</a
+        >
+    </section>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"
+    ></script>
+    <script>
+        const inputEl = document.getElementById(
+            "pdfCompressInput",
+        ) as HTMLInputElement | null;
+        const scaleEl = document.getElementById(
+            "pdfCompressScale",
+        ) as HTMLInputElement | null;
+        const qualityEl = document.getElementById(
+            "pdfCompressQuality",
+        ) as HTMLInputElement | null;
+        const orientationEl = document.getElementById(
+            "pdfCompressOrientation",
+        ) as HTMLSelectElement | null;
+        const messageEl = document.getElementById(
+            "pdfCompressMessage",
+        ) as HTMLParagraphElement | null;
+        const statsEl = document.getElementById(
+            "pdfCompressStats",
+        ) as HTMLParagraphElement | null;
+        const downloadEl = document.getElementById(
+            "pdfCompressDownload",
+        ) as HTMLAnchorElement | null;
+
+        (window as any).pdfjsLib.GlobalWorkerOptions.workerSrc =
+            "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";
+
+        const kb = (size: number) => `${(size / 1024).toFixed(2)} KB`;
+
+        document
+            .getElementById("pdfCompressRunBtn")
+            ?.addEventListener("click", async () => {
+                try {
+                    const file = inputEl?.files?.[0];
+                    if (!file) {
+                        if (messageEl)
+                            messageEl.textContent =
+                                "Silakan pilih file PDF terlebih dahulu.";
+                        return;
+                    }
+
+                    const jsPdfApi = (window as any).jspdf;
+                    if (!jsPdfApi?.jsPDF)
+                        throw new Error("Library jsPDF belum siap.");
+
+                    if (messageEl)
+                        messageEl.textContent = "Memproses kompresi PDF...";
+
+                    const data = new Uint8Array(await file.arrayBuffer());
+                    const pdfDoc = await (window as any).pdfjsLib.getDocument({
+                        data,
+                    }).promise;
+
+                    const scale = Math.max(1, Number(scaleEl?.value ?? 1.6));
+                    const quality = Number(qualityEl?.value ?? 0.7);
+                    const orientation = (orientationEl?.value ?? "portrait") as
+                        | "portrait"
+                        | "landscape";
+                    const outPdf = new jsPdfApi.jsPDF({
+                        orientation,
+                        unit: "pt",
+                        format: "a4",
+                    });
+
+                    const pageW = outPdf.internal.pageSize.getWidth();
+                    const pageH = outPdf.internal.pageSize.getHeight();
+
+                    for (let i = 1; i <= pdfDoc.numPages; i += 1) {
+                        if (i > 1) outPdf.addPage();
+                        const page = await pdfDoc.getPage(i);
+                        const viewport = page.getViewport({ scale });
+                        const canvas = document.createElement("canvas");
+                        canvas.width = viewport.width;
+                        canvas.height = viewport.height;
+                        const ctx = canvas.getContext("2d");
+                        if (!ctx)
+                            throw new Error("Canvas context tidak tersedia.");
+                        await page.render({ canvasContext: ctx, viewport })
+                            .promise;
+
+                        const imgData = canvas.toDataURL("image/jpeg", quality);
+                        const ratio = Math.min(
+                            pageW / canvas.width,
+                            pageH / canvas.height,
+                        );
+                        const w = canvas.width * ratio;
+                        const h = canvas.height * ratio;
+                        const x = (pageW - w) / 2;
+                        const y = (pageH - h) / 2;
+                        outPdf.addImage(imgData, "JPEG", x, y, w, h);
+                    }
+
+                    const blob = outPdf.output("blob");
+                    const url = URL.createObjectURL(blob);
+                    if (downloadEl) {
+                        downloadEl.href = url;
+                        downloadEl.classList.remove("hidden");
+                    }
+
+                    if (statsEl) {
+                        const saving = (
+                            ((file.size - blob.size) / file.size) *
+                            100
+                        ).toFixed(2);
+                        statsEl.textContent = `Ukuran awal: ${kb(file.size)} | Setelah kompres: ${kb(blob.size)} | Hemat: ${saving}%`;
+                    }
+
+                    if (messageEl)
+                        messageEl.textContent = "Kompresi PDF selesai.";
+                } catch (error) {
+                    if (messageEl)
+                        messageEl.textContent = `Gagal kompres PDF: ${error instanceof Error ? error.message : "Unknown error"}`;
+                }
+            });
+    </script>
+</BaseLayout>

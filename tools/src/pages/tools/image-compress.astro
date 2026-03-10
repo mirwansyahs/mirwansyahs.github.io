@@ -1,0 +1,221 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+    title="Image Compress - Irwansyah Tools"
+    description="Kompres gambar JPG/PNG/WEBP langsung di browser dengan pengaturan kualitas dan resize tanpa upload ke server."
+    canonicalPath="/tools/image-compress"
+>
+    <section
+        class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-5"
+    >
+        <h1 class="text-2xl font-black text-slate-900 md:text-3xl">
+            Image Compress
+        </h1>
+        <p class="mt-1 text-sm text-slate-600">
+            Kompres gambar di browser. File tidak dikirim ke server.
+        </p>
+
+        <input
+            id="compressImageInput"
+            type="file"
+            accept="image/*"
+            class="mt-3 block w-full text-sm"
+        />
+
+        <div class="mt-3 grid gap-3 md:grid-cols-3">
+            <label class="block text-sm">
+                <span class="mb-1 block font-semibold text-slate-700"
+                    >Format Output</span
+                >
+                <select
+                    id="compressFormat"
+                    class="w-full rounded-2xl border border-slate-300 p-2"
+                >
+                    <option value="image/jpeg">JPEG</option>
+                    <option value="image/webp">WEBP</option>
+                    <option value="image/png">PNG</option>
+                </select>
+            </label>
+            <label class="block text-sm">
+                <span class="mb-1 block font-semibold text-slate-700"
+                    >Quality (JPEG/WEBP)</span
+                >
+                <input
+                    id="compressQuality"
+                    type="range"
+                    min="0.1"
+                    max="1"
+                    step="0.05"
+                    value="0.75"
+                    class="w-full"
+                />
+                <span id="compressQualityValue" class="text-xs text-slate-600"
+                    >0.75</span
+                >
+            </label>
+            <label class="block text-sm">
+                <span class="mb-1 block font-semibold text-slate-700"
+                    >Max Width (px)</span
+                >
+                <input
+                    id="compressMaxWidth"
+                    type="number"
+                    min="100"
+                    value="1600"
+                    class="w-full rounded-2xl border border-slate-300 p-2"
+                />
+            </label>
+        </div>
+
+        <button
+            id="compressRunBtn"
+            class="mt-3 rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700"
+            >Compress Image</button
+        >
+
+        <p id="compressMessage" class="mt-3 text-sm text-slate-600"></p>
+        <p id="compressStats" class="mt-2 text-xs text-slate-600"></p>
+
+        <div class="mt-3 grid gap-3 md:grid-cols-2">
+            <img
+                id="compressBeforePreview"
+                alt="Original preview"
+                class="hidden rounded-2xl border border-slate-200"
+            />
+            <img
+                id="compressAfterPreview"
+                alt="Compressed preview"
+                class="hidden rounded-2xl border border-slate-200"
+            />
+        </div>
+
+        <a
+            id="compressDownloadLink"
+            class="mt-3 hidden inline-flex rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+            download="compressed-image.jpg">Download Compressed</a
+        >
+    </section>
+
+    <script>
+        const inputEl = document.getElementById(
+            "compressImageInput",
+        ) as HTMLInputElement | null;
+        const formatEl = document.getElementById(
+            "compressFormat",
+        ) as HTMLSelectElement | null;
+        const qualityEl = document.getElementById(
+            "compressQuality",
+        ) as HTMLInputElement | null;
+        const qualityValueEl = document.getElementById(
+            "compressQualityValue",
+        ) as HTMLSpanElement | null;
+        const maxWidthEl = document.getElementById(
+            "compressMaxWidth",
+        ) as HTMLInputElement | null;
+        const messageEl = document.getElementById(
+            "compressMessage",
+        ) as HTMLParagraphElement | null;
+        const statsEl = document.getElementById(
+            "compressStats",
+        ) as HTMLParagraphElement | null;
+        const beforePreviewEl = document.getElementById(
+            "compressBeforePreview",
+        ) as HTMLImageElement | null;
+        const afterPreviewEl = document.getElementById(
+            "compressAfterPreview",
+        ) as HTMLImageElement | null;
+        const downloadEl = document.getElementById(
+            "compressDownloadLink",
+        ) as HTMLAnchorElement | null;
+
+        qualityEl?.addEventListener("input", () => {
+            if (qualityValueEl && qualityEl)
+                qualityValueEl.textContent = qualityEl.value;
+        });
+
+        const bytesToKb = (size: number) => `${(size / 1024).toFixed(2)} KB`;
+
+        document
+            .getElementById("compressRunBtn")
+            ?.addEventListener("click", async () => {
+                try {
+                    const file = inputEl?.files?.[0];
+                    if (!file) {
+                        if (messageEl)
+                            messageEl.textContent =
+                                "Silakan pilih file gambar terlebih dahulu.";
+                        return;
+                    }
+
+                    if (messageEl)
+                        messageEl.textContent = "Memproses kompresi gambar...";
+
+                    const originalUrl = URL.createObjectURL(file);
+                    if (beforePreviewEl) {
+                        beforePreviewEl.src = originalUrl;
+                        beforePreviewEl.classList.remove("hidden");
+                    }
+
+                    const image = new Image();
+                    image.src = originalUrl;
+                    await image.decode();
+
+                    const maxWidth = Math.max(
+                        100,
+                        Number(maxWidthEl?.value ?? 1600),
+                    );
+                    const scale = Math.min(1, maxWidth / image.width);
+                    const targetWidth = Math.max(
+                        1,
+                        Math.round(image.width * scale),
+                    );
+                    const targetHeight = Math.max(
+                        1,
+                        Math.round(image.height * scale),
+                    );
+
+                    const canvas = document.createElement("canvas");
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+                    const ctx = canvas.getContext("2d");
+                    if (!ctx) throw new Error("Canvas context tidak tersedia.");
+                    ctx.drawImage(image, 0, 0, targetWidth, targetHeight);
+
+                    const format = formatEl?.value ?? "image/jpeg";
+                    const quality = Number(qualityEl?.value ?? 0.75);
+                    const blob = await new Promise<Blob | null>((resolve) => {
+                        canvas.toBlob(resolve, format, quality);
+                    });
+                    if (!blob)
+                        throw new Error("Gagal menghasilkan file terkompres.");
+
+                    const compressedUrl = URL.createObjectURL(blob);
+                    if (afterPreviewEl) {
+                        afterPreviewEl.src = compressedUrl;
+                        afterPreviewEl.classList.remove("hidden");
+                    }
+
+                    if (downloadEl) {
+                        const ext = format.split("/")[1] || "jpg";
+                        downloadEl.href = compressedUrl;
+                        downloadEl.download = `compressed-image.${ext}`;
+                        downloadEl.classList.remove("hidden");
+                    }
+
+                    const reduction = (
+                        ((file.size - blob.size) / file.size) *
+                        100
+                    ).toFixed(2);
+                    if (statsEl) {
+                        statsEl.textContent = `Ukuran awal: ${bytesToKb(file.size)} | Setelah kompres: ${bytesToKb(blob.size)} | Hemat: ${reduction}%`;
+                    }
+                    if (messageEl) messageEl.textContent = "Kompresi selesai.";
+                } catch (error) {
+                    if (messageEl)
+                        messageEl.textContent = `Gagal kompres gambar: ${error instanceof Error ? error.message : "Unknown error"}`;
+                }
+            });
+    </script>
+</BaseLayout>

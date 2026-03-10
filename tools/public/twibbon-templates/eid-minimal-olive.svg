@@ -1,0 +1,18 @@
+<svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="bg9" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#3F6212" />
+            <stop offset="1" stop-color="#1F2937" />
+        </linearGradient>
+    </defs>
+    <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M0 0H1080V1080H0V0ZM540 828C734.77 828 892.5 670.27 892.5 475.5C892.5 280.73 734.77 123 540 123C345.23 123 187.5 280.73 187.5 475.5C187.5 670.27 345.23 828 540 828Z"
+        fill="url(#bg9)" />
+    <circle cx="540" cy="475" r="388" stroke="#FDE68A" stroke-width="28" />
+    <path d="M130 920H950" stroke="#A3E635" stroke-width="10" />
+    <path d="M180 880H900" stroke="#FDE68A" stroke-opacity="0.7" stroke-width="4" />
+    <text x="540" y="115" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="52"
+        font-weight="700">EID AL FITR</text>
+    <text x="540" y="970" text-anchor="middle" fill="#ECFCCB" font-family="Georgia, serif" font-size="34">Minal Aidin
+        Wal Faizin</text>
+</svg>

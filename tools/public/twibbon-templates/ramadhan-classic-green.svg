@@ -1,0 +1,21 @@
+<svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="bg3" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#166534" />
+            <stop offset="1" stop-color="#064E3B" />
+        </linearGradient>
+    </defs>
+    <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M0 0H1080V1080H0V0ZM540 815C709.588 815 847 677.588 847 508C847 338.412 709.588 201 540 201C370.412 201 233 338.412 233 508C233 677.588 370.412 815 540 815Z"
+        fill="url(#bg3)" />
+    <circle cx="540" cy="508" r="348" stroke="#FDE68A" stroke-width="40" />
+    <circle cx="540" cy="508" r="387" stroke="#D1FAE5" stroke-opacity="0.45" stroke-width="6" />
+    <path d="M540 84L552 118H588L558 138L569 172L540 152L511 172L522 138L492 118H528L540 84Z" fill="#FDE68A" />
+    <path d="M180 860L220 820M900 860L860 820" stroke="#FDE68A" stroke-opacity="0.5" stroke-width="8" />
+    <text x="540" y="120" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="54"
+        font-weight="700">RAMADHAN</text>
+    <text x="540" y="172" text-anchor="middle" fill="#FDE68A" font-family="Georgia, serif" font-size="32">BULAN PENUH
+        AMPUNAN</text>
+    <text x="540" y="970" text-anchor="middle" fill="#ECFDF5" font-family="Georgia, serif" font-size="38">Marhaban Ya
+        Ramadhan</text>
+</svg>

@@ -1,0 +1,14 @@
+<svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg10" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0D9488"/>
+      <stop offset="1" stop-color="#0F766E"/>
+    </linearGradient>
+  </defs>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H1080V1080H0V0ZM540 834C743.793 834 909 668.793 909 465C909 261.207 743.793 96 540 96C336.207 96 171 261.207 171 465C171 668.793 336.207 834 540 834Z" fill="url(#bg10)"/>
+  <circle cx="540" cy="465" r="404" stroke="#FFF7C2" stroke-width="26"/>
+  <circle cx="540" cy="465" r="374" stroke="#FCD34D" stroke-width="12"/>
+  <path d="M140 860C260 790 390 760 540 760C690 760 820 790 940 860" stroke="#FFF7C2" stroke-opacity="0.55" stroke-width="10"/>
+  <text x="540" y="100" text-anchor="middle" fill="#FFF7C2" font-family="Georgia, serif" font-size="56" font-weight="700">EID MODERN</text>
+  <text x="540" y="970" text-anchor="middle" fill="#FFF7C2" font-family="Georgia, serif" font-size="34">Happy Eid, Full of Grace</text>
+</svg>

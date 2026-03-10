@@ -1,0 +1,26 @@
+<svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="bg3" x1="0" y1="0" x2="1080" y2="1080" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0F766E" />
+            <stop offset="1" stop-color="#166534" />
+        </linearGradient>
+        <linearGradient id="ring3" x1="200" y1="200" x2="880" y2="880" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFF7C2" />
+            <stop offset="1" stop-color="#F59E0B" />
+        </linearGradient>
+    </defs>
+
+    <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M0 0H1080V1080H0V0ZM540 850C710.105 850 848 712.105 848 542C848 371.895 710.105 234 540 234C369.895 234 232 371.895 232 542C232 712.105 369.895 850 540 850Z"
+        fill="url(#bg3)" />
+    <circle cx="540" cy="542" r="350" stroke="url(#ring3)" stroke-width="42" />
+
+    <path d="M540 120L556 164H603L566 188L580 232L540 206L500 232L514 188L477 164H524L540 120Z" fill="#FDE68A" />
+    <path d="M350 880H730" stroke="#FDE68A" stroke-opacity="0.65" stroke-width="8" />
+    <path d="M420 920H660" stroke="#FDE68A" stroke-opacity="0.65" stroke-width="8" />
+
+    <text x="540" y="130" text-anchor="middle" fill="#FFF7C2" font-family="Georgia, serif" font-size="58"
+        font-weight="700">EID MUBARAK</text>
+    <text x="540" y="975" text-anchor="middle" fill="#FFF7C2" font-family="Georgia, serif" font-size="38">Taqabbalallahu
+        Minna Wa Minkum</text>
+</svg>

@@ -42,6 +42,35 @@ const jsonLd = {
         "query-input": "required name=search_term_string",
     },
 };
+const pageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description,
+    url: canonical,
+    inLanguage: "id-ID",
+    isPartOf: {
+        "@type": "WebSite",
+        name: SITE.name,
+        url: SITE.url,
+    },
+};
+const toolJsonLd = isToolsPage
+    ? {
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          name: title,
+          applicationCategory: "DeveloperApplication",
+          operatingSystem: "Web Browser",
+          description,
+          url: canonical,
+          offers: {
+              "@type": "Offer",
+              price: "0",
+              priceCurrency: "USD",
+          },
+      }
+    : null;
 ---
 
 <!doctype html>
@@ -72,6 +101,18 @@ const jsonLd = {
         <meta name="twitter:creator" content={SITE.twitter} />
         <link rel="canonical" href={canonical} />
         <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+        <script
+            type="application/ld+json"
+            set:html={JSON.stringify(pageJsonLd)}
+        />
+        {
+            toolJsonLd && (
+                <script
+                    type="application/ld+json"
+                    set:html={JSON.stringify(toolJsonLd)}
+                />
+            )
+        }
         {
             adsenseClient && (
                 <script

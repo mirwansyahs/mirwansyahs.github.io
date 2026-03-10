@@ -1,0 +1,118 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+    title="HTML Encode and Decode - Irwansyah Tools"
+    description="Encode dan decode karakter HTML entities seperti <, >, &, dan quotes untuk kebutuhan frontend, CMS, dan keamanan output."
+    canonicalPath="/tools/html-encode-decode"
+>
+    <section
+        class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-5"
+    >
+        <h1 class="text-2xl font-black text-slate-900 md:text-3xl">
+            HTML Encode and Decode
+        </h1>
+        <p class="mt-1 text-sm text-slate-600">
+            Konversi text ke HTML entities atau decode kembali ke text normal.
+        </p>
+
+        <div class="mt-3 grid gap-3 md:grid-cols-2">
+            <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-slate-700"
+                    >Input</span
+                >
+                <textarea
+                    id="htmlInput"
+                    class="h-44 w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm md:h-56"
+                    placeholder="contoh: <h1>Halo</h1> & 'test'"></textarea>
+            </label>
+            <label class="block">
+                <span class="mb-2 block text-sm font-semibold text-slate-700"
+                    >Output</span
+                >
+                <textarea
+                    id="htmlOutput"
+                    class="h-44 w-full rounded-2xl border border-slate-300 p-3 font-mono text-sm md:h-56"
+                    readonly></textarea>
+            </label>
+        </div>
+
+        <div class="mt-3 flex flex-wrap gap-2">
+            <button
+                id="htmlEncodeBtn"
+                class="rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700"
+                >Encode</button
+            >
+            <button
+                id="htmlDecodeBtn"
+                class="rounded-xl bg-amber-500 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-amber-400"
+                >Decode</button
+            >
+            <button
+                id="htmlCopyBtn"
+                class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                >Copy Output</button
+            >
+        </div>
+        <p id="htmlMessage" class="mt-3 text-sm text-slate-600"></p>
+    </section>
+
+    <script>
+        const inputEl = document.getElementById(
+            "htmlInput",
+        ) as HTMLTextAreaElement | null;
+        const outputEl = document.getElementById(
+            "htmlOutput",
+        ) as HTMLTextAreaElement | null;
+        const messageEl = document.getElementById(
+            "htmlMessage",
+        ) as HTMLParagraphElement | null;
+
+        const encodeHtml = (value: string) => {
+            const map = {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+            } as Record<string, string>;
+            return value.replace(/[&<>"']/g, (ch: string) => map[ch]);
+        };
+
+        const decodeHtml = (value: string) => {
+            const parser = document.createElement("textarea");
+            parser.innerHTML = value;
+            return parser.value;
+        };
+
+        document
+            .getElementById("htmlEncodeBtn")
+            ?.addEventListener("click", () => {
+                const value = inputEl?.value ?? "";
+                if (outputEl) outputEl.value = encodeHtml(value);
+                if (messageEl)
+                    messageEl.textContent =
+                        "Text berhasil di-encode sebagai HTML entities.";
+            });
+
+        document
+            .getElementById("htmlDecodeBtn")
+            ?.addEventListener("click", () => {
+                const value = inputEl?.value ?? "";
+                if (outputEl) outputEl.value = decodeHtml(value);
+                if (messageEl)
+                    messageEl.textContent = "HTML entities berhasil di-decode.";
+            });
+
+        document
+            .getElementById("htmlCopyBtn")
+            ?.addEventListener("click", async () => {
+                const value = outputEl?.value ?? "";
+                if (!value) return;
+                await navigator.clipboard.writeText(value);
+                if (messageEl)
+                    messageEl.textContent = "Output tersalin ke clipboard.";
+            });
+    </script>
+</BaseLayout>

@@ -17,18 +17,50 @@ import { SITE } from "../config/site";
 			Developer Tools Cepat, Ringan, dan Bisa Diindeks Google
 		</h1>
 		<p class="mt-4 max-w-3xl text-base leading-relaxed text-slate-600">
-			Fokus utama: JSON Viewer suite (unstringify, beautify, JSON ke XML,
-			JSON ke CSV), plus tool Base64. Semua halaman memakai layout
-			reusable agar perubahan global tidak perlu diedit satu per satu.
+			Koleksi utility paling sering dipakai developer: JSON formatter,
+			regex tester, JWT decoder, timestamp converter, UUID generator,
+			base64, URL encode/decode, dan HTML encode/decode. Semua halaman
+			dioptimalkan untuk load cepat dan mudah diindeks mesin pencari.
 		</p>
 	</section>
 
 	<section class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
 		<ToolCard
+			title="JSON Formatter / Validator"
+			description="Validasi, beautify, dan minify JSON untuk debugging API request/response."
+			href="/tools/json-formatter-validator"
+			status="Popular"
+		/>
+		<ToolCard
 			title="JSON Viewer Suite"
 			description="Parse JSON, unstringify JSON string, beautify output, convert to XML/CSV dalam satu halaman."
 			href="/tools/json-viewer"
 			status="Priority"
+		/>
+		<ToolCard
+			title="Regex Tester"
+			description="Uji pola regular expression lengkap dengan flags dan daftar hasil match."
+			href="/tools/regex-tester"
+		/>
+		<ToolCard
+			title="JWT Decoder"
+			description="Decode JWT header dan payload untuk debugging autentikasi token."
+			href="/tools/jwt-decoder"
+		/>
+		<ToolCard
+			title="Timestamp Converter"
+			description="Konversi Unix timestamp ke tanggal normal dan sebaliknya."
+			href="/tools/timestamp-converter"
+		/>
+		<ToolCard
+			title="UUID Generator"
+			description="Generate UUID v4 cepat untuk kebutuhan ID unik aplikasi."
+			href="/tools/uuid-generator"
+		/>
+		<ToolCard
+			title="HTML Encode / Decode"
+			description="Encode/decode HTML entities untuk output aman di frontend/CMS."
+			href="/tools/html-encode-decode"
 		/>
 		<ToolCard
 			title="Base64 Encode / Decode"
@@ -55,5 +87,20 @@ import { SITE } from "../config/site";
 			description="Generate hash one-way: MD5, SHA-1, SHA-256, SHA-384, SHA-512, plus info Tiger dan bcrypt."
 			href="/tools/hash-generator"
 		/>
+	</section>
+
+	<section
+		class="mt-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8"
+	>
+		<h2 class="text-2xl font-black text-slate-900">
+			Tools Populer untuk Workflow Harian
+		</h2>
+		<p class="mt-2 text-sm leading-relaxed text-slate-600">
+			JSON formatter, regex tester, dan JWT decoder adalah kombinasi
+			paling sering dipakai saat debugging API. Timestamp converter dan
+			UUID generator membantu operasi backend sehari-hari, sedangkan
+			URL/HTML encode-decode berguna untuk query string, rendering, dan
+			sanitasi.
+		</p>
 	</section>
 </BaseLayout>

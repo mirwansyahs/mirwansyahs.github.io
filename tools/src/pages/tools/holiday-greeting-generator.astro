@@ -1,0 +1,209 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+    title="Ucapan Otomatis Hari Besar - Irwansyah Tools"
+    description="Generator ucapan otomatis untuk Ramadhan, Idul Fitri, Natal, dan Tahun Baru dengan berbagai tone."
+    canonicalPath="/tools/holiday-greeting-generator"
+>
+    <section
+        class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-5"
+    >
+        <h1 class="text-2xl font-black text-slate-900 md:text-3xl">
+            Ucapan Otomatis Hari Besar
+        </h1>
+        <p class="mt-1 text-sm text-slate-600">
+            Buat ucapan siap pakai untuk broadcast, story, poster, dan status.
+        </p>
+
+        <div class="mt-4 grid gap-3 md:grid-cols-2">
+            <label class="block text-sm">
+                <span class="mb-1 block font-semibold text-slate-700"
+                    >Momen Hari Besar</span
+                >
+                <select
+                    id="greetEvent"
+                    class="w-full rounded-2xl border border-slate-300 p-2"
+                >
+                    <option value="ramadhan">Ramadhan</option>
+                    <option value="idulfitri">Idul Fitri</option>
+                    <option value="natal">Natal</option>
+                    <option value="tahunbaru">Tahun Baru</option>
+                </select>
+            </label>
+            <label class="block text-sm">
+                <span class="mb-1 block font-semibold text-slate-700">Tone</span
+                >
+                <select
+                    id="greetTone"
+                    class="w-full rounded-2xl border border-slate-300 p-2"
+                >
+                    <option value="formal">Formal</option>
+                    <option value="hangat">Hangat</option>
+                    <option value="singkat">Singkat</option>
+                    <option value="sosmed">Sosial Media</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="mt-3 grid gap-3 md:grid-cols-3">
+            <label class="block text-sm">
+                <span class="mb-1 block font-semibold text-slate-700"
+                    >Nama Penerima (Opsional)</span
+                >
+                <input
+                    id="greetTo"
+                    type="text"
+                    placeholder="Contoh: Sahabat LifePlan"
+                    class="w-full rounded-2xl border border-slate-300 p-2"
+                />
+            </label>
+            <label class="block text-sm">
+                <span class="mb-1 block font-semibold text-slate-700"
+                    >Pengirim (Opsional)</span
+                >
+                <input
+                    id="greetFrom"
+                    type="text"
+                    placeholder="Contoh: Tim Kami"
+                    class="w-full rounded-2xl border border-slate-300 p-2"
+                />
+            </label>
+            <label class="block text-sm">
+                <span class="mb-1 block font-semibold text-slate-700"
+                    >Jumlah Ucapan</span
+                >
+                <input
+                    id="greetCount"
+                    type="number"
+                    min="1"
+                    max="20"
+                    value="8"
+                    class="w-full rounded-2xl border border-slate-300 p-2"
+                />
+            </label>
+        </div>
+
+        <div class="mt-4 flex flex-wrap gap-2">
+            <button
+                id="greetGenerateBtn"
+                class="rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700"
+                >Generate Ucapan</button
+            >
+            <button
+                id="greetCopyBtn"
+                class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                >Copy Output</button
+            >
+        </div>
+
+        <textarea
+            id="greetOutput"
+            class="mt-3 h-72 w-full rounded-2xl border border-slate-300 p-3 text-sm"
+            readonly></textarea>
+        <p id="greetMessage" class="mt-2 text-sm text-slate-600"></p>
+    </section>
+
+    <script>
+        const eventEl = document.getElementById(
+            "greetEvent",
+        ) as HTMLSelectElement | null;
+        const toneEl = document.getElementById(
+            "greetTone",
+        ) as HTMLSelectElement | null;
+        const toEl = document.getElementById(
+            "greetTo",
+        ) as HTMLInputElement | null;
+        const fromEl = document.getElementById(
+            "greetFrom",
+        ) as HTMLInputElement | null;
+        const countEl = document.getElementById(
+            "greetCount",
+        ) as HTMLInputElement | null;
+        const outputEl = document.getElementById(
+            "greetOutput",
+        ) as HTMLTextAreaElement | null;
+        const messageEl = document.getElementById(
+            "greetMessage",
+        ) as HTMLParagraphElement | null;
+
+        const baseGreetings: Record<string, string[]> = {
+            ramadhan: [
+                "Marhaban ya Ramadhan, semoga ibadah kita dilancarkan.",
+                "Selamat menunaikan ibadah puasa, semoga penuh berkah.",
+                "Semoga Ramadhan ini membawa ketenangan dan keberkahan.",
+            ],
+            idulfitri: [
+                "Selamat Idul Fitri, mohon maaf lahir dan batin.",
+                "Taqabbalallahu minna wa minkum, selamat Hari Raya Idul Fitri.",
+                "Semoga hari kemenangan ini membawa kebahagiaan untuk kita semua.",
+            ],
+            natal: [
+                "Selamat Natal, semoga damai dan sukacita selalu menyertai.",
+                "Kiranya kasih Natal membawa harapan baru bagi kita semua.",
+                "Selamat merayakan Natal bersama keluarga tercinta.",
+            ],
+            tahunbaru: [
+                "Selamat Tahun Baru, semoga tahun ini penuh peluang baik.",
+                "Tahun baru, semangat baru, semoga semua rencana berjalan lancar.",
+                "Selamat menyambut tahun baru dengan harapan yang lebih cerah.",
+            ],
+        };
+
+        const toneEndings: Record<string, string[]> = {
+            formal: [
+                "Semoga kesehatan dan kesuksesan senantiasa menyertai Anda.",
+                "Terima kasih atas kebersamaan dan dukungan Anda.",
+            ],
+            hangat: [
+                "Semoga hati kita selalu dipenuhi syukur dan kebahagiaan.",
+                "Semoga momen ini jadi penguat silaturahmi kita.",
+            ],
+            singkat: ["Semoga selalu diberkahi.", "Doa terbaik untuk Anda."],
+            sosmed: [
+                "Share ke orang terdekatmu, ya.",
+                "Yuk rayakan momen ini dengan energi positif.",
+            ],
+        };
+
+        document
+            .getElementById("greetGenerateBtn")
+            ?.addEventListener("click", () => {
+                const eventName = eventEl?.value ?? "ramadhan";
+                const tone = toneEl?.value ?? "formal";
+                const to = (toEl?.value ?? "").trim();
+                const from = (fromEl?.value ?? "").trim();
+                const count = Math.min(
+                    20,
+                    Math.max(1, Number(countEl?.value ?? 8)),
+                );
+
+                const starts =
+                    baseGreetings[eventName] ?? baseGreetings.ramadhan;
+                const ends = toneEndings[tone] ?? toneEndings.formal;
+
+                const lines = Array.from({ length: count }, (_, i) => {
+                    const open = starts[i % starts.length];
+                    const close = ends[i % ends.length];
+                    const toText = to ? `Untuk ${to}, ` : "";
+                    const fromText = from ? `\n- ${from}` : "";
+                    return `${i + 1}. ${toText}${open} ${close}${fromText}`;
+                });
+
+                if (outputEl) outputEl.value = lines.join("\n\n");
+                if (messageEl)
+                    messageEl.textContent = `${count} ucapan berhasil dibuat.`;
+            });
+
+        document
+            .getElementById("greetCopyBtn")
+            ?.addEventListener("click", async () => {
+                const text = outputEl?.value ?? "";
+                if (!text) return;
+                await navigator.clipboard.writeText(text);
+                if (messageEl)
+                    messageEl.textContent = "Ucapan tersalin ke clipboard.";
+            });
+    </script>
+</BaseLayout>

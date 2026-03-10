@@ -31,6 +31,120 @@ const isOverflowActive = overflowNavItems.some((item) =>
 const footerToolItems = NAV_ITEMS.filter((item) =>
     item.href.startsWith("/tools/"),
 );
+type NavItem = (typeof NAV_ITEMS)[number];
+const getFooterCategory = (item: NavItem) => {
+    if (
+        [
+            "/tools/caption-generator",
+            "/tools/caption-hashtag-generator",
+            "/tools/paraphraser",
+            "/tools/headline-generator",
+            "/tools/emoji-text-style",
+            "/tools/holiday-greeting-generator",
+        ].includes(item.href)
+    ) {
+        return "Content";
+    }
+
+    if (["/tools/qr-generator", "/tools/qr-link-tools"].includes(item.href)) {
+        return "Marketing";
+    }
+
+    if (
+        [
+            "/tools/twibbon-maker",
+            "/tools/holiday-poster-maker",
+            "/tools/image-compress",
+            "/tools/image-to-pdf",
+            "/tools/pdf-to-image",
+            "/tools/pdf-compress",
+            "/tools/image-to-ascii",
+        ].includes(item.href)
+    ) {
+        return "Media";
+    }
+
+    if (
+        [
+            "/tools/dns-propagation",
+            "/tools/dns-lookup",
+            "/tools/mx-lookup",
+            "/tools/a-lookup",
+            "/tools/caa-checker",
+            "/tools/srv-checker",
+            "/tools/cname-lookup",
+            "/tools/txt-lookup",
+            "/tools/ns-lookup",
+        ].includes(item.href)
+    ) {
+        return "Networking";
+    }
+
+    if (
+        [
+            "/tools/spf-checker",
+            "/tools/dkim-checker",
+            "/tools/dkim-generator",
+            "/tools/dmarc-checker",
+        ].includes(item.href)
+    ) {
+        return "Email Auth";
+    }
+
+    if (
+        [
+            "/tools/json-formatter-validator",
+            "/tools/json-viewer",
+            "/tools/regex-tester",
+            "/tools/timestamp-converter",
+            "/tools/uuid-generator",
+        ].includes(item.href)
+    ) {
+        return "Data";
+    }
+
+    if (
+        [
+            "/tools/html-encode-decode",
+            "/tools/base64-encode-decode",
+            "/tools/url-encode-decode",
+            "/tools/base64-to-image",
+        ].includes(item.href)
+    ) {
+        return "Encoding";
+    }
+
+    if (
+        [
+            "/tools/jwt-decoder",
+            "/tools/aes-encrypt-decrypt",
+            "/tools/hash-generator",
+        ].includes(item.href)
+    ) {
+        return "Security";
+    }
+
+    return "Lainnya";
+};
+const footerCategoryOrder = [
+    "Content",
+    "Marketing",
+    "Media",
+    "Networking",
+    "Email Auth",
+    "Data",
+    "Encoding",
+    "Security",
+    "Lainnya",
+];
+const footerToolGroups = footerCategoryOrder
+    .map((category) => ({
+        category,
+        items: footerToolItems.filter(
+            (item) => getFooterCategory(item) === category,
+        ),
+    }))
+    .filter((group) => group.items.length > 0);
 const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -132,7 +246,7 @@ const toolJsonLd = isToolsPage
             </div>
 
             <header
-                class="border-b border-slate-200/80 bg-white/80 backdrop-blur"
+                class="relative z-40 border-b border-slate-200/80 bg-white/80 backdrop-blur"
             >
                 <div class="mx-auto max-w-6xl px-4 py-4 md:px-8">
                     <div class="flex items-center justify-between gap-3">
@@ -172,7 +286,7 @@ const toolJsonLd = isToolsPage
                             }
                             {
                                 hasOverflowNav && (
-                                    <details class="group relative">
+                                    <details class="group relative z-50">
                                         <summary
                                             class={`list-none cursor-pointer whitespace-nowrap rounded-full border px-4 py-2 font-semibold transition ${
                                                 isOverflowActive
@@ -182,7 +296,7 @@ const toolJsonLd = isToolsPage
                                         >
                                             More
                                         </summary>
-                                        <div class="absolute right-0 z-20 mt-2 min-w-[220px] rounded-2xl border border-slate-200 bg-white p-2 shadow-xl">
+                                        <div class="absolute right-0 z-50 mt-2 min-w-[220px] rounded-2xl border border-slate-200 bg-white p-2 shadow-xl">
                                             <div class="flex flex-col gap-1">
                                                 {overflowNavItems.map(
                                                     (item) => (
@@ -291,30 +405,35 @@ const toolJsonLd = isToolsPage
                         Update layout once, reflected across all pages.
                     </p>
 
-                    <section class="mt-5">
+                    <section class="mt-5 space-y-5">
                         <h2
                             class="text-sm font-bold uppercase tracking-[0.08em] text-slate-700"
                         >
-                            Semua Tools
+                            Semua Tools per Kategori
                         </h2>
-                        <div
-                            class="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3"
-                        >
-                            {
-                                footerToolItems.map((item) => (
-                                    <a
-                                        href={item.href}
-                                        class={`rounded-2xl border px-4 py-3 text-sm font-semibold transition ${
-                                            isActiveNav(item.href)
-                                                ? "border-teal-600 bg-teal-600 text-white"
-                                                : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
-                                        }`}
-                                    >
-                                        {item.label}
-                                    </a>
-                                ))
-                            }
-                        </div>
+                        {
+                            footerToolGroups.map((group) => (
+                                <div>
+                                    <h3 class="text-xs font-bold uppercase tracking-[0.08em] text-teal-700">
+                                        {group.category}
+                                    </h3>
+                                    <div class="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                                        {group.items.map((item) => (
+                                            <a
+                                                href={item.href}
+                                                class={`rounded-2xl border px-4 py-3 text-sm font-semibold transition ${
+                                                    isActiveNav(item.href)
+                                                        ? "border-teal-600 bg-teal-600 text-white"
+                                                        : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+                                                }`}
+                                            >
+                                                {item.label}
+                                            </a>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))
+                        }
                     </section>
                 </div>
             </footer>

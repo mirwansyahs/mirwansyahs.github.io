@@ -1,14 +1,23 @@
 export const SITE = {
     name: "Irwansyah Tools",
-    title: "Irwansyah Tools - Twibbon Maker, PDF Tools, Image Tools, DNS, MX, SPF, DKIM",
+    title: "Irwansyah Tools - Viral Content Tools, Twibbon, QR, PDF, DNS, MX, SPF, DKIM",
     description:
-        "Koleksi tools gratis: twibbon maker Ramadhan/Idul Fitri, image compress, image to PDF, PDF to image, PDF compress, image to ASCII, DNS lookup, DNS propagation checker, MX/A/NS/CNAME/TXT/CAA/SRV checker, SPF checker, DKIM checker, DKIM generator, DMARC checker, JSON formatter validator, regex tester, JWT decoder, UUID generator, timestamp converter, Base64, URL encode/decode, HTML encode/decode, AES encrypt/decrypt, hash generator.",
+        "Koleksi tools gratis: caption generator, caption plus hashtag generator, paraphraser, title headline generator, emoji text style, ucapan otomatis hari besar, template poster Ramadhan Idul Fitri Natal Tahun Baru, QR generator, QR and link tools, twibbon maker, image compress, image to PDF, PDF to image, PDF compress, image to ASCII, DNS lookup, DNS propagation checker, MX/A/NS/CNAME/TXT/CAA/SRV checker, SPF checker, DKIM checker, DKIM generator, DMARC checker, JSON formatter validator, regex tester, JWT decoder, UUID generator, timestamp converter, Base64, URL encode/decode, HTML encode/decode, AES encrypt/decrypt, hash generator.",
     url: "https://tools.irwansyah.my.id",
     locale: "id_ID",
     twitter: "@mirwansyahs"
 };
 
 export const NAV_ITEMS = [
+    { label: "Caption Generator", href: "/tools/caption-generator" },
+    { label: "Caption + Hashtag", href: "/tools/caption-hashtag-generator" },
+    { label: "Paraphraser", href: "/tools/paraphraser" },
+    { label: "Headline Generator", href: "/tools/headline-generator" },
+    { label: "Emoji/Text Style", href: "/tools/emoji-text-style" },
+    { label: "Ucapan Hari Besar", href: "/tools/holiday-greeting-generator" },
+    { label: "Poster Hari Besar", href: "/tools/holiday-poster-maker" },
+    { label: "QR Generator", href: "/tools/qr-generator" },
+    { label: "QR/Link Tools", href: "/tools/qr-link-tools" },
     { label: "Twibbon Maker", href: "/tools/twibbon-maker" },
     { label: "Image Compress", href: "/tools/image-compress" },
     { label: "Image to PDF", href: "/tools/image-to-pdf" },

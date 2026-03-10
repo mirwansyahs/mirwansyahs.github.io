@@ -17,12 +17,12 @@ import { SITE } from "../config/site";
 			Developer Tools Cepat, Ringan, dan Bisa Diindeks Google
 		</h1>
 		<p class="mt-4 max-w-3xl text-base leading-relaxed text-slate-600">
-			Koleksi utility paling sering dipakai developer: JSON formatter,
-			regex tester, JWT decoder, timestamp converter, UUID generator,
-			base64, URL encode/decode, HTML encode/decode, plus networking tools
-			seperti MX/A/CNAME/TXT/NS lookup, DNS propagation, SPF, DKIM, dan
-			DMARC checker. Semua halaman dioptimalkan untuk load cepat dan mudah
-			diindeks mesin pencari.
+			Koleksi utility paling sering dipakai developer, creator, dan
+			marketer: caption generator, paraphraser, headline generator, emoji
+			text style, generator ucapan hari besar, template poster momen
+			spesial, QR/link tools, plus networking stack lengkap seperti
+			MX/A/CNAME/TXT/NS lookup, DNS propagation, SPF, DKIM, dan DMARC
+			checker.
 		</p>
 	</section>
 
@@ -47,6 +47,16 @@ import { SITE } from "../config/site";
 				data-category="all"
 				class="rounded-full bg-teal-600 px-3 py-1.5 text-xs font-semibold text-white"
 				>Semua</button
+			>
+			<button
+				data-category="Content"
+				class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700"
+				>Content</button
+			>
+			<button
+				data-category="Marketing"
+				class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700"
+				>Marketing</button
 			>
 			<button
 				data-category="Networking"
@@ -85,6 +95,69 @@ import { SITE } from "../config/site";
 		id="toolsGrid"
 		class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3"
 	>
+		<ToolCard
+			title="Caption Generator"
+			description="Generate caption Instagram, TikTok, X, dan LinkedIn lengkap dengan CTA dan hashtag."
+			href="/tools/caption-generator"
+			status="Viral"
+			category="Content"
+		/>
+		<ToolCard
+			title="Caption + Hashtag Generator"
+			description="Generator caption plus hashtag otomatis yang lebih fokus untuk posting sosial media harian."
+			href="/tools/caption-hashtag-generator"
+			status="Viral"
+			category="Content"
+		/>
+		<ToolCard
+			title="Paraphraser"
+			description="Parafrase teks Indonesia otomatis dengan mode simple, formal, casual, dan short."
+			href="/tools/paraphraser"
+			status="Viral"
+			category="Content"
+		/>
+		<ToolCard
+			title="Title / Headline Generator"
+			description="Generate ide judul artikel, hook konten, dan headline copywriting lebih menarik."
+			href="/tools/headline-generator"
+			status="Viral"
+			category="Content"
+		/>
+		<ToolCard
+			title="Emoji / Text Style"
+			description="Ubah teks jadi bubble, monospace, fullwidth, small caps, plus dekorasi emoji otomatis."
+			href="/tools/emoji-text-style"
+			status="Viral"
+			category="Content"
+		/>
+		<ToolCard
+			title="Ucapan Otomatis Hari Besar"
+			description="Generator ucapan siap pakai untuk Ramadhan, Idul Fitri, Natal, dan Tahun Baru."
+			href="/tools/holiday-greeting-generator"
+			status="Seasonal"
+			category="Content"
+		/>
+		<ToolCard
+			title="Template Poster Hari Besar"
+			description="Buat poster momen spesial langsung dari template Ramadhan, Idul Fitri, Natal, dan Tahun Baru."
+			href="/tools/holiday-poster-maker"
+			status="Seasonal"
+			category="Media"
+		/>
+		<ToolCard
+			title="QR Generator"
+			description="Generate QR code cepat dari URL atau teks, atur ukuran, lalu download PNG."
+			href="/tools/qr-generator"
+			status="Marketing"
+			category="Marketing"
+		/>
+		<ToolCard
+			title="QR / Link Tools"
+			description="UTM builder, URL insights, QR code generator, dan download QR untuk campaign marketing."
+			href="/tools/qr-link-tools"
+			status="Marketing"
+			category="Marketing"
+		/>
 		<ToolCard
 			title="Twibbon Maker"
 			description="Buat twibbon dari template Ramadhan/Idul Fitri bawaan atau upload template sendiri."
@@ -301,13 +374,12 @@ import { SITE } from "../config/site";
 			Tools Populer untuk Workflow Harian
 		</h2>
 		<p class="mt-2 text-sm leading-relaxed text-slate-600">
-			JSON formatter, regex tester, dan JWT decoder adalah kombinasi
-			paling sering dipakai saat debugging API. Timestamp converter dan
-			UUID generator membantu operasi backend sehari-hari, sedangkan
-			URL/HTML encode-decode berguna untuk query string, rendering, dan
-			sanitasi. Untuk networking, tersedia DNS propagation + DNS record
-			lookup lengkap (A/CNAME/TXT/MX/NS) serta paket email-auth SPF, DKIM,
-			dan DMARC checker.
+			Selain JSON formatter, regex tester, dan JWT decoder, sekarang
+			tersedia paket content tools yang sempat viral: caption generator,
+			paraphraser, headline generator, emoji text style, ucapan otomatis
+			hari besar, dan template poster momen musiman. Untuk campaign
+			tracking, tersedia juga QR/link tools lengkap dengan UTM builder dan
+			URL insights.
 		</p>
 	</section>
 

@@ -1,0 +1,211 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+    title="Paraphraser - Irwansyah Tools"
+    description="Paraphrase teks Indonesia otomatis dengan mode simple, formal, casual, dan short."
+    canonicalPath="/tools/paraphraser"
+>
+    <section
+        class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-5"
+    >
+        <h1 class="text-2xl font-black text-slate-900 md:text-3xl">
+            Paraphraser
+        </h1>
+        <p class="mt-1 text-sm text-slate-600">
+            Ubah kalimat jadi versi baru agar lebih ringkas, formal, atau
+            santai.
+        </p>
+
+        <label class="mt-4 block text-sm">
+            <span class="mb-1 block font-semibold text-slate-700"
+                >Input Teks</span
+            >
+            <textarea
+                id="paraInput"
+                class="h-52 w-full rounded-2xl border border-slate-300 p-3 text-sm"
+                placeholder="Tempel teks yang ingin diparafrasekan..."
+            ></textarea>
+        </label>
+
+        <div class="mt-3 grid gap-3 md:grid-cols-3">
+            <label class="block text-sm">
+                <span class="mb-1 block font-semibold text-slate-700">Mode</span
+                >
+                <select
+                    id="paraMode"
+                    class="w-full rounded-2xl border border-slate-300 p-2"
+                >
+                    <option value="simple">Simple</option>
+                    <option value="formal">Formal</option>
+                    <option value="casual">Casual</option>
+                    <option value="short">Short</option>
+                </select>
+            </label>
+            <label class="block text-sm">
+                <span class="mb-1 block font-semibold text-slate-700"
+                    >Jumlah Variasi</span
+                >
+                <input
+                    id="paraCount"
+                    type="number"
+                    min="1"
+                    max="8"
+                    value="3"
+                    class="w-full rounded-2xl border border-slate-300 p-2"
+                />
+            </label>
+            <label
+                class="mt-6 inline-flex items-center gap-2 text-sm text-slate-700 md:mt-7"
+            >
+                <input
+                    id="paraKeepKeywords"
+                    type="checkbox"
+                    class="h-4 w-4"
+                    checked
+                />
+                Pertahankan kata kunci penting
+            </label>
+        </div>
+
+        <div class="mt-4 flex flex-wrap gap-2">
+            <button
+                id="paraGenerateBtn"
+                class="rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700"
+            >
+                Parafrasekan
+            </button>
+            <button
+                id="paraCopyBtn"
+                class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+            >
+                Copy Output
+            </button>
+        </div>
+
+        <textarea
+            id="paraOutput"
+            class="mt-3 h-72 w-full rounded-2xl border border-slate-300 p-3 text-sm"
+            readonly></textarea>
+        <p id="paraMessage" class="mt-2 text-sm text-slate-600"></p>
+    </section>
+
+    <script>
+        const inputEl = document.getElementById(
+            "paraInput",
+        ) as HTMLTextAreaElement | null;
+        const modeEl = document.getElementById(
+            "paraMode",
+        ) as HTMLSelectElement | null;
+        const countEl = document.getElementById(
+            "paraCount",
+        ) as HTMLInputElement | null;
+        const keepEl = document.getElementById(
+            "paraKeepKeywords",
+        ) as HTMLInputElement | null;
+        const outputEl = document.getElementById(
+            "paraOutput",
+        ) as HTMLTextAreaElement | null;
+        const messageEl = document.getElementById(
+            "paraMessage",
+        ) as HTMLParagraphElement | null;
+
+        const synonymMap: Record<string, string[]> = {
+            penting: ["krusial", "esensial", "utama"],
+            mudah: ["sederhana", "praktis", "gampang"],
+            cepat: ["sigap", "kilat", "efisien"],
+            bagus: ["baik", "optimal", "unggul"],
+            membuat: ["menciptakan", "menghasilkan", "membentuk"],
+            menggunakan: ["memakai", "mengaplikasikan", "memanfaatkan"],
+            membantu: ["menolong", "mendukung", "memudahkan"],
+            meningkatkan: ["mengoptimalkan", "menaikkan", "memperbaiki"],
+        };
+
+        const formalPrefix = "Berdasarkan konteks tersebut, ";
+        const casualPrefix = "Singkatnya, ";
+
+        const replaceWithSynonym = (text: string, shift: number) => {
+            let result = text;
+            Object.entries(synonymMap).forEach(([root, variants]) => {
+                const replacement = variants[shift % variants.length];
+                const pattern = new RegExp(`\\b${root}\\b`, "gi");
+                result = result.replace(pattern, replacement);
+            });
+            return result;
+        };
+
+        const makeShort = (text: string) => {
+            const compact = text
+                .replace(/\s+/g, " ")
+                .replace(/,\s*,/g, ",")
+                .trim();
+            return compact.length > 220
+                ? `${compact.slice(0, 217)}...`
+                : compact;
+        };
+
+        const paraphrase = (
+            text: string,
+            mode: string,
+            variation: number,
+            keepKeywords: boolean,
+        ) => {
+            let transformed = replaceWithSynonym(text, variation + 1);
+
+            if (!keepKeywords) {
+                transformed = transformed.replace(
+                    /\b(tool|produk|brand|nama)\b/gi,
+                    "solusi",
+                );
+            }
+
+            if (mode === "formal") {
+                transformed = `${formalPrefix}${transformed}`;
+            } else if (mode === "casual") {
+                transformed = `${casualPrefix}${transformed}`;
+            } else if (mode === "short") {
+                transformed = makeShort(transformed);
+            }
+
+            return transformed;
+        };
+
+        document
+            .getElementById("paraGenerateBtn")
+            ?.addEventListener("click", () => {
+                const rawText = (inputEl?.value ?? "").trim();
+                if (!rawText) {
+                    if (messageEl)
+                        messageEl.textContent = "Input teks wajib diisi.";
+                    return;
+                }
+
+                const mode = modeEl?.value ?? "simple";
+                const count = Math.min(
+                    8,
+                    Math.max(1, Number(countEl?.value ?? 3)),
+                );
+                const keepKeywords = keepEl?.checked ?? true;
+
+                const variants = Array.from({ length: count }, (_, idx) => {
+                    const text = paraphrase(rawText, mode, idx, keepKeywords);
+                    return `Variasi ${idx + 1}:\n${text}`;
+                });
+
+                if (outputEl) outputEl.value = variants.join("\n\n");
+                if (messageEl)
+                    messageEl.textContent = `${count} versi parafrase berhasil dibuat.`;
+            });
+
+        document
+            .getElementById("paraCopyBtn")
+            ?.addEventListener("click", async () => {
+                const text = outputEl?.value ?? "";
+                if (!text) return;
+                await navigator.clipboard.writeText(text);
+                if (messageEl)
+                    messageEl.textContent = "Hasil paraphrase tersalin.";
+            });
+    </script>
+</BaseLayout>

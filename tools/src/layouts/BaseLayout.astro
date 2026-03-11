@@ -6,12 +6,14 @@ interface Props {
     title?: string;
     description?: string;
     canonicalPath?: string;
+    keywords?: string;
 }
 
 const {
     title = SITE.title,
     description = SITE.description,
     canonicalPath = Astro.url.pathname,
+    keywords = "",
 } = Astro.props;
 
 const normalizedCanonicalPath = canonicalPath.startsWith("/")
@@ -613,6 +615,7 @@ const toolFaq = FAQ_BY_CATEGORY[currentToolCategory] ?? FAQ_BY_CATEGORY.Lainnya;
             href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap"
         />
         <meta name="description" content={description} />
+        {keywords && <meta name="keywords" content={keywords} />}
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content={SITE.name} />

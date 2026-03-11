@@ -185,6 +185,401 @@ const toolJsonLd = isToolsPage
           },
       }
     : null;
+
+const toolSlug = isToolsPage
+    ? canonicalPath.replace(/^\/tools\//, "").replace(/\/+$/, "")
+    : "";
+const currentToolItem = NAV_ITEMS.find((item) => item.href === canonicalPath);
+const currentToolName =
+    currentToolItem?.label ?? title.replace(/\s*-\s*Irwansyah Tools\s*$/i, "");
+const currentToolCategory = currentToolItem
+    ? getFooterCategory(currentToolItem)
+    : "Lainnya";
+
+const TOOL_PURPOSES: Record<string, string> = {
+    "a-lookup":
+        "mencari A record (IPv4) domain untuk memastikan host mengarah ke IP server yang benar",
+    "aes-encrypt-decrypt":
+        "mengenkripsi dan mendekripsi text menggunakan algoritma AES untuk kebutuhan data privacy",
+    "base64-encode-decode":
+        "encode text ke Base64 dan decode Base64 kembali ke text asli",
+    "base64-to-image":
+        "mengubah data Base64 image menjadi preview gambar yang bisa diunduh",
+    "caa-checker":
+        "memeriksa CAA record untuk melihat CA mana yang diizinkan menerbitkan sertifikat SSL domain",
+    "caption-generator": "membuat caption siap pakai untuk konten media sosial",
+    "caption-hashtag-generator":
+        "membuat caption sekaligus rekomendasi hashtag yang relevan",
+    "cname-lookup": "mengecek CNAME record untuk memvalidasi alias domain",
+    "dkim-checker":
+        "memvalidasi DKIM record di DNS agar email signing dapat diverifikasi",
+    "dkim-generator":
+        "membuat DKIM key pair dan template DNS record untuk setup email domain",
+    "dmarc-checker": "mengecek DMARC policy domain untuk audit keamanan email",
+    "dns-lookup":
+        "menjalankan lookup DNS record seperti TXT, CNAME, AAAA, PTR, dan SOA",
+    "dns-propagation":
+        "mengecek penyebaran perubahan DNS dari berbagai resolver",
+    "emoji-text-style":
+        "mengubah text biasa menjadi variasi style text dengan karakter dekoratif",
+    "hash-generator":
+        "menghasilkan hash digest dari text untuk checksum dan verifikasi integritas data",
+    "headline-generator":
+        "menghasilkan ide headline yang lebih menarik untuk konten atau artikel",
+    "holiday-greeting-generator":
+        "membuat ucapan hari besar otomatis yang siap dipakai",
+    "holiday-poster-maker":
+        "membuat poster tematik hari besar dengan template cepat",
+    "html-encode-decode":
+        "encode dan decode karakter HTML entity untuk keamanan dan kompatibilitas render",
+    "image-compress": "mengompres ukuran file gambar agar lebih ringan",
+    "image-to-ascii": "mengonversi gambar menjadi ASCII art",
+    "image-to-pdf": "menggabungkan gambar menjadi dokumen PDF",
+    "json-formatter-validator": "merapikan dan memvalidasi struktur JSON",
+    "json-viewer": "menampilkan JSON dalam format yang lebih mudah dibaca",
+    "jwt-decoder": "decode JWT payload untuk inspeksi claim dan metadata token",
+    "mx-lookup": "mengecek MX record domain untuk validasi rute email masuk",
+    "ns-lookup": "mengecek nameserver otoritatif domain",
+    paraphraser: "memparafrase text agar lebih ringkas, natural, atau variatif",
+    "pdf-compress":
+        "mengompres ukuran PDF agar lebih kecil untuk sharing/upload",
+    "pdf-to-image": "mengonversi halaman PDF menjadi file gambar",
+    "qr-generator": "membuat QR code dari text, URL, atau data sederhana",
+    "qr-link-tools":
+        "menganalisis dan menyiapkan link untuk skenario QR campaign",
+    "regex-tester":
+        "menguji regular expression dengan sample text secara interaktif",
+    "spf-checker": "mengecek SPF record untuk mencegah spoofing email",
+    "srv-checker": "mengecek SRV record layanan seperti SIP/XMPP/game server",
+    "timestamp-converter":
+        "mengonversi Unix timestamp ke format tanggal/jam manusia dan sebaliknya",
+    "twibbon-maker": "membuat twibbon frame untuk kampanye atau event",
+    "txt-lookup":
+        "mengecek TXT record untuk verifikasi domain dan konfigurasi layanan",
+    "url-encode-decode":
+        "encode dan decode URL component agar aman saat dikirim via query string",
+    "uuid-generator": "membuat UUID unik untuk identifier data",
+};
+
+const TOOL_EXAMPLES: Record<string, string> = {
+    "a-lookup":
+        "Input domain: api.example.com, lalu cek apakah IP hasil lookup sesuai server produksi.",
+    "aes-encrypt-decrypt":
+        "Encrypt text API key internal dengan passphrase, lalu decrypt kembali saat dibutuhkan.",
+    "base64-encode-decode":
+        "Encode text 'Hello World' menjadi Base64, lalu decode lagi untuk memastikan hasil sama.",
+    "base64-to-image":
+        "Paste data:image/png;base64,... untuk preview logo dan unduh file PNG hasil render.",
+    "caa-checker":
+        "Cek domain perusahaan sebelum renewal SSL untuk memastikan CA yang diizinkan sudah benar.",
+    "caption-generator":
+        "Generate 10 opsi caption untuk post produk baru, lalu pilih yang paling sesuai brand tone.",
+    "caption-hashtag-generator":
+        "Buat caption + hashtag untuk reels promosi agar riset hashtag lebih cepat.",
+    "cname-lookup":
+        "Validasi CNAME blog.example.com sudah mengarah ke target hosting yang tepat.",
+    "dkim-checker":
+        "Verifikasi selector DKIM setelah setup mail provider untuk memastikan status pass.",
+    "dkim-generator":
+        "Generate key DKIM 2048-bit, salin TXT record ke DNS, lalu validasi propagasinya.",
+    "dmarc-checker":
+        "Audit policy DMARC domain klien sebelum menaikkan mode dari p=none ke p=quarantine.",
+    "dns-lookup":
+        "Lookup TXT record _acme-challenge.example.com saat proses verifikasi SSL.",
+    "dns-propagation":
+        "Setelah ubah A record, cek propagasi sampai sebagian besar resolver sudah update.",
+    "emoji-text-style":
+        "Ubah judul campaign jadi style dekoratif untuk caption IG story.",
+    "hash-generator":
+        "Buat SHA-256 dari file manifest untuk membandingkan integritas antar environment.",
+    "headline-generator":
+        "Generate headline artikel landing page lalu A/B test 2 versi terbaik.",
+    "holiday-greeting-generator":
+        "Siapkan ucapan hari raya untuk email blast pelanggan dengan cepat.",
+    "holiday-poster-maker":
+        "Gunakan template poster event musiman lalu sesuaikan judul dan tanggal acara.",
+    "html-encode-decode":
+        "Encode karakter <script> menjadi entity agar aman ditampilkan sebagai plain text.",
+    "image-compress":
+        "Kompres hero banner sebelum upload ke website untuk menurunkan waktu loading.",
+    "image-to-ascii":
+        "Konversi avatar tim jadi ASCII untuk README atau signature terminal.",
+    "image-to-pdf":
+        "Gabungkan beberapa scan dokumen JPG menjadi satu file PDF untuk arsip.",
+    "json-formatter-validator":
+        "Paste response API mentah untuk rapikan indentasi dan cek error syntax.",
+    "json-viewer":
+        "Lihat struktur JSON nested panjang tanpa harus scroll raw text yang sulit dibaca.",
+    "jwt-decoder":
+        "Decode access token untuk mengecek exp, iss, aud, dan custom claims.",
+    "mx-lookup":
+        "Pastikan MX record domain baru mengarah ke provider email perusahaan.",
+    "ns-lookup": "Cek nameserver aktif setelah migrasi domain registrar.",
+    paraphraser:
+        "Parafrase deskripsi produk agar lebih singkat untuk versi marketplace.",
+    "pdf-compress":
+        "Kompres proposal PDF sebelum dikirim via email dengan batas ukuran lampiran.",
+    "pdf-to-image":
+        "Ubah halaman cover PDF menjadi PNG untuk thumbnail konten.",
+    "qr-generator":
+        "Generate QR untuk URL menu digital restoran dan cetak di meja kasir.",
+    "qr-link-tools":
+        "Buat URL berparameter UTM lalu generate QR untuk tracking campaign offline.",
+    "regex-tester":
+        "Uji regex validasi email dengan beberapa sample valid dan invalid.",
+    "spf-checker": "Cek SPF saat email notifikasi sering masuk spam.",
+    "srv-checker":
+        "Validasi SRV _sip._tcp.example.com untuk troubleshooting VoIP.",
+    "timestamp-converter":
+        "Konversi timestamp log backend ke waktu lokal untuk investigasi incident.",
+    "twibbon-maker":
+        "Buat frame event komunitas lalu bagikan link upload foto peserta.",
+    "txt-lookup":
+        "Cari TXT verification token saat setup layanan email marketing.",
+    "url-encode-decode":
+        "Encode query parameter yang mengandung spasi dan simbol khusus.",
+    "uuid-generator":
+        "Generate UUID v4 untuk primary key resource sementara di prototipe API.",
+};
+
+const HOW_TO_USE_BY_CATEGORY: Record<string, string[]> = {
+    Content: [
+        "Isi input utama dengan ide, topik, atau text draft.",
+        "Pilih gaya output jika tersedia, lalu klik generate/process.",
+        "Review hasil, copy versi terbaik, dan iterasikan sampai sesuai tone.",
+    ],
+    Marketing: [
+        "Masukkan URL atau text campaign.",
+        "Atur parameter tracking/format output sesuai kebutuhan publikasi.",
+        "Generate hasil lalu uji scan atau klik sebelum dipublikasikan.",
+    ],
+    Media: [
+        "Upload file media dari perangkat.",
+        "Atur opsi kualitas, ukuran, atau format output.",
+        "Proses file lalu download hasil akhirnya.",
+    ],
+    Networking: [
+        "Masukkan domain/host yang ingin diperiksa.",
+        "Pilih jenis record dan provider resolver jika tersedia.",
+        "Jalankan lookup lalu analisis respons record.",
+    ],
+    "Email Auth": [
+        "Isi domain dan selector (jika diperlukan).",
+        "Jalankan pemeriksaan autentikasi email.",
+        "Gunakan hasil untuk memperbaiki DNS dan tingkat deliverability.",
+    ],
+    Data: [
+        "Paste data mentah ke area input.",
+        "Klik tombol proses (format/validate/convert/generate).",
+        "Salin hasil dan gunakan di workflow development.",
+    ],
+    Encoding: [
+        "Masukkan text atau payload yang ingin diolah.",
+        "Pilih aksi encode/decode/convert sesuai kebutuhan.",
+        "Periksa output lalu copy atau download hasil.",
+    ],
+    Security: [
+        "Masukkan data input (token/text/secret) sesuai use case.",
+        "Pilih mode proses seperti decode/encrypt/hash.",
+        "Verifikasi hasil sebelum dipakai di environment produksi.",
+    ],
+    Lainnya: [
+        "Masukkan input pada field yang tersedia.",
+        "Klik tombol proses utama untuk menghasilkan output.",
+        "Copy atau download hasil sesuai kebutuhan.",
+    ],
+};
+
+const WHY_DEVELOPERS_USE_BY_CATEGORY: Record<string, string[]> = {
+    Content: [
+        "Mempercepat produksi copy tanpa mulai dari nol.",
+        "Membantu eksplorasi variasi tone dan struktur kalimat.",
+        "Mengurangi waktu revisi konten harian.",
+    ],
+    Marketing: [
+        "Memudahkan distribusi campaign lintas channel.",
+        "Mendukung tracking performa link yang lebih rapi.",
+        "Mempercepat eksekusi materi promosi.",
+    ],
+    Media: [
+        "Menghemat waktu editing file dasar.",
+        "Mengurangi ukuran aset untuk performa web/app.",
+        "Membantu otomasi kebutuhan konversi format.",
+    ],
+    Networking: [
+        "Mempercepat troubleshooting DNS dan domain.",
+        "Membantu validasi konfigurasi saat migrasi.",
+        "Mengurangi trial-error saat setup layanan.",
+    ],
+    "Email Auth": [
+        "Meningkatkan deliverability email bisnis.",
+        "Mendeteksi misconfiguration SPF/DKIM/DMARC lebih cepat.",
+        "Membantu hardening domain dari spoofing.",
+    ],
+    Data: [
+        "Membuat inspeksi data lebih cepat dan minim error manual.",
+        "Membantu debugging API/log secara langsung.",
+        "Meningkatkan konsistensi format data antar tim.",
+    ],
+    Encoding: [
+        "Praktis untuk kebutuhan encode/decode saat debugging.",
+        "Membantu interoperability antar sistem berbasis text.",
+        "Menghemat waktu dibanding menulis script kecil berulang.",
+    ],
+    Security: [
+        "Mendukung verifikasi data security dengan cepat.",
+        "Mempermudah inspeksi token dan payload terenkripsi.",
+        "Membantu validasi sebelum implementasi ke aplikasi.",
+    ],
+    Lainnya: [
+        "Mempercepat pekerjaan teknis harian.",
+        "Mengurangi langkah manual berulang.",
+        "Membantu tim fokus ke problem utama.",
+    ],
+};
+
+const FAQ_BY_CATEGORY: Record<string, Array<{ q: string; a: string }>> = {
+    Content: [
+        {
+            q: "Apakah output bisa langsung dipakai?",
+            a: "Bisa, tapi tetap disarankan review agar sesuai brand voice dan konteks audiens.",
+        },
+        {
+            q: "Apakah tool ini menggantikan editor manusia?",
+            a: "Tidak. Tool ini mempercepat draft awal, sementara quality control tetap di tim Anda.",
+        },
+        {
+            q: "Bagaimana dapat hasil lebih relevan?",
+            a: "Berikan input yang spesifik: target audiens, tema, dan tujuan konten.",
+        },
+    ],
+    Marketing: [
+        {
+            q: "Apakah QR/link cocok untuk materi cetak?",
+            a: "Ya, asalkan URL final sudah diuji scan dan tracking parameter sudah benar.",
+        },
+        {
+            q: "Kenapa hasil tracking tidak terbaca analytics?",
+            a: "Biasanya karena parameter UTM kurang lengkap atau URL tujuan melakukan redirect yang menghapus query.",
+        },
+        {
+            q: "Apakah aman membagikan QR publik?",
+            a: "Aman jika URL tujuan valid dan tidak mengandung data sensitif.",
+        },
+    ],
+    Media: [
+        {
+            q: "Kenapa kualitas file menurun setelah kompres?",
+            a: "Karena kompresi mengurangi detail visual. Atur kualitas menengah untuk menjaga keseimbangan.",
+        },
+        {
+            q: "Apakah ukuran file pasti jauh lebih kecil?",
+            a: "Tergantung konten awal dan format file. Beberapa file sudah sangat optimal dari sumbernya.",
+        },
+        {
+            q: "Bisa dipakai untuk file besar?",
+            a: "Bisa, tetapi proses mungkin lebih lama tergantung perangkat dan browser.",
+        },
+    ],
+    Networking: [
+        {
+            q: "Kenapa record tidak muncul padahal sudah diubah?",
+            a: "Kemungkinan masih masa propagasi atau cache resolver belum kadaluarsa.",
+        },
+        {
+            q: "Resolver mana yang sebaiknya dipakai?",
+            a: "Gunakan beberapa resolver populer untuk cross-check, misalnya Cloudflare dan Google.",
+        },
+        {
+            q: "Apakah hasil lookup ini real-time?",
+            a: "Hasil mengikuti data resolver yang dipilih, sehingga bisa sedikit berbeda antar provider.",
+        },
+    ],
+    "Email Auth": [
+        {
+            q: "Kenapa email masih masuk spam padahal SPF sudah benar?",
+            a: "Deliverability juga dipengaruhi DKIM, DMARC, reputasi domain, dan konten email.",
+        },
+        {
+            q: "Berapa lama perubahan DNS email auth aktif?",
+            a: "Umumnya beberapa menit hingga 24 jam, tergantung TTL dan cache resolver.",
+        },
+        {
+            q: "Apakah wajib pakai SPF + DKIM + DMARC sekaligus?",
+            a: "Disarankan ya, karena ketiganya saling melengkapi proteksi domain email.",
+        },
+    ],
+    Data: [
+        {
+            q: "Apakah data saya dikirim ke server?",
+            a: "Sebagian besar tool data dirancang berjalan di browser. Tetap hindari memasukkan data sensitif.",
+        },
+        {
+            q: "Kenapa format tetap gagal divalidasi?",
+            a: "Biasanya ada karakter tersembunyi, koma berlebih, atau struktur yang tidak sesuai standar.",
+        },
+        {
+            q: "Bisa untuk data berukuran besar?",
+            a: "Bisa, tetapi performa bergantung kapasitas browser dan perangkat.",
+        },
+    ],
+    Encoding: [
+        {
+            q: "Apakah encode sama dengan enkripsi?",
+            a: "Tidak. Encoding hanya transformasi format, bukan mekanisme keamanan.",
+        },
+        {
+            q: "Kenapa hasil decode error?",
+            a: "Input kemungkinan tidak lengkap, rusak, atau mengandung karakter yang tidak valid.",
+        },
+        {
+            q: "Kapan sebaiknya tidak memakai encoding ini?",
+            a: "Untuk data berukuran besar atau data yang butuh kerahasiaan tinggi, gunakan pendekatan lain.",
+        },
+    ],
+    Security: [
+        {
+            q: "Apakah tool security ini aman untuk secret produksi?",
+            a: "Sebaiknya hindari memasukkan secret kritikal produksi ke tool web umum.",
+        },
+        {
+            q: "Kenapa hasil decrypt/hash berbeda?",
+            a: "Periksa mode, key/iv, salt, dan algoritma agar sama persis dengan sistem asal.",
+        },
+        {
+            q: "Apakah hasil bisa dipakai lintas bahasa pemrograman?",
+            a: "Bisa, jika parameter algoritma dan encoding output disamakan.",
+        },
+    ],
+    Lainnya: [
+        {
+            q: "Apakah tool ini gratis?",
+            a: "Ya, tool ditujukan untuk kebutuhan praktis harian dan dapat digunakan bebas.",
+        },
+        {
+            q: "Apakah perlu install aplikasi tambahan?",
+            a: "Tidak, cukup gunakan browser modern.",
+        },
+        {
+            q: "Bagaimana cara mendapat hasil paling akurat?",
+            a: "Gunakan input yang jelas dan valid, lalu verifikasi output sebelum dipakai produksi.",
+        },
+    ],
+};
+
+const toolWhatIs = TOOL_PURPOSES[toolSlug]
+    ? `${currentToolName} adalah tool untuk ${TOOL_PURPOSES[toolSlug]}.`
+    : `${currentToolName} adalah tool praktis untuk membantu workflow developer secara cepat langsung dari browser.`;
+const toolHowToUse =
+    HOW_TO_USE_BY_CATEGORY[currentToolCategory] ??
+    HOW_TO_USE_BY_CATEGORY.Lainnya;
+const toolExample =
+    TOOL_EXAMPLES[toolSlug] ??
+    `Buka ${currentToolName}, masukkan input yang relevan, proses data, lalu gunakan hasilnya di project Anda.`;
+const toolWhyDevelopersUse =
+    WHY_DEVELOPERS_USE_BY_CATEGORY[currentToolCategory] ??
+    WHY_DEVELOPERS_USE_BY_CATEGORY.Lainnya;
+const toolFaq = FAQ_BY_CATEGORY[currentToolCategory] ?? FAQ_BY_CATEGORY.Lainnya;
 ---
 
 <!doctype html>
@@ -384,6 +779,77 @@ const toolJsonLd = isToolsPage
             >
                 <section class="min-h-0">
                     <slot />
+                    {
+                        isToolsPage && (
+                            <section class="mt-4 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-5">
+                                <h2 class="text-xl font-black text-slate-900 md:text-2xl">
+                                    Tool Guide
+                                </h2>
+                                <p class="mt-1 text-sm text-slate-600">
+                                    Ringkasan cepat untuk memahami dan memakai
+                                    tool ini.
+                                </p>
+
+                                <div class="mt-4 space-y-4 text-sm text-slate-700">
+                                    <section class="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                                        <h3 class="text-base font-bold text-slate-900">
+                                            What is
+                                        </h3>
+                                        <p class="mt-1">{toolWhatIs}</p>
+                                    </section>
+
+                                    <section class="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                                        <h3 class="text-base font-bold text-slate-900">
+                                            How to use
+                                        </h3>
+                                        <ol class="mt-2 list-decimal space-y-1 pl-5">
+                                            {toolHowToUse.map((step) => (
+                                                <li>{step}</li>
+                                            ))}
+                                        </ol>
+                                    </section>
+
+                                    <section class="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                                        <h3 class="text-base font-bold text-slate-900">
+                                            Example
+                                        </h3>
+                                        <p class="mt-1">{toolExample}</p>
+                                    </section>
+
+                                    <section class="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                                        <h3 class="text-base font-bold text-slate-900">
+                                            Why developers use
+                                        </h3>
+                                        <ul class="mt-2 list-disc space-y-1 pl-5">
+                                            {toolWhyDevelopersUse.map(
+                                                (point) => (
+                                                    <li>{point}</li>
+                                                ),
+                                            )}
+                                        </ul>
+                                    </section>
+
+                                    <section class="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                                        <h3 class="text-base font-bold text-slate-900">
+                                            FAQ
+                                        </h3>
+                                        <div class="mt-2 space-y-2">
+                                            {toolFaq.map((item) => (
+                                                <details class="rounded-xl border border-slate-200 bg-white p-3">
+                                                    <summary class="cursor-pointer font-semibold text-slate-800">
+                                                        {item.q}
+                                                    </summary>
+                                                    <p class="mt-2 text-slate-700">
+                                                        {item.a}
+                                                    </p>
+                                                </details>
+                                            ))}
+                                        </div>
+                                    </section>
+                                </div>
+                            </section>
+                        )
+                    }
                 </section>
                 {
                     !isToolsPage && (

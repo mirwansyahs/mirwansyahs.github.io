@@ -1,8 +1,8 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 
 interface Props {
   title?: string;
@@ -16,9 +16,22 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
 <html lang="id">
   <head>
     <BaseHead title={title} description={description} />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DWD8Q7Y89P"
+    ></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-DWD8Q7Y89P");
+    </script>
   </head>
   <body class="bg-slate-50 text-slate-900 antialiased">
-    <div class="min-h-screen bg-[radial-gradient(circle_at_top_right,_#fed7aa,_transparent_42%),radial-gradient(circle_at_bottom_left,_#99f6e4,_transparent_38%)]">
+    <div
+      class="min-h-screen bg-[radial-gradient(circle_at_top_right,_#fed7aa,_transparent_42%),radial-gradient(circle_at_bottom_left,_#99f6e4,_transparent_38%)]"
+    >
       <Header />
       <main class="mx-auto w-full max-w-6xl px-4 py-8 md:px-8 md:py-10">
         <slot />

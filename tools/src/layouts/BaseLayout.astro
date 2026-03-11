@@ -14,14 +14,26 @@ const {
     canonicalPath = Astro.url.pathname,
 } = Astro.props;
 
-const canonical = new URL(canonicalPath, SITE.url).toString();
-const isToolsPage = canonicalPath.startsWith("/tools/");
+const normalizedCanonicalPath = canonicalPath.startsWith("/")
+    ? canonicalPath
+    : (() => {
+          try {
+              return new URL(canonicalPath).pathname;
+          } catch {
+              return canonicalPath;
+          }
+      })();
+const canonical = new URL(normalizedCanonicalPath, SITE.url).toString();
+const isToolsPath =
+    normalizedCanonicalPath === "/tools" ||
+    normalizedCanonicalPath.startsWith("/tools/");
 const adsenseClient = import.meta.env.PUBLIC_GOOGLE_ADSENSE_CLIENT;
 const DESKTOP_PRIMARY_NAV_COUNT = 4;
 const isActiveNav = (href: string) =>
     href === "/"
-        ? canonicalPath === "/"
-        : canonicalPath === href || canonicalPath.startsWith(`${href}/`);
+        ? normalizedCanonicalPath === "/"
+        : normalizedCanonicalPath === href ||
+          normalizedCanonicalPath.startsWith(`${href}/`);
 const primaryNavItems = NAV_ITEMS.slice(0, DESKTOP_PRIMARY_NAV_COUNT);
 const overflowNavItems = NAV_ITEMS.slice(DESKTOP_PRIMARY_NAV_COUNT);
 const hasOverflowNav = overflowNavItems.length > 0;
@@ -169,7 +181,7 @@ const pageJsonLd = {
         url: SITE.url,
     },
 };
-const toolJsonLd = isToolsPage
+const toolJsonLd = isToolsPath
     ? {
           "@context": "https://schema.org",
           "@type": "WebApplication",
@@ -186,10 +198,13 @@ const toolJsonLd = isToolsPage
       }
     : null;
 
-const toolSlug = isToolsPage
-    ? canonicalPath.replace(/^\/tools\//, "").replace(/\/+$/, "")
+const toolSlug = isToolsPath
+    ? normalizedCanonicalPath.replace(/^\/tools\//, "").replace(/\/+$/, "")
     : "";
-const currentToolItem = NAV_ITEMS.find((item) => item.href === canonicalPath);
+const currentToolItem = NAV_ITEMS.find(
+    (item) => item.href === normalizedCanonicalPath.replace(/\/+$/, ""),
+);
+const shouldShowToolGuide = isToolsPath || Boolean(currentToolItem);
 const currentToolName =
     currentToolItem?.label ?? title.replace(/\s*-\s*Irwansyah Tools\s*$/i, "");
 const currentToolCategory = currentToolItem
@@ -609,6 +624,19 @@ const toolFaq = FAQ_BY_CATEGORY[currentToolCategory] ?? FAQ_BY_CATEGORY.Lainnya;
         <meta name="twitter:description" content={description} />
         <meta name="twitter:creator" content={SITE.twitter} />
         <link rel="canonical" href={canonical} />
+        <!-- Google tag (gtag.js) -->
+        <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-DWD8Q7Y89P"
+        ></script>
+        <script is:inline>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+            gtag("config", "G-DWD8Q7Y89P");
+        </script>
         <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
         <script
             type="application/ld+json"
@@ -775,12 +803,12 @@ const toolFaq = FAQ_BY_CATEGORY[currentToolCategory] ?? FAQ_BY_CATEGORY.Lainnya;
             </header>
 
             <main
-                class={`mx-auto grid w-full max-w-6xl gap-4 px-4 py-4 md:px-8 md:py-4 ${isToolsPage ? "lg:grid-cols-1" : "md:grid-cols-[minmax(0,1fr)_300px] md:py-10"}`}
+                class={`mx-auto grid w-full max-w-6xl gap-4 px-4 py-4 md:px-8 md:py-4 ${shouldShowToolGuide ? "lg:grid-cols-1" : "md:grid-cols-[minmax(0,1fr)_300px] md:py-10"}`}
             >
                 <section class="min-h-0">
                     <slot />
                     {
-                        isToolsPage && (
+                        shouldShowToolGuide && (
                             <section class="mt-4 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-5">
                                 <h2 class="text-xl font-black text-slate-900 md:text-2xl">
                                     Tool Guide
@@ -852,7 +880,7 @@ const toolFaq = FAQ_BY_CATEGORY[currentToolCategory] ?? FAQ_BY_CATEGORY.Lainnya;
                     }
                 </section>
                 {
-                    !isToolsPage && (
+                    !shouldShowToolGuide && (
                         <aside class="space-y-4">
                             <div class="sticky top-6 rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-600">
                                 Utility tools ini dioptimalkan untuk pengalaman

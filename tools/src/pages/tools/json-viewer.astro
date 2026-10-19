@@ -209,18 +209,48 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
             });
         }
 
+        const decodeUnicodeEscapes = (str) => {
+            return str
+                .replace(/[\u00A0\u200B]/g, " ")
+                .replace(/\\u([0-9a-fA-F]{4})/g, (_, match) => {
+                    return String.fromCharCode(parseInt(match, 16));
+                });
+        };
+
         const parseFlexibleJson = (raw) => {
-            let value = JSON.parse(raw);
-            // Unwrap stringified JSON up to 5 levels to support deeply escaped payloads.
-            for (let i = 0; i < 5; i += 1) {
-                if (typeof value !== "string") break;
-                try {
-                    value = JSON.parse(value);
-                } catch {
-                    break;
-                }
+            // 1. Decode unicode escapes pada raw input secara menyeluruh
+            let cleaned = decodeUnicodeEscapes(raw);
+
+            let value;
+            try {
+                value = JSON.parse(cleaned);
+            } catch (e) {
+                // Fallback jika ada escape backslash tambahan
+                let relaxed = cleaned.replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+                value = JSON.parse(relaxed);
             }
-            return value;
+
+            // 2. Fungsi rekursif untuk mendeteksi string yang sebenarnya adalah JSON (seperti field "param")
+            const deepParseJson = (obj) => {
+                if (typeof obj === "string") {
+                    // Coba decode unicode lagi jika string di dalam property masih punya escape
+                    let decodedStr = decodeUnicodeEscapes(obj);
+                    try {
+                        const parsedObj = JSON.parse(decodedStr);
+                        return deepParseJson(parsedObj); // Parse lebih dalam jika bersarang
+                    } catch {
+                        return obj;
+                    }
+                }
+                if (obj !== null && typeof obj === "object") {
+                    for (const key of Object.keys(obj)) {
+                        obj[key] = deepParseJson(obj[key]);
+                    }
+                }
+                return obj;
+            };
+
+            return deepParseJson(value);
         };
 
         const escapeXml = (value) =>
@@ -327,7 +357,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
                 const parsed = parseFlexibleJson(raw);
                 if (activeMode === "beautify") {
                     outputEl.value = JSON.stringify(parsed, null, 2);
-                    msgEl.textContent = "JSON berhasil di-beautify.";
+                    msgEl.textContent = "JSON berhasil di-beautify dan dibersihkan.";
                     return;
                 }
 
@@ -359,10 +389,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
                 ? autoUpdateEl.checked
                 : true;
 
-        // Process automatically when user leaves input area.
         inputEl?.addEventListener("blur", processJson);
 
-        // Optional live processing while typing.
         inputEl?.addEventListener("input", () => {
             if (!isAutoUpdateEnabled()) return;
             processJson();
@@ -375,13 +403,12 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
         document
             .getElementById("copyJsonBtn")
-            ?.addEventListener("click", async () => {
+            .addEventListener("click", async () => {
                 if (!outputEl.value) return;
                 await navigator.clipboard.writeText(outputEl.value);
                 msgEl.textContent = "Output tersalin ke clipboard.";
             });
 
-        // Re-process immediately when mode changes.
         for (const btn of modeButtons) {
             btn.addEventListener("click", () => {
                 if ((inputEl?.value?.trim() || "") !== "") processJson();
